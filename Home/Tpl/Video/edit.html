@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>更新视频|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script type="text/javascript" src="__JS__/check.js"></script>
+<script type="text/javascript" src="__ROOT__/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="__ROOT__/ueditor/ueditor.all.min.js"> </script>
+<script type="text/javascript" src="__ROOT__/ueditor/lang/zh-cn/zh-cn.js"></script>
+  <link rel="stylesheet" href="__JS__/Validform/images/style.css" type="text/css" media="all" /> 
+  <script type="text/javascript" src="__JS__/Validform/images/jquery-1.9.1.min.js"></script> 
+  <script type="text/javascript" src="__JS__/Validform/images/Validform_v5.3.2.js"></script> 
+  <script type="text/javascript" src="__JS__/Validform/plugin/passwordStrength/passwordStrength-min.js"></script> 
+  <script type="text/javascript">
+$(function(){
+    $(".registerform").Validform({
+        tiptype:2,
+        /*表单验证*/
+        tiptype:function(msg,o,cssctl){
+            if(!o.obj.is("form")){
+                var objtip=o.obj.parent().find(".Validform_checktip");
+                cssctl(objtip,o.type);
+                objtip.text(msg);
+                
+                var infoObj=o.obj.parent().find(".info");
+                if(o.type==2){
+                    infoObj.fadeOut(200);
+                }else{
+                    if(infoObj.is(":visible")){return;}
+                    infoObj.css({
+                        left:0,
+                        top:-30
+                    }).show().animate({
+                        top:-27
+                    },200);
+                }
+                
+            }   
+        },  
+    });
+    
+   })
+</script>
+</head>
+<body>
+<div id="content">
+    <h1>首页 > 官网视频 > 修改视频</h1>
+    <h2>
+        <div class="h2_left">
+            <a href="__ACTION__" class="whole">全部</a>
+            <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+    </h2>
+    <form action="__APP__/Video/edit_do/" method="post" enctype="multipart/form-data" name="form" class="registerform">
+    <dl id="cdl">
+        <dd>
+            <span class="dd_left">所属分类：</span>
+            <span class="dd_right">
+                <select class="select" name="pid" style="width:110px;">
+                    <option value="2" <if condition="$vo.pid eq 2">selected</if>> 首页视频</option>
+                    <option value="3" <if condition="$vo.pid eq 3">selected</if>>企业管家视频</option>
+                    
+                </select>
+                <font>选择视频位置</font>
+            </span>
+        </dd>
+        <dd>
+            <span class="dd_left">视频标题:</span>
+             <span class="dd_right">
+                <input type="text" class="qtext" name="title" datatype="*2-80" errormsg="视频标题在2~80位之间！"  nullmsg="请填视频标题！" maxlength=80 value="<{$vo.title}>"/>
+                <font class="defi defi-01"><span class="Validform_checktip"></span></font>
+                <input type="hidden" name="id"  value="<{$vo.id}>"/>
+            </span>
+        </dd>
+        <dd>
+            <span class="dd_left">优酷VideoIDS:</span>
+            <span class="dd_right">
+                <input type="text" class="qtext" name="VideoIDS" datatype="*" nullmsg="请填优酷VideoIDS！" value="<{$vo.VideoIDS}>"/> <font class="defi defi-01"><span class="Validform_checktip"></span></font>
+            </span>
+        </dd>
+        <dd>
+            <span class="dd_left">排序ID：</span>
+            <span class="dd_right">
+                <input type="text" class="dtext" name="sortid" datatype="n"  value="<{$vo.sortid}>"/><font>* 排序ID，请填写数字</font><font class="defi defi-01"><span class="Validform_checktip"></span></font>
+            </span>
+        </dd>
+        <!--<dd>-->
+            <!--<span class="dd_left">关注度：</span>-->
+            <!--<span class="dd_right">-->
+                <!--<input type="text" class="dtext" name="atten" datatype="*" value="<{$vo.atten}>"/><font>* 关注度，请填写数字</font><font class="defi defi-01"><span class="Validform_checktip"></span></font>-->
+            <!--</span>-->
+        <!--</dd>-->
+
+        <dd>
+            <if condition="$vo.img neq ''"><img src="__UPLOAD__/video/<{$vo.img}>" style="width:280px;height:200px;">
+            <else />
+            </if>
+           
+        </dd>
+
+         <dd>
+            <div id="reader_box"></div>
+            <span class="dd_left">上传图片:</span>
+            <span class="dd_right">
+              <input type="file" name="img" id="readerfile"/>
+              请选择jpg,png, jpeg类型的图片(视频默认只有一张图片,上传新的即删除原来的)
+            </span>
+        </dd>
+
+        <dd><input type="submit" name="submit" value="修 改" class="submit" /></dd>
+    </dl>
+    </form>
+</div>
+</body>
+</html>

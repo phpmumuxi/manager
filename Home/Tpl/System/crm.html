@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>CRM|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+</head>
+<style>
+    .came a{left:220px; top:10px; width:60px; height:28px; line-height:28px; border:none; background:#090; color:#fff; font-family:"微软雅黑";text-align:center;float:right;margin-right: 30px;margin-bottom: 10px;cursor: pointer;}
+</style>
+<body>
+<div id="content">
+	<h1>首页 > CRM > 权限列表</h1>
+    <h2>
+    	<div class="h2_left">
+        	<a href="__ACTION__" class="whole">全部</a>
+        	<a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+    </h2>
+    <h2>
+        <div class="h2_left">
+            <a href="__APP__/System/crm/key/1" class="uclass" >admin</a>
+            <a href="__APP__/System/crm/key/14" class="uclass" style="width:110px;">区域总代理</a>
+            <a href="__APP__/System/crm/key/15"  class="uclass" style="width:110px;">贸易管家代理商</a>
+            <a href="__APP__/System/crm/key/16"  class="uclass" style="width:110px;">社区管家代理商</a>
+            <a href="__APP__/System/crm/key/17"  class="uclass" style="width:110px;">贸易管家工厂</a>
+            <a href="__APP__/System/crm/key/18"  class="uclass" style="width:110px;">贸易管家工厂-员工</a>
+            <a href="__APP__/System/crm/key/19"  class="uclass" style="width:110px;">社区管家店铺</a>
+            <a href="__APP__/System/crm/key/20"  class="uclass" style="width:110px;">社区管家代理商-员工</a>
+            <a href="__APP__/System/crm/key/21"  class="uclass" style="width:110px;">区域划分帐号</a>
+        </div>
+    </h2>
+    <div class="came"><a href="<{:U('System/crmadd')}>" title="">添加</a></div>
+    <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+    	<tr>
+        <!-- 	<th>权限id</th> -->
+            <th>岗位id</th>
+            <th>角色</th>
+            <th>对应模块操作</th>
+          <!--   <th>备注</th> -->
+          <!--   <th>操 作</th> -->
+        </tr>
+    <volist name="role" id="vo">
+    <tr>
+		<td style="text-align:center" class='tc'><{$vo.permission_id}></td>
+<!-- 		<td style="text-align:center" class='tc'><{$vo.role_id}></td> -->
+		<td style="text-align:center" class='tc'>
+		<!-- 使用switch标签判断输出 -->
+		<switch name="vo.position_id">
+		    <case value="1">admin</case>
+		    <case value="14">区域总代理</case>
+		    <case value="15">贸易管家代理商</case>
+            <case value="16">社区管家代理商</case>
+            <case value="17">贸易管家工厂</case>
+            <case value="18">贸易管家工厂-员工</case>
+            <case value="19">社区管家店铺</case>
+            <case value="20">社区管家代理商-员工</case>
+            <case value="21">区域划分帐号</case>
+		    <default />未知
+		</switch>
+		</td>
+         <td style="text-align:center" class='tc'><{$vo.url}></td>
+       <!--  <td style="text-align:center" class='tc'><{$vo.description}></td> -->
+		<!-- <td class='tc' style="text-align:center">
+        <a href="<{:U('System/crmedit')}>?sid=<{$vo.sid}>" style="color:orange;" title="编辑">编辑</a>
+		</td> -->
+	</tr> 
+	</volist>
+
+    </table>
+    <div id="page"><{$page}></div>
+</div>
+
+</body>
+</html>

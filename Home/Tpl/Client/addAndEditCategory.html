@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>添加行业|<{$configcache['Title']}></title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <link rel="stylesheet" type="text/css" href="__JS__/layer/skin/layer.css" />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/layer/layer.js"></script>   
+    <style type="text/css">
+        .dd_left{margin-top: 5px;}
+        .registerform{margin:60px 0 0 40px;}
+        .thum{
+            display: inline-block;
+            border:0;
+            padding:0;
+            margin: 10px;
+            cursor: pointer;
+            position: relative;
+        }
+        .btn-a{
+            padding: 6px 15px;
+            color: #ffffff;
+            background-color: #347FA9;
+            border-radius: 5px; 
+        }
+    </style>
+</head>
+<body>
+    <div id="content">
+        <h1>首页 > 逸管家 > 添加行业</h1>
+        <h2>
+            <div class="h2_left">
+                <a href="__ACTION__" class="whole">全部</a>
+                <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+                <a href="javascript:history.back();" class="Retreat">后退</a>
+                <a href="javascript:history.go(1);" class="Advance">前进</a>
+            </div>
+        </h2>
+        <div class="registerform">
+            <dl id="cdl">
+                <dd>
+                    <span class="dd_left">行业类型:</span>
+                    <span class="dd_right">
+                        <input type="text" class="qtext" style="width:160px" id="text" <if condition="$info['text']">value="<{$info['text']}>" </if> />
+                    </span>
+                </dd>
+                <dd>
+                    <span class="dd_left">首页图标:</span>
+                    <span class="dd_right">                      
+                        <div id="mainThum1" style="display: inline-block;border:0;padding:0;">
+                            <if condition="$info['categoryIcon']">
+                                <img style="margin-left:20px;width:100px;height:100px"  key="<{$info['categoryIcon']}>" src="<{$info['realCategoryIcon']}>" />
+                            </if>
+                        </div>
+                        <div class="thum">              
+                            <a class="btn-a" onclick="imgOneclick1()" >+上传图片</a>       
+                            <input type="file"  class="upOneImg1" onchange="update1(this);" style="display:none;">
+                        </div>
+                        <div style="display: inline;">（建议130*130，支持gif,jpg,jpeg,png,bmp格式）</div>           
+                    </span>
+                </dd>
+                <dd>
+                    <span class="dd_left">发布图标:</span>
+                    <span class="dd_right">                      
+                        <div id="mainThum2" style="display: inline-block;border:0;padding:0;">
+                            <if condition="$info['categoryImg']">
+                                <img style="margin-left:20px;width:100px;height:100px"  key="<{$info['categoryImg']}>" src="<{$info['realCategoryImg']}>" />
+                            </if>
+                        </div>
+                        <div class="thum">              
+                            <a class="btn-a" onclick="imgOneclick2()" >+上传图片</a>       
+                            <input type="file"  class="upOneImg2" onchange="update2(this);" style="display:none;">
+                        </div>
+                        <div style="display: inline;">（建议130*130，支持gif,jpg,jpeg,png,bmp格式）</div>           
+                    </span>
+                </dd>
+                <if condition="!$info['value']">
+                <dd>
+                    <span class="dd_left">行业代值:</span>
+                    <span class="dd_right">
+                        <input type="text" class="qtext" style="width:160px" placeholder="例如7700000000" id="value" />
+                    </span><span style='color:red'>&nbsp;&nbsp;&nbsp;行业代值不可重复</span>
+                </dd>
+                </if>
+                <dd>
+                    <span class="dd_left">排序:</span>
+                    <span class="dd_right">
+                      <input type="text" class="qtext" id="sort" style="width:160px" placeholder="例如10" <if condition="$info['sort']">value="<{$info['sort']}>" </if>/>
+                    </span>
+                </dd>
+                <if condition="$info['sid']">
+                <dd>
+                    <span class="dd_left">状态:</span>
+                    <span class="dd_right">
+                        <input type="radio" name="isUse"  value="1" <eq name="info.isUse" value='1'>checked</eq> /><label>使用</label>
+                         <input type="radio" name="isUse"  value="0" <eq name="info.isUse" value='0'>checked</eq> /><label>禁用</label>
+                    </span>
+                </dd>
+                </if>
+                <dd>
+                    <span class="dd_left">发布模板:</span>
+                    <span class="dd_right">
+                       <select class="select" id="categoryType">
+                            <option value='0'>--请选择--</option>
+                            <option value='1' <eq name="info.categoryType" value='1'>selected</eq> >模板一</option>
+                            <option value='2' <eq name="info.categoryType" value='2'>selected</eq> >模板二</option>
+                            <option value='3' <eq name="info.categoryType" value='3'>selected</eq> >模板三</option>
+                            <option value='4' <eq name="info.categoryType" value='4'>selected</eq> >模板四</option>
+                            <option value='5' <eq name="info.categoryType" value='5'>selected</eq> >模板五</option>                            
+                            <option value='6' <eq name="info.categoryType" value='6'>selected</eq> >模板六</option>                            
+                       </select>
+                    </span>
+                </dd>
+                <dd id="categoryTypeDd" <if condition="$info['categoryType']"><else />style="display: none"</if>>
+                    <span class="dd_left">模板图片:</span>
+                    <span class="dd_right">                                             
+                       <span id="categoryTypeSpan"><a target="_blank" <if condition="$info['categoryType']">href="__IMAGE__/moban/<{$info['categoryType']}>.png" <else />href=""</if> ><img <if condition="$info['categoryType']">src="__IMAGE__/moban/<{$info['categoryType']}>.png" <else />src=""</if> width='100px' height='100px'/></a></span>
+                    </span>
+                </dd>
+                <dd style="margin-top: 10px;margin-bottom: 160px;">
+                    <input type="button" class="so submit" id="saveButton" value="保存" />
+                    <if condition="$info['sid']">
+                        <input type="hidden" id="hiddenSid" value="<{$info['sid']}>" />
+                    <else />
+                        <input type="hidden" id="hiddenSid" value="" />
+                    </if>
+                </dd>
+            </dl>
+        </div>
+    </div>
+
+<script type="text/javascript">
+
+var _url='<{$Think.config.URL}>';
+
+function imgOneclick1(){
+    $(".upOneImg1").click(); 
+}
+
+function update1(a) {
+    var uri = _url + '/manager/trade/uploadImg';
+    var img = new FormData();
+    var file = $(a)[0].files[0];
+    file_name = file.name;
+    var extStart=file_name.lastIndexOf("."); 
+    var ext=file_name.substring(extStart,file_name.length).toUpperCase(); 
+    if(ext!=".jpeg"&&ext!=".jpg"&&ext!=".bmp"&&ext!=".png" &&ext!=".JPEG"&&ext!=".JPG"&&ext!=".BMP"&&ext!=".PNG"){ 
+        alert("文件选择错误,图片类型必须是jpeg,jpg,bmp,png中的一种"); 
+        return false; 
+    }
+    file_size = file.size;
+    var size = file_size / 1024;
+    if (size > 10240) {
+      return alert("上传的图片大小不能超过10M！");
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", uri, true);
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState == 4 && xhr.status == 200) {
+            var keyval = $.parseJSON(xhr.responseText);
+            var imgtxt = '<img style="margin-left:20px;width:100px;height:100px"  key="'+keyval.key+'" src="'+keyval.keyUrl+'" />';
+            $('#mainThum1').empty().html(imgtxt);                
+        }
+    };
+    img.append('file', file);
+    xhr.send(img);
+} 
+function imgOneclick2(){
+    $(".upOneImg2").click(); 
+}
+
+function update2(a) {
+    var uri = _url + '/manager/trade/uploadImg';
+    var img = new FormData();
+    var file = $(a)[0].files[0];
+    file_name = file.name;
+    var extStart=file_name.lastIndexOf("."); 
+    var ext=file_name.substring(extStart,file_name.length).toUpperCase(); 
+    if(ext!=".jpeg"&&ext!=".jpg"&&ext!=".bmp"&&ext!=".png" &&ext!=".JPEG"&&ext!=".JPG"&&ext!=".BMP"&&ext!=".PNG"){ 
+        alert("文件选择错误,图片类型必须是jpeg,jpg,bmp,png中的一种"); 
+        return false; 
+    }
+    file_size = file.size;
+    var size = file_size / 1024;
+    if (size > 10240) {
+      return alert("上传的图片大小不能超过10M！");
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", uri, true);
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState == 4 && xhr.status == 200) {
+            var keyval = $.parseJSON(xhr.responseText);
+            var imgtxt = '<img style="margin-left:20px;width:100px;height:100px"  key="'+keyval.key+'" src="'+keyval.keyUrl+'" />';
+            $('#mainThum2').empty().html(imgtxt);                
+        }
+    };
+    img.append('file', file);
+    xhr.send(img);
+} 
+$('#categoryType').change(function(){
+    if($('#categoryType').val()=='0'){
+        $('#categoryTypeDd').hide();
+    }else{        
+        var _imgUrl = '__IMAGE__/moban/'+$('#categoryType').val()+'.png';
+        $('#categoryTypeDd').show();
+        $('#categoryTypeSpan').find('a').attr('href',_imgUrl);
+        $('#categoryTypeSpan').find('img').attr('src',_imgUrl);
+    }
+})
+//保存
+$('#saveButton').click(function(){
+    var _text = $.trim($('#text').val());
+    if(!_text){
+        layer.msg('请填写行业类型！', {icon: 2}); 
+        return false;
+    }
+    var _icoIconUrl = $('#mainThum1').find('img').attr('key');
+    if (!_icoIconUrl) {  
+        layer.msg('请上传首页图标！', {icon: 2});
+        return false;
+    }
+     var _icoImgUrl = $('#mainThum2').find('img').attr('key');
+    if (!_icoImgUrl) {  
+        layer.msg('请上传发布图标！', {icon: 2});
+        return false;
+    }  
+    var _sort = $.trim($('#sort').val());
+    if(_sort==''){
+        _sort=1;
+    }
+    var _categoryType = $('#categoryType').val();
+    if(_categoryType=='0'){
+        layer.msg('请选择发布模板！', {icon: 2});
+        return false;
+    }
+    var _sid = $.trim($('#hiddenSid').val());
+    if(_sid){
+        if(!$("input[type='radio']").is(":checked")){
+            layer.msg('请选择使用状态！', {icon: 2});
+            return false;
+        }
+        var _isUse = $("input[name='isUse']:checked").val();
+        $.post(_url+'/manager/sysGoodsCategory/saveSysGoodsCategory',{'sid':_sid,'text':_text,'categoryIcon':_icoIconUrl,'categoryImg':_icoImgUrl,'sort':_sort,'isUse':_isUse,'categoryType':_categoryType},function(result){
+            if(result.success){
+                layer.msg('更新成功！',{icon: 1,time: 1500},function(){
+                    window.location.href='__APP__/Client/categoryManagement';
+                });
+            }else{
+                layer.msg('更新失败！',{icon: 2,time: 1500},function(){                
+                    f5();
+                });
+            }
+        },'json')
+
+    }else{
+        var _value = $.trim($('#value').val());
+        if (!_value) {  
+            layer.msg('请填写行业代值！', {icon: 2});
+            return false;
+        }        
+        $.post(_url+'/manager/sysGoodsCategory/saveSysGoodsCategory',{'text':_text,'categoryIcon':_icoIconUrl,'categoryImg':_icoImgUrl,'value':_value,'sort':_sort,'categoryType':_categoryType},function(result){            
+                if(result.success){
+                    layer.msg('保存成功！',{icon: 1,time: 1500},function(){
+                        window.location.href='__APP__/Client/categoryManagement';
+                    });
+                }else{
+                    layer.msg('保存失败！',{icon: 2,time: 1500},function(){                
+                        f5();
+                    });
+                }
+        },'json')
+    }
+})
+</script>
+</body>
+</html>

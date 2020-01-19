@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>添加新类目</title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/winpop.js"></script>
+    <script type="text/javascript" src="__JS__/check.js"></script>
+    <script>
+        $(document).ready(function() {
+            var $dldd=$('#dl dd');
+            $('.button').click(function() {
+                var
+                        mname=$dldd.find('.qtext').eq(0).val(),			//模块名称
+                        sid=$dldd.find('.select').val(),				//目录
+                        status=$dldd.find('.status:checked').val();		//是否永久封禁
+
+                if (!tcheck(mname,'','请填写正确的菜单名称')) { return false; }
+                if (!tcheck(mname,'1,20','菜单名称请在20个字符以内','length')) { return false; }
+                if (!tcheck(sid,'','目录ID获取失败')) { return false; }
+                if (!tcheck(sid,'number','目录ID获取失败')) { return false; }
+                if (!tcheck(status,'','状态ID获取失败')) { return false; }
+                if (!tcheck(status,'number','状态ID获取失败')) { return false; }
+
+                wintq('正在添加，请稍后...',4,20000,0,'');
+                $.ajax({
+                    url:'__APP__/System/manage_add_do/',
+                    dataType:'json',
+                    type:'POST',
+                    data:'mname='+mname+'&sid='+sid+'&status='+status,
+                    success: function(data) {
+                        if (data.s=='ok') {
+                            wintq('添加成功',1,1000,0,'__APP__/System/manage_add/');
+                        }else {
+                            wintq(data.s,3,1000,1,'');
+                        }
+                    }
+                });
+            });
+            $('#ximg').click(function() {
+                window.top.c.window.Img();
+            });
+        });
+    </script>
+</head>
+<body>
+<div id="content">
+    <dl id="dl">
+        <dt>添加类目</dt>
+        <dd>
+            <span class="dd_left">类目名称：</span>
+            <span class="dd_right"><input type="text" name="mname" class="qtext" maxlength="20" /><font>* 输入如：系统管理</font></span>
+        </dd>
+        <dd>
+            <span class="dd_left">目录分类：</span>
+            <span class="dd_right">
+            	<select name="sid" class="select">
+                    <option value="0">顶级目录</option>
+                    <foreach name="list" item="l">
+                    	<option value="<{$l.value}>"><if condition="$l.level neq 0">-----------<{$l.text}></if><if condition="$l.level neq 1"><{$l.text}></if></option>
+                    </foreach>
+                </select><font>* 选择类目目录</font>
+            </span>
+        </dd>
+        <dd>
+            <span class="dd_left">状态：</span>
+            <span class="dd_right"><label><input type="radio" name="status" class="status" value="0" checked /> 启用</label><label><input type="radio" name="status" class="status" value="1" /> 禁用</label></span>
+        </dd>
+        <dd><input type="button" class="button" value="提 交" /></dd>
+    </dl>
+</div>
+</body>
+</html>

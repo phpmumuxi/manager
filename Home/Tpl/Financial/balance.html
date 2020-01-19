@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>财务管理|<{$configcache['Title']}></title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/winpop.js"></script>
+    <script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__JS__/layer/layer.js"></script>
+    <link rel="stylesheet" type="text/css" href="__JS__/layer/skin/layer.css"  />
+    <style type="text/css">
+    .select{padding:5px 10px;border:#ddd 1px solid;border-radius:4px;width:60%;margin:5% auto;font-size:12px}
+    .select li{list-style:none;padding:10px 0 5px 100px}
+    .select .select-list{border-bottom:#eee 1px dashed}
+    .select dl{zoom:1;position:relative;line-height:24px;}
+    .select dl:after{content:" ";display:block;clear:both;height:0;overflow:hidden}
+    .select dt{width:100px;margin-bottom:5px;position:absolute;top:0;left:-100px;text-align:right;color:#666;height:24px;line-height:24px}
+    .select dd{float:left;display:inline;margin:0 0 5px 5px;}
+    .select a{display:inline-block;white-space:nowrap;height:24px;padding:0 10px;text-decoration:none;color:#039;border-radius:2px;}
+    .select a:hover{color:#f60;background-color:#f3edc2}
+    .select .selected a{color:#fff;background-color:#f60}
+    .select-result dt{font-weight:bold}
+    .select-no{color:#999}
+    .select .select-result a{padding-right:20px;background:#f60 url("__PUBLIC__/image/close.gif") right 9px no-repeat}
+    .select .select-result a:hover{background-position:right -15px}
+    .tc{text-align:center; text-indent:0;font-family:"微软雅黑";font-size: 14px;color:#111;}
+    .tel{left:0; top:10px; width:220px; height:26px; line-height:26px; color:#555; font-family:"微软雅黑"; repeat-x left top; border:solid 1px #ccc;}
+    .sure{left:220px; top:10px; width:60px; height:28px; line-height:28px; border:none; background:#090; color:#fff; font-family:"微软雅黑"; cursor:pointer;}
+    #str{position:absolute; margin-left:400px;}
+    </style>
+</head>
+<body>
+    <div id="content">
+        <h1>首页 > 财务管理 > 用户账户余额列表</h1>
+        <h2>
+            <div class="h2_left">
+                <a href="__ACTION__" class="whole">全部</a>
+                <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+                <a href="javascript:history.back();" class="Retreat">后退</a>
+                <a href="javascript:history.go(1);" class="Advance">前进</a>
+            </div>
+        </h2><br/>
+        <form method="get">
+            手机号:
+            <input type="text"  name="telephone" class="tel telephone" value="<{$telephone}>"/>&nbsp;&nbsp;&nbsp;&nbsp;
+            昵称:
+            <input type="text"  name="username" class="tel userName" value="<{$username}>"/>&nbsp;&nbsp;&nbsp;&nbsp;
+            公司名称:
+            <input type="text"  name="company" class="tel company" value="<{$company}>"/>&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="submit" class="sure" value="搜索" />
+        </form>
+        <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+            <tr>
+                <th>昵称</th>
+                <th>真实姓名</th>
+                <th>公司名称</th>
+                <th>手机号</th>
+                <th>账户余额</th>
+                <!-- <th>可提现余额</th> -->
+            </tr>
+            <volist name="reco" id="vo">
+                <tr>
+                    <td style="text-align:center" class='tc'><{$vo.userNickName}></td>
+                    <td style="text-align:center" class='tc'><{$vo.userRealName}></td>
+                    <td style="text-align:center" class='tc'><{$vo.userCompany}></td>
+                    <td style="text-align:center" class='tc'><{$vo.userTelephone}></td>
+                    <td style="text-align:center" class='tc'><{$vo.userBalance}></td>
+                    <!-- <td style="text-align: center" class='tc'><{$vo.withdrawMoney}></td> -->
+                </tr>
+            </volist>
+        </table>
+        <div id="page">
+            <{$page}>
+        </div>
+    </div>
+</body>
+</html>

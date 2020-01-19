@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>报名人员信息|<{$configcache['Title']}></title>
+	<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+	<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+  <script type="text/javascript" src="__JS__/jquery.js"></script>
+	<script type="text/javascript" src="__JS__/Public.js"></script>
+	<script type="text/javascript" src="__JS__/winpop.js"></script>
+	<script type="text/javascript" src="__JS__/check.js"></script>
+  <style type="text/css"> 
+  #table td{  padding:5px; font-size:14px;text-align:left;}
+ .td1{
+  	width:15%
+  }
+  </style>
+</head>
+<body>
+  <dt>详情信息</dt>
+  <div id="content" style="text-align:center;">
+   <dl id="dl">
+    <h2>
+      <div class="h2_left">
+        <a href="__ACTION__" class="whole">全部</a>
+        <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+        <a href="javascript:history.back();" class="Retreat">后退</a>
+        <a href="javascript:history.go(1);" class="Advance">前进</a>
+      </div>
+    </h2>   
+    <table style="width:60%;" id="table">
+      <tr><td colspan="2"><b>实名信息</b><hr/></td></tr>
+      <tr>
+       	<td class="td1">真实姓名:</td> <td><{$info.userRealName}></td>
+      </tr>
+      <tr >
+  	    <td class="td1">身份证号：</td><td><{$info.userIdCode}></td>
+      </tr>  
+      <tr>
+        <td class="td1">常住地址:</td><td><{$info.userAddress}></td>
+      </tr>   
+      <tr>
+        <td class="td1">手持身份证头部照:</td>
+        <td>
+          <a style="margin-right:10px" href="<{$info.headSelfPicUrl}>" target="_blank"><img width=100px height='100px' src="<{$info.headSelfPicUrl}>"></a>
+        </td>
+      </tr>
+      <tr>
+        <td class="td1">手持身份证面部照:</td>
+        <td>
+          <a style="margin-right:10px" href="<{$info.idCodeFrontPic}>" target="_blank"><img width=100px height='100px' src="<{$info.idCodeFrontPic}>"></a>
+        </td>
+      </tr>
+      <tr>
+        <td class="td1">手持身份证反面照:</td>
+        <td>
+          <a style="margin-right:10px" href="<{$info.idCodeBackPic}>" target="_blank"><img width=100px height='100px' src="<{$info.idCodeBackPic}>"></a>
+        </td>
+      </tr>
+      
+      <tr><td colspan="2"></td></tr>
+      <tr><td colspan="2"><b>个人基本信息</b><hr/></td></tr>
+      <tr>
+        <td class="td1">个人服务行业:</td><td><{$info.text}></td>
+      </tr>
+      <tr>
+        <td class="td1">意向服务区域:</td><td><{$info.serviceArea}></td>
+      </tr>
+      <tr>
+        <td class="td1">服务截止日期:</td><td><{$info.deadTime}></td>
+      </tr>
+      <tr>
+        <td class="td1">个人特长:</td><td><{$info.personalSpecialty}></td>
+      </tr>
+
+      <tr><td colspan="2"></td></tr>
+      <tr><td colspan="2"><b>意向服务领域</b><hr/></td></tr>
+      <tr>
+        <td colspan="2">
+            <volist name="info.serviceTypeList" id="val">
+                <{$val.typeName}>&nbsp;&nbsp;&nbsp;
+            </volist>
+        </td>
+      </tr>
+      
+      <tr><td colspan="2"></td></tr>
+      <tr><td colspan="2"><b>审核结果</b><hr/></td></tr>
+      <tr>
+        <td colspan="2">
+            <switch name="info.auditEnrollStatus">
+              <case value="1">待审核</case>
+              <case value="2">审核通过</case>
+              <case value="3">审核驳回 ( <{$info.reasonRejection}> )</case>
+              <default />
+            </switch>
+        </td>
+      </tr>
+    </table>
+</div>
+</body>
+</html>

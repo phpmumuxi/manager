@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>登录日志|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<style type="text/css">
+	#content #table .tr td {border:1px solid #ccc;}
+</style>
+</head>
+<body>
+<div id="content">
+     <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+    	<tr>
+            <th>用户名</th>
+            <th>设备名称</th>
+            <th>登录地址</th>
+            <th>设备版本</th>
+            <th>设备编号</th>
+            <th>登录时间</th>
+            <th>备注</th>
+            <th>创建时间</th>
+            <th>是否启用</th>
+        </tr>
+      
+        <!--顶级数据-->
+        <volist name="login" id="vo">
+        <tr class="tr">
+            <td class="tc"><{$vo.userName}></td>
+            <td><{$vo.equName}></td>
+            <td class="tc"><{$vo.loginIp}></td>
+            <td class="tc"><{$vo.equVersion}></td>
+            <td class="tc"><{$vo.equImei}></td>
+            <td class="tc"><{$vo.loginTime}></td>
+            <td class="tc"><{$vo.comment|mbsubstr=0,10}></td>
+            <td class="tc"><{$vo.createTime}></td>
+         	<td style="text-align:center" class='tc'>
+  				<!-- 使用switch标签判断输出 -->
+  				<switch name="vo.istUse">
+		  		    <case value="0">否</case>
+		  		    <case value="1">是</case>
+		  		    <default />缺少参数
+		  		</switch>
+  		</td>
+        </tr>
+        </volist>
+    </table>
+    <div id="page"><{$page}></div>
+</div>
+</body>
+</html>

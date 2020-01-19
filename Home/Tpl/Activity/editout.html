@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>活动管理|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script type="text/javascript" src="__JS__/check.js"></script>
+<script type="text/javascript" src="__JS__/jquery-form.js"></script>
+<link rel="stylesheet" href="__JS__/Validform/images/style.css" type="text/css" media="all" /> 
+<script type="text/javascript" src="__JS__/Validform/images/jquery-1.9.1.min.js"></script> 
+<script type="text/javascript" src="__JS__/Validform/images/Validform_v5.3.2.js"></script> 
+<script type="text/javascript" src="__JS__/Validform/plugin/passwordStrength/passwordStrength-min.js"></script> 
+<script src="__JS__/jquery-form.js" type="text/javascript"></script>
+<script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="__ROOT__/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="__ROOT__/ueditor/ueditor.all.min.js"> </script>
+<script type="text/javascript" src="__ROOT__/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="__JS__/PCASClass.js"></script>
+<style type="text/css" >
+    #view{} .imgbox{float:left;position:relative;width:100px;height: 100px;margin-left: 10px;margin-top: 10px;
+      padding:5px;border:solid 1px #ccc;border-radius: 5px;;}
+    #view{} .imgbox .close{border: solid 1px #ccc;position: absolute;top: -15px;
+      width: 20px;height: 20px; display: inherit;cursor: pointer;text-align: center;background: red;color: #fff;right: -10px;z-index: 20;border-radius: 100%;}
+    #view{} .imgbox input{width:100%;height: 100%;z-index: 10;}
+    .tablecon{width: 800px; margin-left:80px;}
+    #content .tablecon #cdl dd .dd_left { display:block; width:110px; line-height:24px; float:left; text-align:left; font-weight:900; color:#444; margin-right:6px; }
+    .bang{cursor: pointer;background-color: #090;color: #fff;margin-right: 365px;float:right;text-align: center;width: 60px;height: 26px;margin-top: 5px;}
+    .acttitle{font-size: 28px;margin: 0 auto;width: 120px;font-weight: bold;}
+    #content #cdl dd font span { font-family:"Georgia"; font-weight:900; font-size:18px; color:#444; }
+    .matters a{cursor: pointer;background-color: #090;color: #fff;margin-right: 164px;float:right;text-align: center;width: 96px;height: 26px;} 
+    #content .atext { width:100px; height:24px; line-height:24px;border:solid 1px #ccc; font-family:"宋体"; }
+    #content .ttext { width:140px; height:24px; line-height:24px;border:solid 1px #ccc; font-family:"宋体"; }
+    .editimg{height:80px;padding-left:10px;}
+    .delimg{height: 20px;cursor: pointer;}
+</style>
+<script type="text/javascript">
+$(function(){
+    $(".registerform").Validform({
+        tiptype:2,
+        /*表单验证*/
+        tiptype:function(msg,o,cssctl){
+            if(!o.obj.is("form")){
+                var objtip=o.obj.parent().find(".Validform_checktip");
+                cssctl(objtip,o.type);
+                objtip.text(msg);
+                
+                var infoObj=o.obj.parent().find(".info");
+                if(o.type==2){
+                    infoObj.fadeOut(200);
+                }else{
+                    if(infoObj.is(":visible")){return;}
+                    infoObj.css({
+                        left:0,
+                        top:-30
+                    }).show().animate({
+                        top:-27
+                    },200);
+                }  
+            }   
+        },  
+    });
+   })
+</script> 
+</head>
+<body>
+<div id="content">
+    <h1>首页 > 活动管理 > 修改活动</h1>
+    <h2>
+        <div class="h2_left">
+            <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+    </h2>
+    <div class="tablecon">
+    <div class="acttitle">修改活动</div>
+    <form action="<{$url}>/manager/active/updateActive" method="post" class="registerform" id="form"  enctype="multipart/form-data">
+    <dl id="cdl">
+        <dd>
+            <input type="hidden" name="sid" value="<{$shop.sid}>">
+            <span class="dd_left">活动状态:</span>
+            <if condition="$shop.activeStatus eq 1">
+                 <span class="dd_right" style="">
+                    正在报名
+                </span>
+                <span class="matters"><a href="<{:U('Activity/user',array('activeId'=>$shop['sid'],'activeShopRel'=>$activeShopRel))}>" title="">查看报名情况</a></span>
+                <elseif condition="$shop.activeStatus eq 0"/> 已上线
+                <elseif condition="$shop.activeStatus eq 2"/> 报名截止
+                <span class="matters"><a href="<{:U('Activity/user',array('activeId'=>$shop['sid'],'activeShopRel'=>$activeShopRel))}>" title="">查看报名情况</a></span>
+                <elseif condition="$shop.activeStatus eq 3"/> 已结束
+                <span class="matters"><a href="<{:U('Activity/user',array('activeId'=>$shop['sid'],'activeShopRel'=>$activeShopRel))}>" title="">查看报名情况</a></span>    
+                <else />
+            </if>
+        </dd>
+        <dd>
+            <span class="dd_left" style="margin-top:10px;">商家注册手机号:</span>
+            <if condition="$activeShopRel eq ''">
+            <span class="dd_right" style="margin-top:5px;">
+                <input type="text" class="qtext telphone" name="activeShopRel" value="<{$activeShopRel}>"  maxlength=11/>
+            </span>
+            <span class="bang binding">绑定</span>
+            <else/>
+            <span class="dd_right" style="margin-top:5px;">
+                <input type="text" class="qtext telphone" name="activeShopRel" value="<{$activeShopRel}>"  datatype="m" errormsg="请正确填写手机号"  nullmsg="请填写手机号！" maxlength=11 readonly="readonly" />
+                <font class="defi defi-01"><span class="Validform_checktip"></span></font>
+            </span>
+            <span class="bang nobinding">解绑</span>
+            </if>
+        </dd>
+        <dd>
+            <span class="dd_left">商家名称:</span>
+            <span class="dd_right">
+                <input type="text" class="qtext" name="goodsName" value="<{$shop.goodsName}>" id="busname" datatype="*2-80" errormsg="商家名称在2~80位之间！"  nullmsg="请填写商家名称！" maxlength=80 readonly/>
+                <font class="defi defi-01"><span class="Validform_checktip"></span></font>
+            </span>
+        </dd>
+        <dd>
+            <span class="dd_left">活动名称:</span>
+            <span class="dd_right">
+                <input type="text" class="qtext" name="activeName" value="<{$shop.activeName}>" id="actname" datatype="*2-250" errormsg="活动名称在2~250位之间！"  nullmsg="请填写活动名称！" maxlength=250 readonly/>
+                <font class="defi defi-01"><span class="Validform_checktip"></span></font>
+            </span>
+        </dd>
+
+        <dd>
+            <span class="dd_left">活动区域:</span>
+            <span class="dd_right">
+                <script type="text/javascript">
+                    $(function(){
+                        new PCAS("crm_afgmsj['state']","crm_afgmsj['city']","crm_afgmsj['area']","<{$area.0}>","<{$area.1}>","<{$area.2}>");
+                    });
+                </script>
+                <select name="crm_afgmsj['state']" class="input-medium state atext" datatype="*" nullmsg="请选择省份" class="Validform_error" disabled></select>
+                <select name="crm_afgmsj['city']" class="input-medium city atext" datatype="*" nullmsg="请选择城市" class="Validform_error" disabled></select>
+                <select name="crm_afgmsj['area']" class="input-medium area atext" datatype="*" nullmsg="请选择地区" class="Validform_error" disabled></select>
+                <div id="statestr"></div>
+            </span>
+        </dd>
+
+        <dd>
+            <span class="dd_left">活动地址:</span>
+            <span class="dd_right">
+                <input type="text" class="qtext" name="activeAddress" value="<{$shop.activeAddress}>" id="activeAddress" datatype="*2-250" errormsg="活动地址在2~250位之间！"  nullmsg="请填写活动地址！" maxlength=250 readonly/>
+                <font class="defi defi-01"><span class="Validform_checktip"></span></font>
+            </span>
+        </dd>
+
+        <dd>
+            <span class="dd_left">名额:</span>
+            <span class="dd_right">
+                <input type="text" class="dtext" name="activeNum" value="<{$shop.activeNum}>" id="man" datatype="n" errormsg="请正确填写活动名额！！"  nullmsg="请填写活动名额" readonly style="text-align: center;"/>
+                <font class="defi defi-01"><span class="Validform_checktip"></span></font>
+            </span>
+        </dd>
+        <dd>
+            
+            <span class="dd_left">系数:</span>
+            <span class="dd_right">
+                <input type="text" class="dtext" name="applyNum" value="<{$shop.applyNum}>"  datatype="/^-?[1-9]+(\.\d+)?$|^-?0(\.\d+)?$|^-?[1-9]+[0-9]*(\.\d+)?$/" nullmsg="请正确填写活动系数!" errormsg="必须为数字，可以有小数" readonly="readonly" style="text-align: center;" />
+                <font class="defi defi-01"><span class="Validform_checktip"></span></font>
+            </span>
+        </dd>
+        <dd>
+            <span class="dd_left">活动截止时间:</span>
+            <span class="dd_right" style="margin-top:5px;">
+                <input name="endTime" value="<{$shop.activeEndTime}>" type="text" id="end_date" name="end_date" class="Wdate" readonly/>
+            </span>
+        </dd>
+
+        <dd>
+            <span class="dd_left">报名时间:</span>
+            <input type="hidden" name="oldBeginTime" value="<{$shop.activeBeginTime}>">
+            <input type="hidden" name="oldEndtime" value="<{$shop.activeEndTime}>">
+            <input type="hidden" name="oldApplyTime" value="<{$shop.applyTime}>">
+
+            <span class="dd_right" style="margin-top:5px;">
+            <input class="ttext" name="beginTime" value="<{$shop.activeBeginTime}>" type="text" id="start_date" name="start_date" readonly/>&nbsp;~
+            </span>
+ 
+            <span class="dd_right" style="margin-top:5px;">
+               <input name="checkStopTime" value="<{$shop.applyTime}>" type="text" id="end_date2" name="end_date2" class="Wdate" readonly/>
+            </span>
+        </dd>
+        <dd>
+            <span class="dd_left">类别:</span>
+            <span class="dd_right" style="margin-top:5px;">
+                <select class="select" name="activeType" style="width:110px;" id="activeType" disabled>
+                    <option value="">请选择</option>
+                    <option value="0" <if condition="$shop.activeType eq 0">selected</if>>霸王餐</option>
+                    <option value="1" <if condition="$shop.activeType eq 1">selected</if>>其它</option>
+                </select>
+            </span>
+        </dd>
+        <dd>
+            <span class="dd_left">标签:</span>
+            <span class="dd_right" style="margin-top:5px;">
+            <input type="radio" name="activeLabel" value="1" <if condition="$shop.activeLabel eq 1">checked</if>>美食&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="radio" name="activeLabel" value="2" <if condition="$shop.activeLabel eq 2">checked</if>>生活
+            </span>
+        </dd>
+
+        <dd class="yuanimg">
+            <span class="dd_left">活动主图:</span>
+            <span class="dd_right">
+                    <span class="hidenimg">
+                        <img src="<{$mainpic.realPicUrl}>" alt="" class="editimg">
+                    </span>
+            </span>
+        </dd> 
+
+        <dd class="yuanimg">
+            <span class="dd_left">活动副图:</span>
+            <span class="dd_right">
+                <volist name="piclist" id="pic" key="k">
+                    <span class="hidenimg<{$k}>">
+                        <img src="<{$pic.realPicUrl}>" alt="" class="editimg">
+                    </span>
+                </volist>
+            </span>
+        </dd> 
+
+        <dd>
+            <span class="dd_left">活动介绍:</span>
+            <span class="dd_right" style="margin-top:5px;margin-left: 115px;">
+                <script id="editor" name="activeDetail" type="text/plain" style="width:750px;height:300px;"><{$shop['activeDetail']|htmlspecialchars_decode}></script>
+            </span>
+        </dd>
+
+        <dd>
+            <span class="dd_left">商家信息:</span>
+            <!-- <span class="dd_right" style="margin-top:5px;margin-left: 115px;">
+                <textarea style="border: 1px solid rgb(204, 204, 204); box-shadow: none; margin: 0px; width: 750px; height: 106px;" name="goodsInfo" id="goodsInfo" readonly><{$shop.goodsInfo}></textarea>
+            </span> -->
+            <span class="dd_right" style="margin-top:5px;margin-left: 115px;">
+                <script id="editor2" name="goodsInfo" type="text/plain" style="width:750px;height:300px;"><{$shop['goodsInfo']|htmlspecialchars_decode}></script>
+            </span>
+        </dd>
+        <dd style="margin-top: 10px;margin-bottom: 160px;"></dd>
+    </dl>
+    </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+var imgkey = [];
+    function load(file) {
+        var num=1;
+        $('.imgbox').remove();
+        if (file.files) {
+            for (var i = 0; i < file.files.length; i++) {
+                var reader = new FileReader();
+                reader.readAsDataURL(file.files[i]);
+                reader.onload = function(evt) {
+                    var imgbox=$('<div></div>');
+                    imgbox.addClass('imgbox');
+                    $('#view').append(imgbox);
+                    var imgs = $('<input type="image" />');
+                    imgs.attr('name','mum'+num);
+                    num++;
+                    imgs.appendTo(imgbox);
+                    imgs.attr('src', evt.target.result);
+                }
+            }
+        }
+    }
+
+    $('.area').change(function(){
+        var city = $('.state option:selected').val()+'-'+$('.city option:selected').val()+'-'+$('.area option:selected').val();//区域
+        //console.log(city);
+        var html = '<input type="hidden" name="activeArea" value='+city+'>';
+        document.getElementById("statestr").innerHTML = html
+    })
+
+    UE.getEditor('editor');
+    //获取内容
+    function getContent() {
+        return UE.getEditor('editor').getContent();
+    }
+
+    UE.getEditor('editor2');
+    //获取内容
+    function getContent() {
+        return UE.getEditor('editor2').getContent();
+    }
+
+
+$('.delimg').click(function(){
+   imgkey.push($(this).attr('key'));
+    keyArray = imgkey.join(',');
+    var htmlimg = '<input type="hidden" name="keyArray" value='+keyArray+'>';
+    document.getElementById("imgstr").innerHTML = htmlimg ;
+    var i = $(this).attr('k');
+    //console.log(i);
+    $('.hidenimg'+i).remove();
+
+});
+
+
+$(function(){
+$(document).ready(function(){
+    $('.submit').click(function(){
+        var busname = $('#busname').val();
+        var actname = $('#actname').val();
+        var state = $('.state').val();
+        var city = $('.city').val();
+        var area = $('.area').val();
+        var activeAddress = $('#activeAddress').val();
+        var activeNum = $('#man').val();
+        var xishu = $('.xishu').val();
+        var Wdate = $('.Wdate').val();
+        if(busname == '' || actname=='' || state=='' || city=='' ||area=='' ||activeAddress=='' ||activeNum=='' ||xishu=='' ||Wdate=='' ){
+            return;
+        }
+
+        var index = layer.load(1, {
+          shade: [0.1,'#fff'] //0.1透明度的白色背景
+        });   
+    });
+
+    $('#form').ajaxForm(function(data){
+        //弹出ajax请求后的回调结果，data回调数据  onclick="sub()"
+        if(data.code =="2000" ){ 
+            layer.closeAll('loading');
+            alert(data.message);
+            var url = $('#jump').val();
+            window.location.href = url; 
+            // location.href=document.referrer; 
+         }else{
+            layer.closeAll('loading');
+            alert(data.message);
+         }
+    });
+});
+});
+
+
+//绑定
+$('.binding').click(function(){
+    var telephone = $('.telphone').val();
+    var activeId = "<{$activeId}>";
+    if(telephone){
+        $.ajax({
+            url:'<{$url}>/manager/active/verifyIsRegister',
+            data:{telephone:telephone},
+            type:'post',
+            cache:'false',
+            dataType:'json',
+            success:function(json){
+                //console.log(json);  
+                if(json.code == 2000){
+                $.ajax({
+                    url:'<{$url}>/manager/active/activeBoundTelephone',
+                    data:{telephone:telephone,activeId:activeId},
+                    type:'post',
+                    cache:'false',
+                    dataType:'json',
+                    success:function(data){
+                        alert(data.message);  
+                        location.reload(); 
+                    },
+                    error:function(){
+                        alert('异常!');
+                    }
+                });
+                }else if(json.code == 3000){
+                    alert(json.message);
+                }else if(json.code == 5000){
+                    alert(json.message);
+                }
+            },
+            error:function(){
+                alert('异常!');
+            }
+        });
+    }else{
+        alert('请正确填写手机号')
+    }
+});
+
+//解除绑定
+$('.nobinding').click(function(){
+    var telephone = $('.telphone').val();
+    var activeId = "<{$activeId}>";
+    if(telephone){
+    $.ajax({
+        url:'<{$url}>/manager/active/unbundlingActive',
+        data:{telephone:telephone,activeId:activeId},
+        type:'post',
+        cache:'false',
+        dataType:'json',
+        success:function(data){
+            //console.log(data);  
+            alert(data.message);  
+            location.reload(); 
+        },
+        error:function(){
+            alert('异常!');
+        }
+    });
+    }else{
+        alert('暂无手机号!')
+    }
+});
+
+</script>
+</body>
+</html>

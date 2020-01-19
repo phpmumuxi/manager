@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>商品管理|<{$configcache['Title']}></title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/winpop.js"></script>
+    <script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+    <style type="text/css">
+        .select{padding:5px 10px;border:#ddd 1px solid;border-radius:4px;width:60%;margin:5% auto;font-size:12px}
+        .select li{list-style:none;padding:10px 0 5px 100px}
+        .select .select-list{border-bottom:#eee 1px dashed}
+        .select dl{zoom:1;position:relative;line-height:24px;}
+        .select dl:after{content:" ";display:block;clear:both;height:0;overflow:hidden}
+        .select dt{width:100px;margin-bottom:5px;position:absolute;top:0;left:-100px;text-align:right;color:#666;height:24px;line-height:24px}
+        .select dd{float:left;display:inline;margin:0 0 5px 5px;}
+        .select a{display:inline-block;white-space:nowrap;height:24px;padding:0 10px;text-decoration:none;color:#039;border-radius:2px;}
+        .select a:hover{color:#f60;background-color:#f3edc2}
+        .select .selected a{color:#fff;background-color:#f60}
+        .select-result dt{font-weight:bold}
+        .select-no{color:#999}
+        .select .select-result a{padding-right:20px;background:#f60 url("__PUBLIC__/image/close.gif") right 9px no-repeat}
+        .select .select-result a:hover{background-position:right -15px}
+        .tc{text-align:center; text-indent:0;font-family:"微软雅黑";font-size: 14px;color:#111;}
+        button{margin:5px;}
+    </style>
+</head>
+<body>
+<div id="content">
+    <h1>首页 > 商品管理 > 商品库</h1>
+    <h2>
+        <div class="h2_left">
+            <a href="__ACTION__" class="whole">全部</a>
+            <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+
+        <div class="search">
+            <form method="get" id="search">
+                <input name="month_date" type="text" id="start_date" name="start_date" onClick="WdatePicker({dateFmt:'yyyy-MM'})" class="Wdate sBeginTime"/>&nbsp;
+                <input type="submit" class="so" value="搜 索" />
+            </form>
+            <font>小贴士：可以按月份搜索</font>
+        </div>
+    </h2>
+    <div class="fen">
+        <ul class="select" style="height:75px;margin-top: 20px;margin-bottom: 20px;">
+            <li class="select-list List_more">
+                <dl id="select">
+                    <dt>商品状态：</dt>
+                    <dd><a href="<{$s|createsearchurl="/Financial/monthRebate",s,###,"add",null,null}>">全部</a></dd>
+                    <volist name="status" id="val">
+                        <dd <if condition="$Think.get.s eq $val['value']"> class="selected select-all"</if>><a href="<{$val.value|createsearchurl="/Financial/monthRebate",s,###,"add",null,null}>"><{$val.name}></a></dd>
+                    </volist>
+                </dl>
+            </li>
+
+        </ul>
+    </div>
+    <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+        <tr>
+            <th>昵称</th>
+            <th>真实姓名</th>
+            <th>公司名</th>
+            <th>手机号</th>
+            <th>月订单总金额</th>
+            <th>审核状态</th>
+            <th>操作</th>
+        </tr>
+        <input type="hidden" name="url" value="<{$url}>">
+        <volist name="list" id="vo">
+            <tr>
+                <td style="text-align:center" class='tc'><{$vo.userNickName}></td>
+                <td style="text-align:center" class='tc'><{$vo.userRealName}></td>
+                <td style="text-align:center" class='tc'><{$vo.userCompany}></td>
+                <td style="text-align:center" class='tc'><{$vo.userTelephone}></td>
+                <td style="text-align:center" class='tc'><{$vo.monthOrderTotalMoney}></td>
+                <td style="text-align:center" class='tc'>
+                    <if condition="$vo.checkStatus == 0">待审核</if>
+                    <if condition="$vo.checkStatus == 1">已通过</if>
+                    <if condition="$vo.checkStatus == 2">审核不通过</if>
+                    <if condition="$vo.checkStatus == 3">未满足条件</if>
+                </td>
+                <td  style="text-align:center" class='tc'>
+                    <button style="width:60px; height:30px;border-radius: 5px; background:grey; line-height:30px; text-align:center; color:#fff;font-size:13px;margin-left: 20px" onclick='check("<{$vo.sid}>",1)'>审核通过</button>
+                        <button style="width:60px; height:30px;border-radius: 5px; background:grey; line-height:30px; text-align:center; color:#fff;font-size:13px;" onclick='check("<{$vo.sid}>",2)'>审核不通过</button>
+                    <if condition="$vo.checkStatus == 1">
+                    <a href="__APP__/Financial/detail/sid/<{$vo.sid}>"><button style="width:60px; height:30px;border-radius: 5px; background:grey; line-height:30px; text-align:center; color:#fff;font-size:13px;">查看明细</button></a></if>
+                    <a href="__APP__/Financial/order/sid/<{$vo.sid}>/userId/<{$vo.userId}>/monthTime/<{$vo.monthTime}>">  <button style="width:60px; height:30px;border-radius: 5px; background:grey; line-height:30px; text-align:center; color:#fff;font-size:13px;">查看订单</button></a>
+                </td>
+            </tr>
+        </volist>
+        <p>
+        </p>
+    </table>
+    <div id="page">
+        <{$page}>
+    </div>
+</div>
+
+<script type="text/javascript">
+     function check(sid,id){
+         var url=$("input[name=url]").val();
+         if (!confirm('通过后将发送返利至此用户余额!确定审核?')) {
+             return false;
+         }
+//       window.location.href = 'index/page/'+page+'.html';
+        $.ajax({
+           type: "POST",
+           url: url+"/manager/monthRebate/checkMonthRebate",
+           data: {sid :sid,checkStatus:id},
+           success: function(data){
+               console.log(data);
+               if(data.code==2000) {
+                   window.location.href = '__APP__/Financial/monthRebate';
+               }else{
+                   alert("操作失败!");
+               }
+           },
+           error:function(){
+            alert('异常!');
+           }
+        });
+    }
+</script>
+</body>
+</html>

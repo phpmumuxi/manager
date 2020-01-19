@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>app管理|<{$configcache['Title']}></title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/winpop.js"></script>
+    <script type="text/javascript" src="__JS__/check.js"></script>
+    <script type="text/javascript" src="__JS__/jquery-form.js"></script>
+    <link rel="stylesheet" href="__JS__/Validform/images/style.css" type="text/css" media="all" /> 
+    <script type="text/javascript" src="__JS__/Validform/images/jquery-1.9.1.min.js"></script> 
+    <script type="text/javascript" src="__JS__/Validform/images/Validform_v5.3.2.js"></script> 
+    <script type="text/javascript" src="__JS__/Validform/plugin/passwordStrength/passwordStrength-min.js"></script> 
+    <script src="__JS__/jquery-form.js" type="text/javascript"></script>
+    <script type="text/javascript" src="__JS__/layer/layer.js"></script>
+    <link rel="stylesheet" type="text/css" href="__JS__/layer/skin/layer.css" />
+    <style type="text/css" >
+        .dd_left{margin-top: 5px;}
+        .dtext{text-align: center;}
+        #preview, .img, img{width:200px;height:200px;}
+        #preview{border:1px solid #000;}
+        #view{} .imgbox{float:left;position:relative;width:100px;height: 100px;margin-left: 10px;margin-top: 10px;
+          padding:5px;border:solid 1px #ccc;border-radius: 5px;;}
+        #view{} .imgbox .close{border: solid 1px #ccc;position: absolute;top: -15px;
+              width: 20px;height: 20px; display: inherit;cursor: pointer;text-align: center;background: red;color: #fff;right: -10px;z-index: 20;border-radius: 100%;}
+        #view{} .imgbox input{width:100%;height: 100%;z-index: 10;}
+        .tablecon{width: 800px; margin-left:80px;}
+        .registerform{width:700px;height:565px;margin:20px;border:1px solid #bcd4e5;}
+    </style> 
+    <script type="text/javascript">
+          $(function(){
+            $(".registerform").Validform({
+                tiptype:2,
+                /*表单验证*/
+                tiptype:function(msg,o,cssctl){
+                    if(!o.obj.is("form")){
+                        var objtip=o.obj.parent().find(".Validform_checktip");
+                        cssctl(objtip,o.type);
+                        objtip.text(msg);
+
+                        var infoObj=o.obj.parent().find(".info");
+                        if(o.type==2){
+                            infoObj.fadeOut(200);
+                        }else{
+                            if(infoObj.is(":visible")){return;}
+                            layer.closeAll('loading');
+                            infoObj.css({
+                                left:0,
+                                top:-30
+                            }).show().animate({
+                                top:-27
+                            },200);
+                        }  
+                    }   
+                },  
+            });
+        })
+</script> 
+</head>
+<body>
+    <div id="content">
+        <h1>首页 > app管理 > app类别添加</h1>
+        <h2>
+            <div class="h2_left">
+                <a href="__ACTION__" class="whole">全部</a>
+                <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+                <a href="javascript:history.back();" class="Retreat">后退</a>
+                <a href="javascript:history.go(1);" class="Advance">前进</a>
+                <input type="hidden" id="consult_url" value="<{$url}>"> 
+            </div>
+        </h2>
+        <form action="<{:U('End/appcatesave')}>" method="post" class="registerform" id="form">
+            <dl id="cdl">
+                <dd>
+                    <span class="dd_left">标题(*必填):</span>
+                    <span class="dd_right">
+                        <input type="text" class="qtext" name="navName" value="<{$cateinfo.navName}>" id="title" datatype="*1-200" errormsg="标题名称在1~200位之间！"  nullmsg="请填写标题" />
+                        <font class="defi defi-01"><span class="Validform_checktip"></span></font>
+                    </span>
+                </dd>
+                
+                
+                
+                <dd>
+                    <div id="reader_box"></div>
+                    <span class="dd_left">上传图片:</span>
+                    <span class="dd_right">
+                        <input type="file" name="file" id="file" class='myimage'></input>
+                        <div class="imageview">
+                        	<img class="img-sm image "  src="<{$cateinfo.imageUrl}>" />
+                        </div>
+                        
+                        
+						<input type="hidden" class="imageKey" name="imageKey" value="<{$cateinfo.imageKey}>">
+                    </span>
+                </dd>
+
+
+				<dd>
+                    <span class="dd_left">序号(*必填):</span>
+                    <span class="dd_right">
+                        <input type="text" class="qtext" name="navNo" id="href" value="<{$cateinfo.navNo}>" />
+                    </span>
+                </dd>
+
+                 <dd>
+                    <span class="dd_left">平台(*必填):</span>
+                    <span class="dd_right">
+                        <select name="navPlat" style="width:80px;" class="dtext" id="type">
+                          <option value="0" <if condition="$cateinfo.navPlat eq 0">selected</if> >APP平台</option>
+                          <option value="1" <if condition="$cateinfo.navPlat eq 1">selected</if>>H5平台</option>
+                        </select>
+                    </span>
+                </dd>
+
+                <dd>
+                    <span class="dd_left">类型(*必填):</span>
+                    <span class="dd_right">
+                        <select name="navType" class="dtext" id="type">
+						 <option value="1" <if condition="$cateinfo.navType eq 1">selected</if> >正常类目</option>
+                          <option value="2" <if condition="$cateinfo.navType eq 2">selected</if>>更多类目</option>
+                          <option value="3" <if condition="$cateinfo.navType eq 3">selected</if>>更多商品</option>
+						
+						</select>
+                    </span>
+                </dd>
+                
+                <dd>
+                    <span class="dd_left">访问地址(*必填):</span>
+                    <span class="dd_right">
+                        <input type="text" class="qtext" name="linkUrl" id="href" value="<{$cateinfo.linkUrl}>" />
+                    </span>
+                </dd>
+				
+                <dd style="margin-top: 10px;margin-bottom: 160px;">
+                <input type="hidden" name='sid' value="<{$cateinfo.sid}>">
+                <input type="submit" class="so submit" value="提 交" onClick="check()" />
+                </dd>
+            </dl>
+        </form>
+    </div>
+
+<script type="text/javascript">
+function check(){
+	var linkUrl = $('.linkUrl').val();
+	var title = $('.qtext').val();
+	if(linkUrl == ''){
+		alert(1);
+	}
+	
+}
+$(function (){
+	//var consult_url = 'http://yiguanjiaclub.org:8002/';
+	//图片上传
+	$('.myimage').change(function(){
+		var file = event.target.files[0];
+		var url = URL.createObjectURL(file);
+var consult_url = $('#consult_url').val();
+		var form = new FormData();
+		var xhr = new XMLHttpRequest();
+		form.append("file", file);
+//xhr.open("post",'http://192.168.1.27:8080/manager/trade/uploadImg', true);
+		xhr.open("post",consult_url + '/manager/trade/uploadImg', true);
+		xhr.onreadystatechange = function() {
+			if(xhr.readyState == 4 && xhr.status == 200) {
+				var result = jQuery.parseJSON(xhr.responseText);
+				$('.image').attr('src',result.keyUrl);
+				$('.imageKey').val(result.key);
+//console.log(xhr.responseText);
+			}
+		};
+		xhr.send(form);	
+	})
+
+}); 
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

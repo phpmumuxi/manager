@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>招募活动|<{$configcache['Title']}></title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/winpop.js"></script>
+    <script src="__PUBLIC__/js/layer/layer.js" type="text/javascript"></script>
+    <style>
+    .sure{left:220px; top:10px; width:60px; height:28px; line-height:28px; border:none; background:#009900; color:#fff; font-family:"微软雅黑"; cursor:pointer;}
+   .tel{left:0; top:10px; width:220px; height:26px; line-height:26px; color:#555; font-family:"微软雅黑"; repeat-x left top; border:solid 1px #ccc;}
+    .nav_div{
+        border-bottom:1px solid #333333;    
+        /*width:100%;*/
+        height:50px;
+        margin-top: 30px;    
+    }
+    .nav_div ul{
+        list-style:none;
+        text-align:center;
+        cursor:pointer; 
+        margin-left: 0;
+    }
+    .nav_div ul li{
+        float:left;
+        height:49px;
+        width:128px;
+        line-height:50px;
+    }
+    .nav_active{
+        color: #169BD5;
+        border-top: 1px solid #333333;
+        border-left: 1px solid #333333;
+        border-right: 1px solid #333333;
+        border-bottom: 2px solid white;
+    }
+    .sign_button{
+        border:1px solid #ddd;
+        padding: 6px 14px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin:0 10px;
+        background: #009900;
+        color: white;
+    }
+  </style> 
+</head>
+<body>
+<div id="content">
+    <h1>首页 > 公益服务 > 报名人员</h1>
+    <h2>
+        <div class="h2_left">
+            <a href="__ACTION__" class="whole">全部</a>
+            <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+    </h2>
+    <div class="nav_div">
+        <ul>
+            <a href="<{:U('Client/publicservice')}>"><li>公益服务类型</li></a>
+            <a href="<{:U('Client/userlist')}>"><li>报名人员</li></a>
+            <a href="javascript:;"><li class="nav_active">招募活动</li></a>
+        </ul>
+        <p style="clear: both"></p>
+    </div>
+    
+    <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+        <tr>
+            <th>活动名称</th>
+            <th>已报名人员</th>
+            <th>服务类型</th>
+            <th>服务区域</th>
+            <th>活动日期</th>
+            <th>招募截止日期</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        <empty name="list">
+            <tr><td style='text-align:center' colspan='8'>暂时没有数据</td></tr>
+        <else/>
+            <volist name="list" id="vo">
+                <tr>
+                    <td style="text-align:center" class='tc'><{$vo.activityName}></td>
+                    <td style="text-align:center" class='tc'><if condition="$vo.enrolment gt '0' "><a href="__APP__/Client/getactivityuser?sid=<{$vo.sid}>" style="text-decoration: underline;color:#169BD5"><{$vo.enrolment}></a><else />0</if></td>
+                    <td style="text-align:center" class='tc'><{$vo.typeName}></td>
+                    <td style="text-align:center" class='tc'><{$vo.serviceArea}></td>
+                    <td style="text-align:center" class='tc'><{$vo.activityTime}></td>
+                    <td style="text-align:center" class='tc'><{$vo.activitiesDeadline}></td>
+                    <td class='tc' style="text-align:center">
+                        <switch name="vo.activityStatus">
+                          <case value="1">招募中</case>
+                          <case value="2">违规下架</case>
+                          <case value="3">活动到期停止</case>
+                          <default />
+                        </switch>
+                    </td>
+                    <td class='tc' style="text-align:center">
+                        <a href="__APP__/Client/getactivityinfo?sid=<{$vo.sid}>" style="color:#169BD5">详情</a>&nbsp;&nbsp;
+                        <if condition="$vo.activityStatus eq '1' ">
+                          <a href="javascript:;" style="margin-right: 5px;color:#169BD5" onclick='activityDown("<{$vo.sid}>");'>下架</a>
+                        </if>
+                    </td>
+                </tr>
+            </volist>
+        </empty>
+    </table>
+    <div id="page">
+        <{$page}>
+    </div>
+</div>
+<script>
+function activityDown(_sid){
+  layer.confirm('确认下架嘛？', function(){
+      var _html='<div style="text-align: left;margin-top:20px"><p style="margin-left:35px;">下架原因：</p><textarea style="border:1px solid #ddd;width:240px;margin:15px 0 20px 35px" id="remarkContent"></textarea><br/><span style="width:100%;margin-left:40%"><button type="button" id="layerCancelButton" class="sign_button" style="cursor: pointer">确认</button></span></div>';
+      layer.open({
+          type: 1,
+          title: "<div style='text-align:center;'><strong>下架</strong></div>",
+          content: _html,
+          skin: 'layer-ext-moon',
+          area: ['26%','25%'],
+          resize: false,
+          shadeClose: true,
+          success:function(){
+              $("#layerCancelButton").click(function(){
+                  var _remark =  $.trim($('#remarkContent').val());
+                  if(_remark){
+                      $.post( "<{$Think.config.URL}>/manager/fundActivitie/updateFundActivityState",{sid:_sid,status:'2',lowerReason:_remark},function(res){
+                        if(res.success){
+                          layer.alert(res.message);
+                          f5();
+                        }else{
+                          layer.alert('下架失败！');
+                          f5();
+                        }                
+                      },'json')        
+                  }else{
+                      layer.msg('下架原因必填！',{icon: 2,time: 2000},function(){
+                          f5();
+                      });
+                  }                        
+              })
+          }
+      });
+  });
+}
+</script>
+</body>
+</html>

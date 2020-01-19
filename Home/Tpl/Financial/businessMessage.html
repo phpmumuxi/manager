@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>提现短信通知|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script src="__PUBLIC__/js/layer/layer.js"></script>
+<style type="text/css">
+#content #cdl{
+    width: 620px;
+}
+#cdl dd{
+    margin-top:20px;
+}
+#content #cdl dd{
+    line-height: 55px;    
+}
+#content #cdl dd .dd_left{
+    margin-right: 20px;
+}
+#content .qtext{
+    width: 140px;
+}
+#cdl #submitSure{
+    margin-left:220px
+}
+</style>
+</head>
+<body>
+<div id="content">
+    <h1>首页 > 财务管理 > 提现通知</h1>
+    <h2>
+        <div class="h2_left">
+            <a href="__ACTION__" class="whole">全部</a>
+            <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+    </h2>
+    
+    <p style="margin-left: 10px;margin-top: 20px;font-size: 19px">短信通知设置：</p>
+
+    <dl id="cdl">
+        <dd>
+            <span class="dd_left">通知标题:</span>
+            <span class="dd_right">
+                <input type="text" class="qtext" id="title" placeholder="提现通知" value="<{$data['smsTitle']}>"/>
+            </span>
+        </dd>
+
+        <dd>
+            <span class="dd_left">通知用户:</span>
+            <empty name="data['smsUsers']">
+                <span id="user_phone" class="dd_right user_phone" style="margin-bottom:  10px;">
+                    <input type="text" class="qtext" name="name" value="" placeholder="真实姓名"/>
+                    <input type="text" class="qtext" name="phone" placeholder="手机号"/>
+                    <input type="button" value="＋" class="submit sureBtn" />
+                </span>
+            <else />
+                <foreach name="data['smsUsers']" item="vo" key="k" >
+                    <if condition="$k eq 0">
+                        <span id="user_phone" class="dd_right user_phone" style="margin-bottom:  10px;">
+                            <input type="text" class="qtext" name="name" value="<{$vo['name']}>" placeholder="真实姓名"/>
+                            <input type="text" class="qtext" name="phone" value="<{$vo['phone']}>" placeholder="手机号"/>
+                            <input type="button" value="＋" class="submit sureBtn" />
+                        </span>
+                    <else /> 
+                        <span class="user_phone" style="margin-left: 136px;">
+                            <input type="text" class="qtext" name="name" value="<{$vo['name']}>" placeholder="真实姓名"/>
+                            <input type="text" class="qtext" name="phone"  value="<{$vo['phone']}>" placeholder="手机号"/>
+                            <input type="button" onClick="reduceUserPhone(this)" value="－" class="submit cancelBtn" />
+                        </span>
+                    </if>
+                </foreach>
+            </empty>
+        </dd>
+    
+        <dd>
+            <span class="dd_left">短信推送内容：</span>
+            <span class="dd_right">
+                <textarea id="messageContent" style="border: 1px solid rgb(204, 204, 204); box-shadow: none; margin: 0px; width:260px; height: 80px;" class="checkComment"  onChange="changeMsg()" placeholder="提现通知：逸管家用户申请提现，请尽快受理！" ><{$data['smsContent']}></textarea>
+            </span>
+        </dd>
+        
+        <dd id='ms_cont_title'>
+            <span class="dd_left">短信预览：</span>
+            <span class="dd_right" style="color: black">
+                <p id='ms_cont'></p>
+                <p>逸管家用户【姓名】，提现金额【100元】</p>
+            </span>
+        </dd>
+
+        <dd>
+            <span class="dd_left">状态：</span>
+            <span class="dd_right">
+                <label><input name="show" type="radio" value="1" checked="checked" <eq name="data['smsStatus']" value="1">checked="checked"</eq> />启用 </label> 
+                <label><input name="show" type="radio" value="0" <eq name="data['smsStatus']" value="0">checked="checked"</eq> />禁用 </label> 
+            </span>
+        </dd>
+
+        <dd>
+            <input type="button" id="submitSure" value="保存" class="submit" />
+        </dd>
+    </dl>   
+</div>
+<script type="text/javascript">
+$('#submitSure').click(function(){    
+    var title= $.trim($("#title").val());
+    if(!title || title==''){
+       layer.msg('通知标题必填！',{icon:2,time:2000});
+       return false;        
+    }
+
+    var cont= $.trim($("#messageContent").val());
+    if(!cont || cont==''){
+       layer.msg('短信推送内容必填！',{icon:2,time:2000});
+       return false;        
+    }
+
+    var u_p_arr =[];
+    var u_p_myarr =[];
+    var _flag = true;
+    $(".user_phone").each(function(index, val) {
+        var myObj={};
+        var u_name=$.trim($(val).find("input[name='name']").val());
+        var u_phone=$.trim($(val).find("input[name='phone']").val());
+        if(!u_name || u_name==''){
+           layer.msg('真实姓名必填！',{icon:2,time:2000});
+           _flag=false;
+            return false;
+                  
+        }
+
+        if(!u_phone || u_phone==''){
+           layer.msg('手机号必填！',{icon:2,time:2000});
+           _flag=false;
+            return false;       
+        }
+
+        if(!(/^1[3-9]\d{9}$/.test(u_phone))){
+           layer.msg('手机号格式不正确！',{icon:2,time:2000});
+           _flag=false;
+            return false;       
+        }
+        myObj.name=u_name;
+        myObj.phone=u_phone;
+        u_p_arr.push(myObj);
+        //判断重复
+        var u_np=u_name+'/'+u_phone;
+        if($.inArray(u_np, u_p_myarr) >= 0) {          
+            layer.msg('通知用户重复！',{icon:2,time:2000});
+            _flag=false;
+            return false;
+        }else{
+            u_p_myarr.push(u_np);
+        }
+    })        
+    var status = $('input[type="radio"]:checked').val();
+
+    if(_flag){
+        $.post('<{$Think.config.URL}>/manager/smsNotifyTemplate/save',{'smsTitle':title,'smsUsers':JSON.stringify(u_p_arr),'smsContent':cont,'smsStatus':status},function(res){
+            if(res.success){
+                layer.msg('短信短信通知保存成功！',{icon:1,time:2000},function(){
+                    f5();
+                })
+            }
+        },'json')
+    }
+})
+
+$(function(){  
+    changeMsg();
+});
+
+function changeMsg(){
+    var _cont = $.trim($('#messageContent').val());
+    if(_cont){
+        $('#ms_cont').empty().html(_cont);
+        $('#ms_cont_title').show();
+    }else{
+        $('#ms_cont_title').hide();
+    }
+}
+
+$('.sureBtn').click(function(){
+    var ht='<span class="user_phone" style="margin-left: 136px;"><input type="text" class="qtext" name="name" placeholder="真实姓名"/> <input type="text" class="qtext" name="phone" placeholder="手机号"/>&nbsp;<input type="button" onClick="reduceUserPhone(this)" value="－" class="submit cancelBtn" /></span>';
+    $("#user_phone").after(ht);
+})
+
+function reduceUserPhone(o){
+    $(o).parent().remove();
+}
+</script>
+</body>
+</html>

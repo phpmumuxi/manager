@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>商家资质管理|<{$configcache['Title']}></title>
+  <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+  <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+  <script type="text/javascript" src="__JS__/jquery.js"></script>
+  <script type="text/javascript" src="__JS__/Public.js"></script>
+  <script type="text/javascript" src="__JS__/winpop.js"></script>
+  <script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+  <script src="__PUBLIC__/js/layer/layer.js" type="text/javascript"></script>
+  <style type="text/css">
+  .select{padding:5px 10px;border:#ddd 1px solid;border-radius:4px;width:60%;margin:5% auto;font-size:12px}
+  .select li{list-style:none;padding:10px 0 5px 100px}
+  .select dl{zoom:1;position:relative;line-height:24px;}
+  .select dl:after{content:" ";display:block;clear:both;height:0;overflow:hidden}
+  .select dt{width:100px;margin-bottom:5px;position:absolute;top:0;left:-100px;text-align:right;color:#666;height:24px;line-height:24px}
+  .select dd{float:left;display:inline;margin:0 0 5px 5px;}
+  .select a{display:inline-block;white-space:nowrap;height:24px;padding:0 10px;text-decoration:none;color:#039;border-radius:2px;}
+  .select a:hover{color:#f60;background-color:#f3edc2}
+  .select .selected a{color:#fff;background-color:#f60}
+  .select-result dt{font-weight:bold}
+  .select-no{color:#999}
+  .select .select-result a{padding-right:20px;background:#f60 url("__PUBLIC__/image/close.gif") right 9px no-repeat}
+  .select .select-result a:hover{background-position:right -15px}
+  .tc{text-align:center; text-indent:0;font-family:"微软雅黑";font-size: 14px;color:#111;}
+   .sure{left:220px; top:10px; width:60px; height:28px; line-height:28px; border:none; background:#090; color:#fff; font-family:"微软雅黑"; cursor:pointer;}
+   .tel{left:0; top:10px; width:220px; height:26px; line-height:26px; color:#555; font-family:"微软雅黑"; repeat-x left top; border:solid 1px #ccc;}
+  .butclass{
+  	background:#029be1;
+  	color:white;
+  	height:40px;
+  	width:90px;
+  	margin:40px;
+  	padding:10px;
+  	border-radius:5px;
+  }
+  .reasoncontent{
+    margin-top:30px;
+    border:1px solid #797979;
+    width:60%;
+    height:100px
+  }
+  
+  td{
+  	text-align:center;
+  }
+  th{
+  	text-align:center;
+  }
+  .btnclick{
+    height:20px;
+  	background: #080;
+    cursor: pointer;
+    color: #fff;
+  }
+  a:link {color: #0000FF}     /* 未访问的链接 */
+	a:visited {color: #d90a81}  /* 已访问的链接 */
+	a:hover {color: #d90a81}    /* 当有鼠标悬停在链接上 */
+	a:active {color: #d90a81}   /* 被选择的链接 */
+  </style>
+</head>
+<body>
+  <div id="content">
+     <h1>首页 > 逸管家 > 商家资质审核</h1>
+     <h2>
+       <div class="h2_left">
+         <a href="__ACTION__" class="whole">全部</a>
+         <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+         <a href="javascript:history.back();" class="Retreat">后退</a>
+         <a href="javascript:history.go(1);" class="Advance">前进</a>
+       </div> 
+        <input type="hidden" id="url" value="<{$url}>">
+    </h2>
+    <div class="fen" style="margin-top:15px;">
+      <ul class="select" style="height:55px;margin-top: 20px;margin-bottom: 20px;">    	
+          <li class="List_more">
+            <dl id="select" >
+      	      <dt>审核状态：</dt>
+              <dd <if condition="$checkStatus eq '2'"> class="selected"</if>>
+              	<a href="<{:U('Client/checkBusiness',['checkStatus' => 2])}>">审核通过</a>
+              </dd>
+            	<dd <if condition="$checkStatus eq '3'"> class="selected"</if>>
+              	<a href="<{:U('Client/checkBusiness',['checkStatus' => 3])}>">审核失败</a>
+              </dd>
+              <dd <if condition="$checkStatus eq '1'"> class="selected"</if>>
+              	<a href="<{:U('Client/checkBusiness',['checkStatus' => 1])}>">待审核</a>
+              </dd>
+              <dd <if condition="$overdue eq '1'"> class="selected"</if>>
+                <a href="<{:U('Client/checkBusiness',['overdue' => 1])}>">已过期</a>
+              </dd>
+            </dl>
+          </li>       
+  	  </ul>
+    </div>
+
+    <form method="post" style="margin-top:30px">    
+      <div>提交时间: &nbsp;&nbsp;
+          <input name="startTime" placeholder="请选择日期" value="<{$startTime}>" type="text" id="start_date" name="start_date" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'2012-01-01',maxDate:&quot;#F{$dp.$D('end_date')||'2038-01-01'}&quot;})" class="Wdate sBeginTime"/>&nbsp;~
+          <input name="endTime" placeholder="请选择日期" value="<{$endTime}>" type="text" id="end_date" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss', minDate:&quot;#F{$dp.$D(\'start_date\')}&quot;,maxDate:'2038-01-01'})" name="end_date" class="Wdate sEndTime"/>&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="text" name="keyWord" class="tel orderno"  placeholder="公司名称或用户昵称" value="<{$keyWord}>"/>&nbsp;&nbsp;&nbsp;
+          <input type="submit" class="sure" value="搜索" />           
+      </div>    
+    </form>
+
+    <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+     <tr>
+       <th width="13%">公司名称</th>
+       <th width="12%">用户名称</th>
+       <th width="15%">适用行业</th>
+       <th width="10%">证照名称</th>
+       <!-- <th width="15%">证照图片</th> -->
+       <th width="10%">有效期至</th>  
+       <th width="10%">提交时间</th>
+       <th width="10%">当前状态</th>  
+       <th width="15%">操作</th>     
+     </tr>
+     <volist name="list" id="vo" empty="$empty">
+      <tr>
+        <td style="text-align:center" class='tc'><{$vo.userCompany}></td>
+        <td style="text-align:center" class='tc'><{$vo.nickName}></td>
+        <td style="text-align:center" class='tc'><{$vo.industry}></td>
+        <td style="text-align:center" class='tc'><{$vo.licenceType}></td>
+        <!-- <td style="text-align:center" class='tc'><img src="<{$vo.realPicUrl}>" style="width: 100px;height: 100px;margin-top: 10px" /></td> -->
+        <td style="text-align:center" class='tc'><{$vo.vldTime}></td>
+        <td style="text-align:center" class='tc'><{$vo.submitTime}></td>
+        <td style="text-align:center" class='tc'><{$vo.checkStatus}></td>
+        <td style="text-align:center" class='tc'>
+           <a  href="<{:U('Client/lookBusiness',array('sid'=>$vo['sid']))}>" class="look" style="margin-right: 5px;color: blue">查看</a>
+           <eq name="vo.checkStatus" value="待审核">
+           <span  class="check" style="margin-right: 5px;color: blue;cursor: pointer;" data-sid="<{$vo.sid}>">审核</span>
+           </eq>
+        </td>
+      </tr> 
+     </volist>
+    </table>
+  
+    <notempty name="page">
+      <div id="page">
+        <{$page}>&nbsp;&nbsp;每页显示
+        <select id="selectpagesize" style="width:50px;display:inline-block;">        
+      			<option ><{$pageSize}></option>
+        		<option value="10">10</option>
+        		<option value="5">5</option>
+        		<option value="15">15</option>
+        		<option value="20">20</option>
+        		<option value="30">30</option>
+        		<option value="40">40</option>
+        		<option value="50">50</option>
+        </select>条
+      </div>
+    </notempty>
+  </div>
+<script>
+var _url=$('#url').val();
+
+$("#selectpagesize").on('change',function(){
+    var pageSize=$(this).val();
+    window.location.href = "__APP__/Client/checkBusiness?pageSize="+pageSize;
+});
+
+//审核弹出
+$(".check").click(function(){
+	var sid = $(this).data('sid');
+  var _ht='<div style="text-align:center;margin-top:30px"><span style="float:left;width:100%;text-align: center;">审核通过后，此用户将拥有该经营资质。</span><span style="float:left;width:100%;text-align: center;cursor:pointer"><button type="button" class=" butclass pass" style="cursor: pointer">通过</button><button type="button" class=" butclass notpass" style="cursor: pointer">不通过</button></span></div>';
+	layer.open({
+		type: 1,
+		title: "<div style='text-align:center'><strong>审核</strong></div>",
+		content: _ht,
+		skin: 'layer-ext-moon',
+		area: ['40%','30%'],
+		resize: false,
+		shadeClose: true,
+		success:function(){	
+			//通过
+			$(".pass").click(function(){
+        layer.confirm('确定审核通过嘛?', {icon: 3, title:'提示'}, function(index){ 
+    				$.post(_url+'/manager/businessQualification/examine',{'sid':sid,'comment':'','checkStatus':2},function(result){
+      					if(result.success){
+      						layer.msg(result.message,{icon: 1,time: 1200},function(){
+                      layer.closeAll();
+                  });
+      					}else{
+                  layer.msg('操作失败！',{icon: 2,time: 1200},function(){
+                      layer.closeAll();
+                  });
+                }
+                window.location.reload();
+    				},'json')
+        })
+      });
+
+	   var _html='<div style="text-align:center;margin-top:15px"><span style="float:left;width:100%;text-align: center;">输入不通过原因</span><span><textarea class="reasoncontent"></textarea></span><span style="float:left;width:100%;text-align: center;"><button type="button" class=" butclass notpasssave" style="cursor: pointer">提交</button></span></div>';		
+		
+    //不通过弹出框
+			$(".notpass").click(function(){
+				layer.open({
+					type: 1,
+					title: "<div style='text-align:center'><strong>审核</strong></div>",
+					content: _html,
+					skin: 'layer-ext-moon',
+					area: ['40%','40%'],
+					resize: false,
+					shadeClose: true,
+					success:function(){
+						$(".notpasssave").click(function(){
+							var remark =  $('.reasoncontent').val();
+							$.post(_url+'/manager/businessQualification/examine',{'sid':sid,'comment':remark,'checkStatus':3},function(result){
+                  if(result.success){
+                    layer.msg(result.message,{icon: 1,time: 1200},function(){
+                      layer.closeAll();
+                    });
+                  }else{
+                    layer.msg('操作失败！',{icon: 2,time: 1200},function(){
+                      layer.closeAll();
+                    });
+                  }                  
+                  window.location.reload();
+              },'json')
+						});
+					}
+				});
+			})
+			//end
+		}
+	});
+})	
+</script>
+</body>
+</html>

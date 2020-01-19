@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>订单信息|<{$configcache['Title']}></title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/winpop.js"></script>
+    <script type="text/javascript" src="__JS__/check.js"></script>
+    <script type="text/javascript" src="__JS__/layer/layer.js"></script>
+    <link rel="stylesheet" type="text/css" href="__JS__/layer/skin/layer.css"  />
+    <style type="text/css">
+        .shop-1{border:1px solid #ccc; width:60%;margin-left: auto;margin-right: auto;}
+        .shop-2{margin: 30px;}
+        .imgbox img{max-width:90%;}
+        .basetb td{ padding:6px; padding-top:8px; padding-bottom:8px; font-size:15px;}
+        .label{text-align: center;}
+    </style>
+</head>
+<body>
+<dt>订单明细</dt>
+<div id="content" style="font-size:18px; color:#333; text-align:center;width:1190px;">
+    <h2>
+        <div class="h2_left">
+            <a href="<{:U('Shop/index')}>" class="whole">商品</a>
+            <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+    </h2><br/>
+    <volist name="picture" id="pic">
+        <div class="img" style=
+                "width:200px;height:200px; float:left"><img src="<{$pic.realPicUrl}>" width="190" height="180"></div>
+    </volist>
+    <div style="float: left">
+        <p>本月总流水:￥<{$monthRebate.monthOrderTotalMoney}></p>
+        <p>返利比例:<{$monthRebate.recommendRebate}></p>
+        <p>金额:￥<{$monthRebate.rebateMoney}></p>
+    </div>
+    <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0" style="width: 1900px">
+        <tr>
+            <th style="text-align:center" class='tc'>交易号</th>
+            <th style="text-align:center" class='tc'>商户订单号</th>
+            <th style="text-align:center" class='tc'>商品名称</th>
+            <th style="text-align:center" class='tc'>交易开始时间</th>
+            <th style="text-align:center" class='tc'>昵称</th>
+            <th style="text-align:center" class='tc'>手机号</th>
+            <th style="text-align:center" class='tc' >订单金额</th>
+            <th style="text-align:center" class='tc'>交易结束时间</th>
+            <th style="text-align:center" class='tc'>交易类型</th>
+            <th style="text-align:center" class='tc'>交易状态</th>
+            <th style="text-align:center" class='tc'>支付类型</th>
+        </tr>
+        <volist name="list" id="vo">
+            <tr>
+                <td style="text-align:center" class='tc'><{$vo.payNo}></td>
+                <td style="text-align:center" class='tc'><{$vo.orderNo}></td>
+                <td style="text-align:center" class='tc'><{$vo.title}></td>
+                <td style="text-align:center" class='tc'><{$vo.tradeTime}></td>
+                <td style="text-align:center" class='tc'><{$vo.buyerName}></td>
+                <td style="text-align:center" class='tc'><{$vo.userTelephone}></td>
+                <td style="text-align:center" class='tc'><{$vo.payPrice}></td>
+                <td style="text-align:center" class='tc'><{$vo.tradeFinishTime}></td>
+                <td style="text-align:center" class='tc'><if condition="$vo.tradeType == 0">提现</if>
+                    <if condition="$vo.tradeType == 1">逸管家自营服务</if>
+                    <if condition="$vo.tradeType == 2">在线收款</if>
+                    <if condition="$vo.tradeType == 3">在线支付</if>
+                    <if condition="$vo.tradeType == 4">在线退款</if>
+                    <if condition="$vo.tradeType == 5">充值+值</if></td>
+                <td style="text-align:center" class='tc'><if condition="$vo.tradeStatus == 0">失败</if>
+                    <if condition="$vo.tradeStatus == 1">待付款</if>
+                    <if condition="$vo.tradeStatus == 2">成功</if>
+                    <if condition="$vo.tradeStatus == 3">待收款</if></td>
+                <td style="text-align:center" class='tc'><if condition="$vo.payType == 0">支付宝</if>
+                    <if condition="$vo.payType == 1">微信</if>
+                    <if condition="$vo.payType == 2">余额支付</if>
+                    <if condition="$vo.payType == 3">银行卡支付</if></td>
+            </tr>
+        </volist>
+    </table>
+    <div id="page">
+        <{$page}>
+    </div>
+</div>
+
+<script type="text/javascript">
+</script>
+</body>
+</html>

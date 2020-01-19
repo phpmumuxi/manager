@@ -1,0 +1,3 @@
+<?php
+//000000003600a:5:{s:13:"THINK_VERSION";s:5:"3.1.3";s:15:"SERVER_SOFTWARE";s:32:"Apache/2.4.27 (Win64) PHP/5.6.31";s:6:"PHP_OS";s:5:"WINNT";s:5:"mysql";s:6:"5.7.10";s:4:"core";a:6:{s:15:"UPLOAD_CAPACITY";s:3:"100";s:20:"UPLOAD_USER_CAPACITY";s:2:"50";s:20:"UPLOAD_FILE_PIC_SIZE";s:4:"1024";s:20:"UPLOAD_FILE_PIC_TYPE";s:15:"jpg|gif|png|bmp";s:21:"UPLOAD_FILE_FILE_SIZE";s:11:"10000000000";s:21:"UPLOAD_FILE_FILE_TYPE";s:38:"rar|zip|txt|doc|docx|ppt|pptx|xls|xlsx";}}
+?>

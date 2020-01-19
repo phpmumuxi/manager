@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>活动管理|<{$configcache['Title']}></title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <link rel="stylesheet" type="text/css" href="__JS__/layer/skin/layer.css" />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/layer/layer.js"></script>
+    <style type="text/css">
+    .tc{text-align:center; text-indent:0;font-family:"微软雅黑";font-size: 14px;color:#111;}
+    .came a{left:220px; top:10px; width:100px; height:35px; line-height:30px; border:none; background:#090; color:#fff; font-family:"微软雅黑";text-align:center;float:left;margin-right: 30px;margin-top: 30px;margin-bottom: 10px;cursor: pointer;}
+    </style>
+<script>
+    function myBrowser(){
+    var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+    var isOpera = userAgent.indexOf("Opera") > -1;
+    if (isOpera) {
+        return "Opera"
+    }; //判断是否Opera浏览器
+    if (userAgent.indexOf("Firefox") > -1) {
+        return "FF";
+        /*firefox----这段js重新封装了event对象，经验证可以在火狐下支持！----*/
+        function __firefox(){
+            HTMLElement.prototype.__defineGetter__("runtimeStyle", __element_style);
+            window.constructor.prototype.__defineGetter__("event", __window_event);
+            Event.prototype.__defineGetter__("srcElement", __event_srcElement);
+        }
+        function __element_style(){
+            return this.style;
+        }
+        function __window_event(){
+            return __window_event_constructor();
+        }
+        function __event_srcElement(){
+            return this.target;
+        }
+        function __window_event_constructor(){
+            if(document.all){
+                return window.event;
+            }
+            var _caller = __window_event_constructor.caller;
+            while(_caller!=null){
+                var _argument = _caller.arguments[0];
+                if(_argument){
+                    var _temp = _argument.constructor;
+                    if(_temp.toString().indexOf("Event")!=-1){
+                        return _argument;
+                    }
+                }
+                _caller = _caller.caller;
+            }
+            return null;
+        }
+        if(window.addEventListener){
+            __firefox();
+        }
+    } //判断是否Firefox浏览器
+    if (userAgent.indexOf("Chrome") > -1){
+      return "Chrome";
+  }
+  if (userAgent.indexOf("Safari") > -1) {
+    return "Safari";
+    } //判断是否Safari浏览器
+    if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+        return "IE";
+    }; //判断是否IE浏览器
+}
+myBrowser();
+</script>
+</head>
+<body>
+    <div id="content">
+       <h1>首页 > 活动模块 > 活动列表</h1>
+       <h2>
+           <div class="h2_left">
+               <a href="__ACTION__" class="whole">全部</a>
+               <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+               <a href="javascript:history.back();" class="Retreat">后退</a>
+               <a href="javascript:history.go(1);" class="Advance">前进</a>
+           </div>
+    </h2>
+<div class="came"><a href="<{:U('Activity/activeEdit')}>" title=""><font size='4'>+</font>创建活动</a></div>
+<table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+   <tr>
+     <th>创建时间</th>
+     <th>活动主题</th>
+     <th>活动状态</th>
+     <th>展示样式</th>
+     <th>活动链接</th>
+     <th>操作</th>   
+ </tr>
+ <volist name="list" id="vo" empty="$empty">
+ <tr>
+    <td style="text-align:center" class='tc'><{$vo.createTime}></td>
+    <td style="text-align:center" class='tc'><{$vo.topic}></td>
+    <td style="text-align:center" class='tc'><eq name="vo.status" value='0'>已上架<else />已下架</eq></td>
+    <td style="text-align:center" class='tc'><eq name="vo.style" value='0'>两列<else />三列</eq></td>
+    <td style="text-align:center" class='tc copyUrl'><span style="margin-right: 30px"><{$vo.bannerUrl}></span><a href="javascript:;" onclick="copyUrl($(this).siblings().html());">复制链接</a></td>
+    <td style="text-align:center" class='tc'><a href="__APP__/Activity/activeEdit?id=<{$vo.sid}>" style="margin-right: 5px;color:black">编辑</a> <eq name="vo.status" value='0'><a href="javascript:;" onclick="downOrUpGoods('<{$vo.sid}>','1');">下架</a><else /><a href="javascript:;" onclick="downOrUpGoods('<{$vo.sid}>','0');">上架</a></eq></td>   
+</tr>
+</volist>   
+</table>
+<div id="page">
+  <{$page}>
+</div>
+</div>
+<script type="text/javascript">
+var _url='<{$Think.config.URL}>';
+
+//上下架商品活动修改
+function downOrUpGoods(_id,_s){
+    $.post(_url+'/manager/activity/modActivity',{'sid':_id,'status':_s},function(result){
+            if(result.success){
+                layer.msg('活动修改成功！',{icon: 1,time: 1500},function(){
+                    f5()
+                });
+            }else{
+              layer.msg('活动修改失败！',{icon: 2,time: 1500},function(){                
+                    f5();
+              });
+            }
+    },'json')
+ }
+
+function copyUrl(_s)
+{
+    var oInput = document.createElement('input');
+    oInput.value = _s;
+    document.body.appendChild(oInput);
+    oInput.select(); // 选择对象
+    document.execCommand("Copy"); // 执行浏览器复制命令
+    oInput.className = 'oInput';
+    oInput.style.display='none';
+    alert('复制成功');
+}
+</script>
+</body>
+</html>

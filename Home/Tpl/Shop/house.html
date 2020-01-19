@@ -1,0 +1,336 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>商品信息|<{$configcache['Title']}></title>
+  <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+  <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+  <script type="text/javascript" src="__JS__/jquery.js"></script>
+  <script type="text/javascript" src="__JS__/Public.js"></script>
+  <script type="text/javascript" src="__JS__/winpop.js"></script>
+  <script type="text/javascript" src="__JS__/check.js"></script>
+  <script type="text/javascript" src="__JS__/layer/layer.js"></script>
+  <link rel="stylesheet" type="text/css" href="__JS__/layer/skin/layer.css"  />
+  <style type="text/css">
+  .shop-1{border:1px solid #ccc; width:60%;margin-left: auto;margin-right: auto;}
+  .shop-2{margin: 30px;}
+  .imgbox img{max-width:90%;}
+  .basetb td{ padding:6px; padding-top:8px; padding-bottom:8px; font-size:15px;}
+  </style>
+</head>
+<body>
+  <dt>详情信息</dt>
+  <div id="content" style="font-size:18px; color:#333; text-align:center">
+    <h2>
+      <div class="h2_left">
+        <a href="<{:U('Shop/index')}>" class="whole">商品</a>
+        <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+        <a href="javascript:history.back();" class="Retreat">后退</a>
+        <a href="javascript:history.go(1);" class="Advance">前进</a>
+          <a href="javascript:;" id="del" class="whole" >删除</a>
+        <label class="message"></label>
+         <input type="hidden" id='sid' value="<{$sid}>">
+         <input type="hidden" id='httpreferer' value="<{$httpreferer}>">
+      </div>
+    </h2><br/>
+    <dl id="dl">
+      <volist name="picture" id="pic">
+        <div class="img" style="width:200px;height:200px; float:left"><img src="<{$pic.realPicUrl}>" width="190" height="180"></div>
+      </volist>
+      <div style="clear:both"></div>
+      <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0" class="basetb">
+          <tr>
+            <td class="label" valign="top">分类：</td>
+            <td><b style="font-size:16px;">
+              <switch name="goodsData.userServiceTypeId">
+                <case value="1">二手房</case>
+                <case value="2">租房</case>
+                <case value="3">新房</case>
+                <default />
+              </switch></b><br />
+            </td>
+
+          </tr>
+          <tr>
+            <td class="label">房源标题：</td>
+            <td><{$goodsData.serviceName}></td>
+          </tr>
+          <tr>
+            <td class="label">物业类型:</td>
+            <td><{$goodsData.housePropertyType}></td>
+          </tr>
+          <tr>
+            <td class="label">类型：</td>
+            <td><{$goodsData.houseCategory}></td>
+          </tr>
+          <tr>
+            <td class="label">装修：</td>
+            <td><{$goodsData.houseDecorate}></td>
+          </tr>
+          <tr>
+            <td class="label">户型：</td>
+            <td><{$goodsData.houseType}></td>
+          </tr>
+          <tr>
+            <td class="label">朝向:</td>
+            <td><{$goodsData.houseToward}></td>
+          </tr>
+          <tr>
+            <td class="label">服务费：</td>
+            <td><{$goodsData.serviceFee}></td>
+          </tr>
+          <tr>
+            <td class="label">库存:</td>
+            <td><{$goodsData.stockNum}></td>
+          </tr>
+          <tr>
+            <td class="label">服务类型:</td>
+            <td>
+              <switch name="goodsData.serviceType">
+                <case value="0">商品
+                  <tr><td>具体位置:</td>
+                    <td><{$goodsData.serviceDistrict}><br/><{$goodsData.address}></td>
+                  </tr>
+                </case>
+                <case value="1">服务
+                </case>
+                <default />
+              </switch>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <switch name="goodsData.userServiceTypeId">
+                <case value="1">
+                 <tr>
+                  <td class="label">售价：</td>
+                  <td><{$goodsData.servicePrice}><{$goodsData.serviceUnit}></td>
+                </tr>
+                <tr>
+                  <td class="label">面积：</td>
+                  <td><{$goodsData.houseArea}> 平米</td>
+                </tr>
+                <tr>
+                  <td class="label">楼层：</td>
+                  <td><{$goodsData.houseFloor}></td>
+                </tr>
+                <tr>
+                  <td class="label">产权:</td>
+                  <td><{$goodsData.houseOwnership}></td>
+                </tr>
+                <tr>
+                  <td class="label">建筑年代：</td>
+                  <td><{$goodsData.houseAge}></td>
+
+                </tr>
+                <tr>
+                  <td class="label">划分校区:</td>
+                  <td><{$goodsData.houseSchoolArea}></td>
+                </tr>
+                <tr>
+                  <td class="label">小区名称：</td>
+                  <td><{$goodsData.houseCommunityName}></td>
+                </tr>
+              </case>
+              <case value="2">
+               <tr>
+                <td class="label">出租方式:</td>
+                <td><{$goodsData.houseRentType}></td>
+              </tr>
+              <tr>
+                <td class="label">租金：</td>
+                <td><{$goodsData.servicePrice}><{$goodsData.serviceUnit}></td>
+              </tr>
+              <tr>
+                <td class="label">面积：</td>
+                <td><{$goodsData.houseArea}> 平米</td>
+              </tr>
+              <tr>
+                <td class="label">楼层:</td>
+                <td><{$goodsData.houseFloor}></td>
+              </tr>
+              <tr>
+                <td class="label">建筑类别:</td>
+                <td><{$goodsData.houseBuildType}></td>
+              </tr>
+              <tr>
+                <td class="label">小区名称：</td>
+                <td><{$goodsData.houseCommunityName}></td>
+              </tr>
+            </case>
+            <case value="3">
+             <tr>
+              <td class="label">售价：</td>
+              <td><{$goodsData.servicePrice}><{$goodsData.serviceUnit}></td>
+            </tr>
+            <tr>
+              <td class="label">可售套数：</td>
+              <td><{$goodsData.houseCanBuy}></td>
+            </tr>
+            <tr>
+              <td class="label">容积率：</td>
+              <td><{$goodsData.houseContain}></td>
+            </tr>
+            <tr>
+              <td class="label">开盘时间:</td>
+              <td><{$goodsData.houseOpenTime}></td>
+            </tr>
+            <tr>
+              <td class="label">交付时间：</td>
+              <td><{$goodsData.housePayTime}></td>
+            </tr>
+            <tr>
+              <td class="label">产权:</td>
+              <td><{$goodsData.houseOwnership}></td>
+            </tr>
+            <tr>
+              <tr>
+                <td class="label">建筑类别:</td>
+                <td><{$goodsData.houseBuildType}></td>
+              </tr>
+              <td class="label">建筑年代：</td>
+              <td><{$goodsData.houseAge}></td>
+            </tr>
+            <tr>
+              <td class="label">划分校区:</td>
+              <td><{$goodsData.houseSchoolArea}></td>
+            </tr>
+          </case>
+          <default />
+        </switch>
+      </td>
+    </tr>
+
+    <switch name="goodsData.checkStatus">
+      <case value="2">
+       <tr>
+        <td class="label">不通过原因:</td>
+        <td><{$goodsData.checkComment}></td>
+      </tr>
+    </case>
+    <default />
+  </switch>
+
+  <tr>
+    <td class="label" style="width: 93px;">房源描述:</td>
+    <td><{$goodsData.houseDepict}></td>
+  </tr>
+</table>
+
+<div class="tong" style="width:20%;margin-top:50px;margin-bottom:180px;">
+  <switch name="checkStatus.checkStatus">
+    <case value="0"><button class="pass" approveStatus="2" style="background-color:#f60;color:#fff;cursor:pointer;width:80px;height:40px;" sid='<{$goodsData.sid}>' goodsName='<{$goodsData.serviceName}>' checkUserId='<{$admin.ID}>' checkUserName='<{$admin.Username}>' userId='<{$userData.sid}>' userNickName='<{$userData.userNickName}>'>通过</button> &nbsp;&nbsp;&nbsp;&nbsp;<button class="nopass" approveStatus="2" style="background-color:#f60;color:#fff;cursor:pointer;width:80px;height:40px;" sid='<{$goodsData.sid}>' goodsName='<{$goodsData.serviceName}>' checkUserId='<{$admin.ID}>' checkUserName='<{$admin.Username}>' userId='<{$userData.sid}>' userNickName='<{$userData.userNickName}>'>不通过<button></case>
+    <default />
+  </switch>
+  <!--    <div style="display: none;"><?php dump($html);?></div> -->
+</div>
+</div>
+
+<script type="text/javascript">
+$(function (){
+
+$('#del').click(function(){
+    var sid = $('#sid').val();
+    $.post('/Shop/delgoods',{sid:sid},function(data){
+      if(data.success){
+        $(".message").html('<font color="green">删除成功，正在跳转....</font>');
+        var rfererurl = $('#httpreferer').val();
+        var registurl = window.location.href=rfererurl;
+        setTimeout(registurl);
+      }else{
+        $(".message").html('<font color="red">删除失败</font>');
+      }
+    })
+  });
+
+
+ $('.pass').click(function(){
+  var goodsSid = ($(this).attr('sid'));
+  var goodsName= ($(this).attr('goodsName'));
+  var checkUserId = $(this).attr('checkUserId');
+  var checkUserName = $(this).attr('checkUserName');
+  var userName = $(this).attr('userNickName');
+  var userId = $(this).attr('userId');
+  var checkStatus = 1;
+
+  if(!goodsSid){
+   alert('参数不完整');
+   return;
+ }
+ if(!goodsName){
+   alert('参数不完整');
+   return;
+ }
+ if(!checkUserId){
+   alert('参数不完整');
+   return;
+ }
+ if(!checkUserName){
+   alert('参数不完整');
+   return;
+ }
+ if(!userName ){
+   alert('参数不完整');
+   return;
+ }
+ if(!userId){
+   alert('参数不完整');
+   return;
+ }
+
+ $.ajax({
+  type: "POST",
+  cache: true,
+  async: true,
+  ifModified:true,
+  timeout:20000,
+  url: "<{$url}>/manager/serviceGoods/checkGoodsBase",
+  data: {goodsSid:goodsSid,goodsName:goodsName,checkUserId:checkUserId,checkUserName:checkUserName,userName:userName,userId:userId,checkStatus:checkStatus}, 
+  dataType: "json",
+      // accepts: "json",
+      success: function(json) {
+        alert('操作成功');
+        f5();
+        //self.location=document.referrer;
+      },  
+      error: function(XMLHttpRequest, exception) {
+
+        if (XMLHttpRequest.status == 0) {
+          alert('网络不给力，请稍后再试！');
+        }else if (XMLHttpRequest.status == 404) {
+          alert('资源地址不存在');
+        }else if (XMLHttpRequest.status == 408) {
+          alert('网络不给力，请稍后再试！');
+        }else if (XMLHttpRequest.status == 500) {
+          alert('服务器出错啦')
+        }else if (XMLHttpRequest.status == 502) {
+          alert('Web服务器用作网关或代理服务器时收到了无效响应');
+        }else if (XMLHttpRequest.status == 503) {
+          alert('服务不可用');
+        }else if (XMLHttpRequest.status == 504) {
+          alert('网关超时！');
+        }else{
+
+        }
+      }
+    })
+
+});
+
+$('.nopass').click(function(){
+  var goodsSid = ($(this).attr('sid'));
+  var goodsName= ($(this).attr('goodsName'));
+  var checkUserId = $(this).attr('checkUserId');
+  var checkUserName = $(this).attr('checkUserName');
+  var userNickName = $(this).attr('userNickName');
+  var userId = $(this).attr('userId');
+  popload('审核说明',650,350,'__APP__/Shop/nopass/goodsSid/'+goodsSid+'/goodsName/'+goodsName+'/checkUserId/'+checkUserId+'/checkUserName/'+checkUserName+'/userNickName/'+userNickName+'/userId/'+userId);
+  addDiv($('#iframe_pop'));
+  popclose();
+
+});
+});
+
+</script>
+</body>
+</html>

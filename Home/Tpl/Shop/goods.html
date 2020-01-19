@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商品管理|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<!-- <script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script> -->
+<style type="text/css">
+    .select{padding:5px 10px;border:#ddd 1px solid;border-radius:4px;width:60%;margin:5% auto;font-size:12px}
+    .select li{list-style:none;padding:10px 0 5px 100px}
+    .select .select-list{border-bottom:#eee 1px dashed}
+    .select dl{zoom:1;position:relative;line-height:24px;}
+    .select dl:after{content:" ";display:block;clear:both;height:0;overflow:hidden}
+    .select dt{width:100px;margin-bottom:5px;position:absolute;top:0;left:-100px;text-align:right;color:#666;height:24px;line-height:24px}
+    .select dd{float:left;display:inline;margin:0 0 5px 5px;}
+    .select a{display:inline-block;white-space:nowrap;height:24px;padding:0 10px;text-decoration:none;color:#039;border-radius:2px;}
+    .select a:hover{color:#f60;background-color:#f3edc2}
+    .select .selected a{color:#fff;background-color:#f60}
+    .select-result dt{font-weight:bold}
+    .select-no{color:#999}
+    .select .select-result a{padding-right:20px;background:#f60 url("__PUBLIC__/image/close.gif") right 9px no-repeat}
+    .select .select-result a:hover{background-position:right -15px}
+    .tc{text-align:center; text-indent:0;font-family:"微软雅黑";font-size: 14px;color:#111;}
+    a:link {color: #0000FF}     /* 未访问的链接 */
+	  a:visited {color: #d90a81}  /* 已访问的链接 */
+	  a:hover {color: #d90a81}    /* 当有鼠标悬停在链接上 */
+	  a:active {color: #d90a81}   /* 被选择的链接 */
+  	#select div{
+  		float:top;
+  	}
+   .sign_button{
+      border:1px solid #ddd;
+      padding: 6px 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin:0 10px;
+      background: #058BC6;
+      color: white;
+    }
+</style>
+</head>
+<body>
+<div id="content">
+	<h1>首页 > 商品管理 > 商品库</h1>
+    <h2>
+    	<div class="h2_left">
+        	<a href="__ACTION__" class="whole">全部</a>
+        	<a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div> 
+    </h2>
+    
+  <div style="margin:20px 0;">
+    <button vb="1" class="sign_button cancel_sign">上 架</button>
+    <button vb="2" class="sign_button delete_sign">下 架</button>
+  </div>
+
+  <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+    	<tr>
+          <th><input type="checkbox" id="check_all"> 全选</th>
+    	    <th>公司名称</th>
+        	<th>商品名称</th>
+          <th>时间</th>
+          <th>类别</th>
+          <th>状态</th>
+          <th>上架状态</th>
+          <th>操作</th>
+      </tr>
+    <empty name="shop">
+      <tr><td colspan="8" style="text-align:center">暂无数据</td></tr>
+    <else />
+      <volist name="shop" id="vo">
+        <tr>
+          <td style="text-align:center"><input type="checkbox" vd="<{$vo.sid}>" vs="<{$vo.service_status}>" class="check_list"></td>
+          <td style="text-align:center" class='tc'><{$companyName}></td>
+    	    <td style="text-align:center" class='tc'><span class="username" title="<{$vo['service_name']}>" approveStatus="4" style="cursor:pointer" sid="<{$vo.sid}>"><?php if(strlen($vo["service_name"])>30){ echo mbsubstr($vo["service_name"],0,15).'......';}else{ echo $vo["service_name"];} ?> </span></td>
+          <td style="text-align:center" class='tc'><{$vo.create_time}></td>
+
+          <td style="text-align:center" class='tc'>
+        <!-- 使用switch标签判断输出 -->
+        <switch name="vo.service_type">
+            <case value="0">商品</case>
+            <case value="1">服务</case>
+            <default />
+        </switch>
+        </td>
+    		<td style="text-align:center" class='tc'>
+    		<!-- 使用switch标签判断输出 -->
+    		<switch name="vo.check_status">
+    		    <case value="0">待审核</case>
+    		    <case value="1">已审核</case>
+    		    <case value="2">审核未通过</case>
+    		    
+    		    <default />未知
+    		</switch>
+    		</td>
+          <td style="text-align:center" class='tc'>
+        <switch name="vo.service_status">
+            <case value="0">已下架</case>
+            <case value="1">已上架</case>
+            <default />未知
+        </switch> 
+        </td>
+    		<td class='tc' style="text-align:center">
+    		  <a style="margin:5px" href="<{:U('Shop/shop',array('sid'=>$vo['sid'],'module'=>$vo['module']))}>" >详情</a>
+    		</td>
+    	 </tr> 
+  	 </volist>
+    </empty>
+  <p>
+</p>
+    </table>
+    <div id="page">
+      <{$page}>
+    </div>
+</div>
+<script src="__PUBLIC__/js/layer/layer.js"></script>
+<script type="text/javascript">
+//全选中
+$("#check_all").click(function() {
+    $("input[class='check_list']").prop('checked', $(this).prop("checked"));
+});
+
+$('.sure_sign,.cancel_sign,.delete_sign').click(function(){  
+    var checked_ids = [];
+    var checked_status = [];
+    $.each($("input[class='check_list']:checked"),function(){
+         checked_ids.push($(this).attr("vd"));
+         checked_status.push($(this).attr("vs"));       
+    });
+    
+    if(checked_ids.length==0){
+        layer.alert('当前未选中任何一个商品!',{icon: 5});
+        return false;
+    }
+    var _type=$(this).attr('vb');
+    if(_type == '1'){ 
+        if($.inArray("1", checked_status) >= 0){
+            layer.alert('已有部分商品已上架!',{icon: 2});
+            return false;
+        }
+        layer.confirm('确认上架嘛？', function(index){
+            $.ajax({
+                type: "POST",
+                url: "<{$url}>/manager/trade/editorSoldOut",
+                data: {serviceIds: checked_ids.toString(),serviceStatus: '1'},
+                datatype: "JSON",
+                success: function(data){
+                  if(data.code == 2000) {
+                    layer.alert('上架成功!');
+                    f5();
+                }else{
+                    layer.alert('上架失败!');
+                  }
+                },
+                error:function(){
+                    layer.alert('网络异常!');
+                }
+            });
+            layer.close(index);
+        });       
+    }else if(_type == '2'){
+        if($.inArray("0", checked_status) >= 0){
+            layer.alert('已有部分商品已下架!',{icon: 2});
+            return false;
+        }
+        layer.confirm('确认下架嘛？', function(index){
+            $.ajax({
+                type: "POST",
+                url: "<{$url}>/manager/trade/editorSoldOut",
+                data: {serviceIds: checked_ids.toString(),serviceStatus: '0'},
+                datatype: "JSON",
+                success: function(data){
+                  if(data.code == 2000) {
+                    layer.alert('下架成功!');
+                    f5();
+                  }else{
+                    layer.alert('下架失败!');
+                  }
+                },
+                error:function(){
+                    layer.alert('网络异常!');
+                }
+            });
+            layer.close(index);
+        });
+    // }else if(_type == '3'){        
+    //     layer.confirm('确认删除？删除后不可恢复!', function(index){
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "<{$url}>/manager/trade/deleteService",
+    //             data: {serviceIds: checked_ids.toString()},
+    //             datatype: "JSON",
+    //             success: function(data){console.log(data);
+    //               if(data.data.length == 0) {
+    //                 layer.alert("删除失败，该商品已上架或有未完成订单")
+    //               } else {
+    //                 layer.alert(data.message);
+    //                 f5();
+    //               }
+    //             },
+    //             error:function(){
+    //                 layer.alert('网络异常!');
+    //             }
+    //         });
+    //         layer.close(index);
+    //     });
+    }else{
+
+    }
+ })
+
+/*  function laypage(){
+   var page = $('.laypage').val();
+   var max = '<{$maxpage}>';
+   if(page == ''){
+    return
+   }
+   if(parseInt(page) > parseInt(max)){
+     var page = max;
+   }
+   window.location.href = 'index/page/'+page+'.html';
+ $.ajax({
+    type: "POST",
+    url: "__APP__/Client/index/",
+    data: {page :page}, 
+    success: function(data){
+      console.log(data); 
+    },
+   error:function(){
+     alert('异常!');
+   }
+ });
+} */
+</script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>图片管理|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script type="text/javascript" src="__JS__/check.js"></script>
+<style type="text/css">
+    .tc{text-align: center;border:1px solid #999;}
+    .fixed_w { width:100px; }
+    .fixed_w .oper { padding:0px 6px; color:#060; }
+</style>
+<script>
+$(document).ready(function() {
+	//删除
+	$('#content #table .del').click(function(event) {
+		event.preventDefault();
+		if (!confirm('确定要删除该数据吗？')) {
+			return false;
+		}
+		var id=$(this).attr('href');
+		if (id=='' || isNaN(id)) {
+			wintq('ID参数不正确',3,1000,1,'');
+			return false;
+		}else {
+			wintq('正在删除，请稍后...',4,20000,0,'');
+			$.ajax({
+				url:'__APP__/Photo/photodel/',
+				dataType:'json',
+				type:'POST',
+				data:'id='+id,
+				success: function(data) {
+					if (data.s=='ok') {
+						wintq('删除成功',1,1500,1,'?');
+					}else {
+						wintq(data.s,3,1500,1,'');
+					}
+				}
+			});
+		}
+	});
+
+});
+</script>
+</head>
+<body>
+<div id="content">
+	<h1>首页 > 合作伙伴> 最新动态</h1>
+    <h2>
+    	<div class="h2_left">
+        	<a href="__ACTION__" class="whole">全部</a>
+        	<a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+    </h2>
+    <table id="table" border="1" bordercolor="#ccc" cellpadding="0" cellspacing="0">
+    	<tr>
+        	<!-- <th><input type="checkbox" class="indel" value="del" /></th> -->
+        	<th>排序</th>
+            <th>描述</th>
+            <th>图片</th>
+            <th>是否显示</th>
+            <th>时间</th>
+            <th>操作</th>
+        </tr>
+        <if condition="$co eq 0"><tr class="tr"><td class="tc" colspan="7">暂无数据，等待添加～！</td></tr></if>
+        <!--顶级数据-->
+        <volist name="volist" id="vo">
+        <tr>
+        	<!-- <td class="tc"><input type="checkbox" class="delid" value="<{$vo.id}>" /></td> -->
+            <td class="tc"><{$vo.sortid}></td>
+            <td class="tc"><{$vo.desc|mbsubstr=0,30}></td>
+            <td class="tc"><img src="__UPLOAD__/photo/<{$vo.img}>" style="width:120px;height:80px;"></td>
+            <td class="tc">
+                <switch name="vo.isshow">
+                    <case value="1">显示</case>
+                    <case value="0">不显示</case>
+                </switch>
+
+            </td>
+            <td class="tc"><{$vo.time|date="Y-m-d H:i:s",###}></td>
+            <td class="tc fixed_w"><a href="__APP__/Photo/edit/id/<{$vo.id}>" class="edit oper">修改</a><a href="<{$vo.id}>" class="del oper">删除</a></td>
+        </tr>
+        </volist>
+    </table>
+ <div id="page"><{$page}></div>
+</div>
+</body>
+</html>

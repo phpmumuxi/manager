@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>客户管理|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script>
+$(document).ready(function() {
+//删除
+$('#content #table .tr .del').click(function(event) {
+	event.preventDefault();
+	if (!confirm('确定要删除该数据吗？')) {
+		return false;
+	}
+	var id=$(this).attr('href');
+	if (id=='' || isNaN(id)) {
+		wintq('ID参数不正确',3,1000,1,'');
+		return false;
+	}else {
+		wintq('正在删除，请稍后...',4,20000,0,'');
+		$.ajax({
+			url:'__APP__/Client/client_del/',
+			dataType:'json',
+			type:'POST',
+			data:'post=ok&id='+id,
+			success: function(data) {
+				if (data.s=='ok') {
+					wintq('删除成功',1,1500,0,'?');
+				}else {
+					wintq(data.s,3,1500,1,'');
+				}
+			}
+		});
+	}
+});
+//批量删除
+$('#dely').click(function(event) {
+	event.preventDefault();
+	if (!confirm('确定要删除选择项吗？')) {
+		return false;
+	}
+	var delid='';
+	for (i=0; i<$('#table .delid').size(); i++) {
+		if (!$('#table .delid').eq(i).attr('checked')==false) {
+			delid=delid+$('#table .delid').eq(i).val()+',';
+		}
+	}
+	if (delid=='') {
+		wintq('请选中后再操作',2,1500,1,'');
+	}else {
+		wintq('正在删除，请稍后...',4,20000,0,'');
+		$.ajax({
+			url:'__APP__/Client/client_indel/',
+			dataType:'JSON',
+			type:'POST',
+			data:'delid='+delid,
+			success: function(data) {
+				if (data.s=='ok') {
+					wintq('删除成功',1,1500,0,'?');
+				}else {
+					wintq(data.s,3,1500,1,'');
+				}
+			}
+		});
+	}
+});
+//分页
+$('#page .page a').click(function(event) {
+	event.preventDefault();
+	var url = $(this).attr('href');
+	clientajax(url);
+});
+}
+	//拉取客户信息
+	function clientajax(keyword) {
+		$.get('__APP__/Client/indexajax?keyword='+keyword, function(data) {
+			//回调函数
+			data = eval('('+data+')');
+			if (data.s=='ok') {
+				//有数据的情况下
+				$('#table .tr').remove();
+				$('#page .page').remove();
+				$('#table').append(data.html);
+				$('#page').append(data.page);
+			}else {
+				//没有数据的情况下
+				$('#table .tr').remove();
+				$('#page .page').remove();
+				$('#table').append(data.html);
+			}
+			Operating();
+		});
+	}
+	clientajax('');
+	var speed='';
+	$('.search .text').keyup(function() {
+		clearTimeout(speed);
+		var value = $(this).val();
+		speed = setTimeout(function() {
+			clientajax(value);
+		},300);
+	});
+});
+</script>
+</head>
+<body>
+<div id="content">
+	<h1>首页 > 客户管理 > 客户库</h1>
+    <h2>
+    	<div class="h2_left">
+        	<a href="__ACTION__" class="whole">全部</a>
+        	<a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+        <div class="search">
+            <input type="text" name="keyword" class="text" />
+            <input type="submit" class="so" value="搜 索" />
+            <font>小贴士：输入ID/用户名/姓名/手机号可实时搜索</font>
+        </div>
+    </h2>
+  	 <style type="text/css">
+    	.select{padding:5px 10px;border:#ddd 1px solid;border-radius:4px;width:60%;margin:5% auto;font-size:12px}
+		.select li{list-style:none;padding:10px 0 5px 100px}
+		.select .select-list{border-bottom:#eee 1px dashed}
+		.select dl{zoom:1;position:relative;line-height:24px;}
+		.select dl:after{content:" ";display:block;clear:both;height:0;overflow:hidden}
+		.select dt{width:100px;margin-bottom:5px;position:absolute;top:0;left:-100px;text-align:right;color:#666;height:24px;line-height:24px}
+		.select dd{float:left;display:inline;margin:0 0 5px 5px;}
+		.select a{display:inline-block;white-space:nowrap;height:24px;padding:0 10px;text-decoration:none;color:#039;border-radius:2px;}
+		.select a:hover{color:#f60;background-color:#f3edc2}
+		.select .selected a{color:#fff;background-color:#f60}
+		.select-result dt{font-weight:bold}
+		.select-no{color:#999}
+		.select .select-result a{padding-right:20px;background:#f60 url("__PUBLIC__/image/close.gif") right 9px no-repeat}
+		.select .select-result a:hover{background-position:right -15px}
+    </style>
+    <div class="fen">
+    <ul class="select" style="height: 179px;margin-top: 20px;margin-bottom: 20px;">
+		<li class="select-list">
+			<dl id="select1">
+				<dt>会员状态：</dt>
+				<dd class="select-all selected"><a href="#" status1='0'>全部</a></dd>
+				<dd><a href="#" status1='1'>未认证</a></dd>
+				<dd><a href="#" status1='2'>已认证</a></dd>
+				<dd><a href="#">冻结</a></dd>
+			</dl>
+		</li>
+		<li class="select-list">
+			<dl id="select2">
+				<dt>申请时间：</dt>
+				<dd class="select-all selected"><a href="#">全部</a></dd>
+				<dd><a href="#">今日</a></dd>
+				<dd><a href="#">最近七天</a></dd>
+				<dd><a href="#">最近30日</a></dd>
+			</dl>
+		</li>
+		<li class="select-list">
+			<dl id="select3">
+				<dt>层级关系：</dt>
+				<dd class="select-all selected"><a href="#">全部</a></dd>
+				<dd><a href="#">一层</a></dd>
+				<dd><a href="#">二层</a></dd>
+			</dl>
+		</li>
+		<li class="select-result">
+			<dl>
+				<dt>已选条件：</dt>
+				<dd class="select-no">暂时没有选择过滤条件</dd>
+			</dl>
+		</li>
+	</ul>
+  	<div>当前逸专员人数：50000000，一层关系人数：38888人，两层关系人数：34599人</div>
+  	</div>
+    <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+    	<tr>
+        	<th><input type="checkbox" class="indel" value="del" /></th>
+        	<th>序号</th>
+            <th>申请时间</th>
+            <th>主用户</th>
+            <th>一度(人)</th>
+            <th>二度(人)</th>
+            <th>总收入(元)</th>
+            <th>上月收入</th>
+            <th>本月收入</th>
+            <th>昨日新增（元）</th>
+            <th>上月新增（人）</th>
+            <th>本月新增（人）</th>
+        </tr>
+      <tr>
+		<td class='tc'><input type='checkbox' class='delid' value="" /></td>
+		<td class='tc'>1</td>
+		<td>2016-4-22</td>
+		<td class='tc'>admin</td>
+		<td class='tc'>22</td>
+		<td>18</td>
+		<td class='tc'>9900</td>
+		<td class='tc'>2000</td>
+		<td class='tc'>3000</td>
+		<td class='tc'>600</td>
+		<td class='tc'>18</td>
+		<td class='tc'>16</td>
+	</tr>
+    </table>
+    <div id="page"><a href="javascript:;" class="selbox">全选</a><a href="javascript:;" class="anti">反选</a><a href="javascript:;" class="unselbox">全不选</a>&nbsp;&nbsp;对选中项进行&nbsp;&nbsp;<a href="javascript:;" id="dely">删除</a>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+</div>
+
+    <script type="text/javascript">
+    // $(function (){
+  //      $('.status').click(function (){
+
+  //      	$('.status').removeClass("cur");
+  //      	$(this).addClass("cur");
+  //      	//status
+  //      	// 0.全部
+  //      	// 1.未认证
+  //      	// 2.已认证
+  //      	// 3.冻结
+  //      	// 4.申请时间今日
+  //      	// 5.申请时间最近七天
+  //      	// 6.申请时间最近30天
+  //      	// 7.一层
+  //      	// 8.二层
+  //      	var status = $(this).attr('status');
+  //     	$.ajax({
+		//    type: "POST",
+		//    url: "",
+		//    data: {status:status}, 
+		//    success: function(msg){
+		//     //alert();
+		//    }
+		// });
+  //     });
+  //   });
+    </script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+			
+	$("#select1 dd").click(function () {
+		$(this).addClass("selected").siblings().removeClass("selected");
+
+		if ($(this).hasClass("select-all")) {
+			$("#selectA").remove();
+		} else {
+			var copyThisA = $(this).clone();
+			var status1 = $(this).text();
+			$.ajax({
+			   type: "GET",
+			   url: "",
+			   data: {status1:status1}, 
+			   success: function(msg){
+			    //alert();
+			   }
+			});
+			if ($("#selectA").length > 0) {
+				$("#selectA a").html($(this).text());
+			} else {
+				$(".select-result dl").append(copyThisA.attr("id", "selectA"));
+			}
+		}
+	});
+	
+	$("#select2 dd").click(function () {
+		$(this).addClass("selected").siblings().removeClass("selected");
+		if ($(this).hasClass("select-all")) {
+			$("#selectB").remove();
+		} else {
+			var copyThisB = $(this).clone();
+			var status2 = $(this).text();
+			$.ajax({
+			   type: "GET",
+			   url: "",
+			   data: {status2:status2}, 
+			   success: function(msg){
+			    //alert();
+			   }
+			});
+			if ($("#selectB").length > 0) {
+				$("#selectB a").html($(this).text());
+			} else {
+				$(".select-result dl").append(copyThisB.attr("id", "selectB"));
+			}
+		}
+	});
+	
+	$("#select3 dd").click(function () {
+		$(this).addClass("selected").siblings().removeClass("selected");
+		if ($(this).hasClass("select-all")) {
+			$("#selectC").remove();
+		} else {
+			var copyThisC = $(this).clone();
+			var status3 = $(this).text();
+			$.ajax({
+			   type: "GET",
+			   url: "",
+			   data: {status3:status3}, 
+			   success: function(msg){
+			    //alert();
+			   }
+			});
+			if ($("#selectC").length > 0) {
+				$("#selectC a").html($(this).text());
+			} else {
+				$(".select-result dl").append(copyThisC.attr("id", "selectC"));
+			}
+		}
+	});
+	
+	
+	$("#selectA").live("click", function () {
+		$(this).remove();
+		$("#select1 .select-all").addClass("selected").siblings().removeClass("selected");
+	});
+	
+	$("#selectB").live("click", function () {
+		$(this).remove();
+		$("#select2 .select-all").addClass("selected").siblings().removeClass("selected");
+	});
+	
+	$("#selectC").live("click", function () {
+		$(this).remove();
+		$("#select3 .select-all").addClass("selected").siblings().removeClass("selected");
+	});
+	
+	
+	$(".select dd").live("click", function () {
+		if ($(".select-result dd").length > 1) {
+			var status = new Array();
+			status[0] = $(this).text();
+			console.log(status);
+			$.ajax({
+			   type: "GET",
+			   url: "",
+			   data: {status:status}, 
+			   success: function(msg){
+			    //alert();
+			   }
+			});
+			$(".select-no").hide();
+		} else {
+			$(".select-no").show();
+		}
+	});
+	
+});
+    </script>
+</body>
+</html>

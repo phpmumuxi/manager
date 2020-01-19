@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>新闻管理|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script type="text/javascript" src="__JS__/check.js"></script>
+
+</head>
+<body>
+<div id="content">
+	<h1>首页 > 新闻管理 > 文章管理</h1>
+    <h2>
+    	<div class="h2_left">
+        	<a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+    </h2>
+    <div id="article">
+    	<volist name="res" id="vo">
+    		
+<!--     	<div class="title"></div> -->
+		<!-- <div style="font-size: 20px;margin: 20px;"><a href="<{$vo.link}>" title=""><{$vo.title}></a></div>
+		<div><{:comment($vo['allList'])}></div> -->
+		<!-- <div><{$vo.content}></div>		 -->
+    	</volist>
+    </div>
+</div>
+</body>
+</html>

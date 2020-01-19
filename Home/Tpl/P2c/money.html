@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>添加新客户|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script type="text/javascript" src="__JS__/check.js"></script>
+<script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+<script>
+$(document).ready(function() {
+	var $client = $('#client');
+	$('.submit').click(function() {
+		
+		var loginName = $client.find('.ctext').eq(0).val();
+        var userName =  $client.find('.ctext').eq(1).val();
+        var Phone =  $client.find('.ctext').eq(4).val();
+		if (!tcheck(loginName,'','请填写用户名')) { return false; }
+        if (!tcheck(userName,'','请填写姓名')) { return false; }
+		if (!tcheck(Phone,'','请填写手机号码')) { return false; }
+		if (!tcheck(Phone,'11','手机号码必须11位','length')) { return false; }
+		if (!tcheck(Phone,'number','手机号码必须是数字')) { return false; }
+		wintq('正在处理，请稍后...',4,20000,0,'');
+		$('form').submit();
+	});
+});
+</script>
+</head>
+<body>
+<div id="content" style="padding-bottom:20px;">
+    <form action="__APP__/Client/add_do" method="post">
+    <table id="client" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+    	<tr class="tr">
+        	<td class="left">推荐专员：</td>
+        	<td><input name="loginName" type="text" class="ctext" size="30" value ="70%" readonly="readonly" /></td>
+            <td class="left">推荐买家：</td>
+        	<td><input name="userName" type="text" class="ctext" size="30" value ="30%" readonly="readonly"/></td>
+        </tr>
+        <tr class="tr">
+            <td class="left">一度关系：</td>
+            <td><input name="userName" type="text" class="ctext" size="30" value ="80%" readonly="readonly"/></td>
+            <td class="left">一度关系：</td>
+            <td><input name="userName" type="text" class="ctext" size="30" value ="80%" readonly="readonly" /></td>
+        </tr>
+        <tr class="tr">
+            <td class="left">二度关系：</td>
+            <td><input name="userName" type="text" class="ctext" size="30" value ="20%" readonly="readonly"/></td>
+            <td class="left">二度关系：</td>
+            <td><input name="userName" type="text" class="ctext" size="30" value ="20%" readonly="readonly"/></td>
+        </tr>
+    </table>
+   <!--  <input type="submit" class="submit" value="添加" style="margin:20px 0 0 30px;" /> -->
+    </form>
+</div>
+</body>
+</html>

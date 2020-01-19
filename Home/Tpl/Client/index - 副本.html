@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>用户管理|<{$configcache['Title']}></title>
+  <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+  <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+  <script type="text/javascript" src="__JS__/jquery.js"></script>
+  <script type="text/javascript" src="__JS__/Public.js"></script>
+  <script type="text/javascript" src="__JS__/winpop.js"></script>
+  <script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+  <style type="text/css">
+  .select{padding:5px 10px;border:#ddd 1px solid;border-radius:4px;width:60%;margin:5% auto;font-size:12px}
+  .select li{list-style:none;padding:10px 0 5px 100px}
+  .select .select-list{border-bottom:#eee 1px dashed}
+  .select dl{zoom:1;position:relative;line-height:24px;}
+  .select dl:after{content:" ";display:block;clear:both;height:0;overflow:hidden}
+  .select dt{width:100px;margin-bottom:5px;position:absolute;top:0;left:-100px;text-align:right;color:#666;height:24px;line-height:24px}
+  .select dd{float:left;display:inline;margin:0 0 5px 5px;}
+  .select a{display:inline-block;white-space:nowrap;height:24px;padding:0 10px;text-decoration:none;color:#039;border-radius:2px;}
+  .select a:hover{color:#f60;background-color:#f3edc2}
+  .select .selected a{color:#fff;background-color:#f60}
+  .select-result dt{font-weight:bold}
+  .select-no{color:#999}
+  .select .select-result a{padding-right:20px;background:#f60 url("__PUBLIC__/image/close.gif") right 9px no-repeat}
+  .select .select-result a:hover{background-position:right -15px}
+  .tc{text-align:center; text-indent:0;font-family:"微软雅黑";font-size: 14px;color:#111;}
+  </style>
+  <script>
+  function myBrowser(){
+    var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+    var isOpera = userAgent.indexOf("Opera") > -1;
+    if (isOpera) {
+      return "Opera"
+    }; //判断是否Opera浏览器
+    if (userAgent.indexOf("Firefox") > -1) {
+      return "FF";
+      /*firefox----这段js重新封装了event对象，经验证可以在火狐下支持！----*/
+      function __firefox(){
+        HTMLElement.prototype.__defineGetter__("runtimeStyle", __element_style);
+        window.constructor.prototype.__defineGetter__("event", __window_event);
+        Event.prototype.__defineGetter__("srcElement", __event_srcElement);
+      }
+      function __element_style(){
+        return this.style;
+      }
+      function __window_event(){
+        return __window_event_constructor();
+      }
+      function __event_srcElement(){
+        return this.target;
+      }
+      function __window_event_constructor(){
+        if(document.all){
+          return window.event;
+        }
+        var _caller = __window_event_constructor.caller;
+        while(_caller!=null){
+          var _argument = _caller.arguments[0];
+          if(_argument){
+            var _temp = _argument.constructor;
+            if(_temp.toString().indexOf("Event")!=-1){
+              return _argument;
+            }
+          }
+          _caller = _caller.caller;
+        }
+        return null;
+      }
+      if(window.addEventListener){
+        __firefox();
+      }
+    } //判断是否Firefox浏览器
+    if (userAgent.indexOf("Chrome") > -1){
+      return "Chrome";
+    }
+    if (userAgent.indexOf("Safari") > -1) {
+      return "Safari";
+    } //判断是否Safari浏览器
+    if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+      return "IE";
+    }; //判断是否IE浏览器
+  }
+  </script>
+</head>
+<body>
+  <div id="content">
+   <h1>首页 > 客户管理 > 客户库</h1>
+   <h2>
+     <div class="h2_left">
+       <a href="__ACTION__" class="whole">全部</a>
+       <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+       <a href="javascript:history.back();" class="Retreat">后退</a>
+       <a href="javascript:history.go(1);" class="Advance">前进</a>
+     </div>
+     <div class="search">
+      <form method="get" id="search">
+        <input type="text" name="k" class="text" value="<{$key}>"/>
+        <input type="submit" class="so" value="搜 索" />
+      </form>
+      <font>小贴士：输入昵称/手机号</font>
+    </div>
+  </h2>
+
+  <div class="fen">
+    <ul class="select" style="height:175px;margin-top: 20px;margin-bottom: 20px;">
+      <li class="select-list List_more"> 
+        <dl id="select">
+          <dt>会员状态：</dt>
+          <dd <?php if(get('s')<0){ echo 'class="selected select-all"';} $s = -1;?>><a href="<{$s|createsearchurl="/Client/index",s,###,"add",null,null}>">全部</a></dd>
+          <volist name="status" id="val">
+            <dd <if condition="$Think.get.s eq $val['value']"> class="selected select-all"</if>><a href="<{$val.value|createsearchurl="/Client/index",s,###,"add",null,null}>"><{$val.name}></a></dd>
+          </volist>
+        </dl>
+      </li>
+      <li class="select-list List_more"> 
+        <dl id="select">
+          <dt>申请时间：</dt>
+          <dd <?php if(get('t')<0){ echo 'class="selected select-all"';} $t = -1;?>><a href="<{$t|createsearchurl="/Client/index",t,###,"add",null,null}>">全部</a></dd>
+          <volist name="times" id="val">
+            <dd <if condition="$Think.get.t eq $val['value']"> class="selected select-all"</if>><a href="<{$val.value|createsearchurl="/Client/index",t,###,"add",null,null}>"><{$val.name}></a></dd>
+          </volist>
+        </dl>
+      </li>
+      <li class="select-list List_more"> 
+        <dl id="select">
+          <dt>服务数量：</dt>
+          <volist name="sort" id="val">
+            <dd <if condition="$Think.get.p eq $val['value']"> class="selected select-all"</if>><a href="<{$val.value|createsearchurl="/Client/index",p,###,"add",null,null}>"><{$val.name}></a></dd>
+          </volist>
+        </dl>
+      </li>
+
+      <li class="select-list List_more"> 
+        <dl id="select">
+          <dt>是否有头像:</dt>
+          <volist name="userimg" id="val">
+            <dd <if condition="$Think.get.g eq $val['value']"> class="selected select-all"</if>><a href="<{$val.value|createsearchurl="/Client/index",g,###,"add",null,null}>"><{$val.name}></a></dd>
+          </volist>
+        </dl>
+      </li>
+    </ul>
+  </div>
+  <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+   <tr>
+     <th>昵称</th>
+     <th>手机号</th>
+     <th>真实姓名</th>
+     <th>状态</th>
+     <th>持股金额</th>
+     <th>积分</th>
+     <th>会员等级</th>
+     <th>成为管家</th>
+     <th>荣誉值</th>
+     <th>修改资料</th>
+     <th>是否为明星逸专员</th>
+     <th>代理商</th>
+     <th>操作</th>       
+   </tr>
+  <if condition="count($user)">
+   <volist name="user" id="vo">
+    <tr>
+      <td style="text-align:center" class='tc'><{$vo.userNickName}></td>
+      <td style="text-align:center" class='tc'><{$vo.userTelephone}></td>
+      <td style="text-align:center" class='tc'><{$vo.userRealName}></td>
+      <td style="text-align:center" class='tc'>
+        <!-- 使用switch标签判断输出 -->
+        <switch name="vo.userApproveStatus">
+          <case value="0">未认证</case>
+          <case value="1">待认证</case>
+          <case value="2">已认证</case>
+          <case value="3">认证未通过</case>
+          <default />
+        </switch>
+      </td>
+      <td class="tc" style="text-align: center"><{$vo.userStockNum}></td>
+      <td class="tc" style="text-align: center"><{$vo.memberPoint}></td>
+      <td style="text-align:center" class='tc'>
+        <!-- 使用switch标签判断输出 -->
+        <switch name="vo.memberLvel">
+          <case value="0">普通用户</case>
+          <case value="1">金牌VIP</case>
+          <case value="2">钻石VIP</case>
+          <case value="3">皇冠VIP</case>
+          <default />
+        </switch>
+      </td>
+      <td style="text-align:center" class='tc'>
+        <switch name="vo.">
+          <case value="0"></case>
+          <case value="1">私人管家</case>
+          <case value="2">网红管家</case>
+          <default />
+        </switch>
+      </td>
+      <td class="tc" style="text-align: center"><{$vo.memberGlory}></td>
+      <td class='tc' style="text-align:center"><a href="<{:U('Client/edit')}>?sid=<{$vo.sid}>" class="" style="color:orange;" sid='<{$vo.sid}>'>编辑</a></td>
+      <td class='tc' style="text-align:center">
+        <switch name="vo.userIsStar">
+          <case value="0"><a href="javascript:;" class="star" approveStatus="3" style="color:#009900" sid='<{$vo.sid}>'>设为VIP管家</a></case>
+          <case value="1"><a href="javascript:;" class="nostar" approveStatus="3" style="color:#009900" sid='<{$vo.sid}>'>取消VIP管家</a></case>
+          <default /><a href="javascript:;" class="star" approveStatus="3" style="color:#009900" sid='<{$vo.sid}>'>设为VIP管家</a>
+        </switch>
+      </td>
+      <td class="tc" style="text-align: center">
+        <if condition="$vo['isAgent'] eq 0">
+          <a href="javascript:;" class="isagent" style="color:#FF9933"  userId='<{$vo.sid}>' agent='1'>设置为代理商</a>
+          <elseif condition="$vo['isAgent'] eq 1"/>
+          <a href="javascript:;" class="isagent"  style="color:#FF9933"  userId='<{$vo.sid}>' agent='0'>取消代理商</a>
+          <else/>
+        </if>
+      </td>
+      <td class='tc' style="text-align:center">
+        <!-- 使用switch标签判断输出 -->
+        <switch name="vo.userApproveStatus">
+         <case value="0">待用户上传认证信息</case>
+         <case value="1"><a href="javascript:;" class="details" approveStatus="4" style="color:#0000FF" sid='<{$vo.sid}>' name='<{$vo.userNickName}>'>详情</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" class="pass" approveStatus="2" style="color:#FF9933" sid='<{$vo.sid}>' userId='<{$admin.ID}>' userName='<{$admin.Username}>'>通过</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" class="nopass" approveStatus="3" style="color:#FF9933" sid='<{$vo.sid}>' userId='<{$admin.ID}>' userName='<{$admin.Username}>'>不通过</a></case>
+         <case value="2"><a href="javascript:;" class="details" approveStatus="4" style="color:#0000FF" sid='<{$vo.sid}>' name='<{$vo.userNickName}>'>详情</a></case>
+         <case value="3"><a href="javascript:;" class="details" approveStatus="4" style="color:#0000FF" sid='<{$vo.sid}>' name='<{$vo.userNickName}>'>详情</a></case>
+         <default />未知
+       </switch>
+     </td>
+   </tr> 
+ </volist>
+  <else />
+      <tr><td style="text-align:center" colspan="12" class='tc'>当前请求无数据</td></tr>
+  </if>
+</table>
+<div id="page">
+  <{$page}>
+</div>
+</div>
+<script type="text/javascript">
+$(function (){
+ $('.nopass').click(function(){
+  var approveStatus = parseInt($(this).attr('approveStatus'));
+  var sid= ($(this).attr('sid'));
+  var checkUserId = $(this).attr('userId');
+  var checkUserName = $(this).attr('Username');
+  popload('拒绝原因',600,300,'__APP__/Client/nopa/sid/'+sid+'/approveStatus/'+approveStatus+'/checkUserId/'+checkUserId+'/checkUserName/'+checkUserName);
+  addDiv($('#iframe_pop'));
+  popclose();
+ // location.reload();
+});
+
+ $('.pass').click(function(){
+  var approveStatus = parseInt($(this).attr('approveStatus'));
+  var sid= ($(this).attr('sid'));
+  var userId = $(this).attr('userId');
+  var Username = $(this).attr('Username');
+  $.ajax({
+   type: "POST",
+   url: "<{$url}>/manager/user/applyUser",
+   data: {approveStatus:approveStatus,sid:sid,userId:userId,Username:Username}, 
+   success: function(msg){
+    alert(msg.message);
+    f5();
+  }
+});
+});
+
+
+
+ $('.details').click(function(){
+  var approveStatus = parseInt($(this).attr('approveStatus'));
+  var sid= ($(this).attr('sid'));
+  event.preventDefault();
+  popload('详情信息',860,800,'__APP__/Client/user/sid/'+sid);
+  addDiv($('#iframe_pop'));
+  popclose();
+});
+
+
+//登录日志
+$('.login').click(function(){
+  var sid= ($(this).attr('sid'));
+  var userNickName = $(this).attr('userNickName');
+  event.preventDefault();
+  popload('登录日志',960,800,'__APP__/Client/login/userNickName/'+userNickName);
+  addDiv($('#iframe_pop'));
+  popclose();
+});
+});
+
+
+//设为明星专员
+$('.star').click(function(){
+  var sid= ($(this).attr('sid'));
+
+  $.ajax({
+   type: "POST",
+   url: "<{$url}>/manager/user/changeUserIsStar",
+   data: {userId :sid,isStar:'true'}, 
+   success: function(msg){
+    if(msg.code == "2000"){
+      alert(msg.message);
+      f5();
+    }
+  },
+  error:function(){
+    alert('异常!');
+  }
+});
+
+});
+
+//取消明星专员
+$('.nostar').click(function(){
+  var sid= ($(this).attr('sid'));
+
+  $.ajax({
+   type: "POST",
+   url: "<{$url}>/manager/user/changeUserIsStar",
+   data: {userId :sid,isStar:'false'}, 
+   success: function(msg){
+    if(msg.code == "2000"){
+      alert(msg.message);
+      f5();
+    }
+
+  },
+  error:function(){
+    alert('异常!');
+  }
+});
+
+});
+
+$('.isagent').click(function(){
+  var userId= ($(this).attr('userId'));
+  var isAgent = ($(this).attr('agent'));
+  $.ajax({
+   type: "POST",
+   url: "<{$url}>/manager/user/setAgent",
+   data: {userId:userId,isAgent:isAgent}, 
+   success: function(msg){
+    alert('操作成功');
+    f5();
+  }
+});
+});
+</script>
+</body>
+</html>

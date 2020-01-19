@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>详情信息|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+</head>
+<body>
+<div id="content">
+	<dl id="dl">
+    <dt>用户详情信息</dt>
+        <dd>
+            <span class="dd_left">缩略图：</span>
+            <span class="dd_right">
+                <a href="<{$info.polyvMp4url1}>" target='_blank'><img src="<{$info.polyvFirstImage}>" width="200" height="200" style="margin:5px;"></a>
+            </span>
+        </dd>
+        <dd>
+            <span class="dd_left">视频ID：</span>
+            <span class="dd_right">
+                <font><{$info.sid}></font>
+            </span>
+        </dd>
+        <dd>
+            <span class="dd_left">视频描述：</span>
+            <span class="dd_right"><font><{$info.serviceDetail}></font></span>
+        </dd>
+        <dd>
+            <span class="dd_left">视频标题：</span>
+            <span class="dd_right"><font><{$info.serviceTitle}></font></span>
+        </dd>
+        <dd>
+            <span class="dd_left">用户昵称：</span>
+            <span class="dd_right"><font><{$info.userNickName}></font></span>
+        </dd>
+        <dd>
+            <span class="dd_left">手机号：</span>
+            <span class="dd_right"><font><{$info.userTelephone}></font></span>
+        </dd>
+        <dd>
+            <span class="dd_left">视频时长：</span>
+            <span class="dd_right"><font><{$info.polyvDuration}></font></span>
+        </dd>
+        <dd>
+            <span class="dd_left">区域：</span>
+            <span class="dd_right"><font><{$info.serviceDistrict}></font></span>
+        </dd>
+        <dd>
+            <span class="dd_left">地址：</span>
+            <span class="dd_right"><font><{$info.serviceAddress}></font></span>
+        </dd>
+        <dd>
+            <span class="dd_left">关联商品数：</span>
+            <span class="dd_right"><font><{$info.videoGoodsNum}></font></span>
+        </dd>
+        <dd>
+            <span class="dd_left">播放次数：</span>
+            <span class="dd_right"><font><{$info.clickNum}></font></span>
+        </dd>
+        <dd>
+            <span class="dd_left">点赞总数：</span>
+            <span class="dd_right"><font><{$info.videoLikeNum}></font></span>
+        </dd>
+        <dd>
+            <span class="dd_left">收藏总数：</span>
+            <span class="dd_right"><font><{$info.videoCollectionNum}></font></span>
+        </dd>
+        <dd>
+        	<span class="dd_left">举报状态：</span>
+        	<span class="dd_right"><font>
+            <switch name="info.isComplaint">
+                <case value="0">未举报</case>
+                <case value="1">被举报</case>
+                <default />
+            </switch></font></span>
+        </dd>
+        <dd>
+            <span class="dd_left">上下架状态：</span>
+            <span class="dd_right"><font>
+                <switch name="info.serviceStatus">
+                   <case value="1">
+                       上架               
+                   </case>
+                   <case value="0">
+                       下架<if condition="$info['checkComment']">&nbsp;&nbsp;&nbsp;(<{$info.checkComment}>)</if>
+                   </case>                  
+                </switch>
+            </font></span>
+        </dd>
+        
+    </dl>
+</div>
+</body>
+</html>

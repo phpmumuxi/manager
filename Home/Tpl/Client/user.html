@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户信息|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script type="text/javascript" src="__JS__/check.js"></script>
+<script>
+$(document).ready(function() {
+    $('.button').click(function() {
+      var id=$('#dl input:hidden').val();
+      alert(id);
+        $.ajax({
+            url:'',
+            dataType:'json',
+            type:'POST',
+            data:{id:id},
+            success: function(data) {
+                
+            }
+        });
+    });
+});
+</script>
+</head>
+<body>
+<div id="content">
+	<dl id="dl">
+    <dt>用户详情信息</dt>
+        <a href="<{$user.headPicUrl}>" title="图片详情" target='_blank'><img src="<{$user.headPicUrl}>" width="190" height="180" style="margin:5px;"></a>
+        <a href="<{$user.headSelfPicUrl}>" title="图片详情" target='_blank'><img src="<{$user.headSelfPicUrl}>" width="190" height="180" style="margin:5px;"></a>
+        <a href="<{$user.idCodeFrontPic}>" title="图片详情" target='_blank'><img src="<{$user.idCodeFrontPic}>" width="190" height="180" style="margin:5px;"></a>
+        <a href="<{$user.idCodeBackPic}>" title="图片详情" target='_blank'><img src="<{$user.idCodeBackPic}>" width="190" height="180" style="margin:5px;"></a>
+        <dd>
+            <span class="dd_left">昵 称：</span>
+            <span class="dd_right"><font><{$user.userNickName}></font></span>
+        </dd>
+        <dd>
+            <span class="dd_left">真实姓名：</span>
+            <span class="dd_right"><font><{$user.userRealName}></font><if condition="$user.userIsStar eq 1  ">(明星专员)<else /></if></span>
+        </dd>
+        <dd>
+            <span class="dd_left">身份证号：</span>
+            <span class="dd_right"><font><{$user.userIdCode}></font></span>
+        </dd>
+        <dd>
+            <span class="dd_left">地址：</span>
+            <span class="dd_right"><font><{$user.userAddress}></font></span>
+        </dd>
+        <dd>
+            <span class="dd_left">年龄：</span>
+            <span class="dd_right"><font><{$user.userAge}></font></span>
+        </dd>
+        <dd>
+        	<span class="dd_left">性 别：</span>
+        	<span class="dd_right"><font>
+            <switch name="user.userSex">
+                <case value="0">男</case>
+                <case value="1">女</case>
+                <default />未知
+            </switch></font></span>
+        </dd>
+        <dd>
+            <span class="dd_left">手机号：</span>
+            <span class="dd_right"><font><{$user.userTelephone}></font></span>
+        </dd>
+        <dd>
+            <span class="dd_left">微信号：</span>
+            <span class="dd_right"><font><{$user.userWx}></font></span>
+        </dd>
+        <dd>
+            <span class="dd_left">QQ号：</span>
+            <span class="dd_right"><font><{$user.userQq}></font></span>
+        </dd>
+        <dd>
+            <span class="dd_left">服务城市：</span>
+            <span class="dd_right"><font><{$user.userServiceCity}></font></span>
+        </dd>
+       
+        <dd>
+            <span class="dd_left">服务状态：</span>
+            <span class="dd_right"><font><if condition="$user.userServiceStatus eq 1  ">开启<else />关闭</if></font></span>
+        </dd>
+
+        <dd>
+            <span class="dd_left">账号状态：</span>
+            <span class="dd_right"><font>
+            <switch name="user.userApproveStatus">
+            <case value="0">未认证</case>
+            <case value="1">待认证</case>
+            <case value="2">已认证</case>
+            <case value="3">认证未通过</case>
+            <default />未知
+            </switch>
+            </font></span>
+        </dd>
+
+ <!--        <dd>
+            <span class="dd_left">公司名称：</span>
+            <span class="dd_right"><font><{$user.userCompany}></font></span>
+        </dd>
+        -->
+        <dd>
+            <span class="dd_left">注册时间：</span>
+            <span class="dd_right"><font><{$user.userCreateDate}></font></span>
+        </dd>
+        <dd>
+            <span class="dd_left" style="width:86px;">认证时间：</span>
+            <span class="dd_right"><font><{$user.userApprovedDatetime}></font></span>
+        </dd>
+        <dd>
+            <span class="dd_left">余额：</span>
+            <span class="dd_right"><font><{$user.userBalance}></font></span>
+        </dd>        
+        <switch name="user.userApproveStatus">
+            <case value="3">
+                <dd>
+                    <span class="dd_left">拒绝原因：</span>
+                    <span class="dd_right"><font><{$user.userRefusalReason}></font></span>
+                </dd>
+            </case>
+            <default />
+        </switch>        
+        <dd>
+            <span class="dd_left">是否付费：</span>
+            <span class="dd_right">
+                <switch name="user.registerType">
+                <case value="0">老用户未付款</case>
+                <case value="1">未支付<{$user.payMoney}>（订单号<{$user.payNo}>）</case>
+                <case value="2">已付款<{$user.payMoney}> （订单号<{$user.payNo}>）</case>
+                <default />
+                </switch>
+            </span>
+        </dd>
+    </dl>
+</div>
+</body>
+</html>

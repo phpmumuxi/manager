@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>商户管理|<{$configcache['Title']}></title>
+  <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+  <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+  <script type="text/javascript" src="__JS__/jquery.js"></script>
+  <script type="text/javascript" src="__JS__/Public.js"></script>
+  <script type="text/javascript" src="__JS__/winpop.js"></script>
+  <script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+  <script type="text/javascript" src="__JS__/PCASClass.js"></script>
+  <style type="text/css">
+  .select{padding:5px 10px;border:#ddd 1px solid;border-radius:4px;width:60%;margin:5% auto;font-size:12px}
+  .select li{list-style:none;padding:10px 0 5px 100px}
+  .select .select-list{border-bottom:#eee 1px dashed}
+  .select dl{zoom:1;position:relative;line-height:24px;}
+  .select dl:after{content:" ";display:block;clear:both;height:0;overflow:hidden}
+  .select dt{width:100px;margin-bottom:5px;position:absolute;top:0;left:-100px;text-align:right;color:#666;height:24px;line-height:24px}
+  .select dd{float:left;display:inline;margin:0 0 5px 5px;}
+  .select a{display:inline-block;white-space:nowrap;height:24px;padding:0 10px;text-decoration:none;color:#039;border-radius:2px;}
+  .select a:hover{color:#f60;background-color:#f3edc2}
+  .select .selected a{color:#fff;background-color:#f60}
+  .select-result dt{font-weight:bold}
+  .select-no{color:#999}
+  .select .select-result a{padding-right:20px;background:#f60 url("__PUBLIC__/image/close.gif") right 9px no-repeat}
+  .select .select-result a:hover{background-position:right -15px}
+  .tc{text-align:center; text-indent:0;font-family:"微软雅黑";font-size: 14px;color:#111;}
+  #content .atext { width:100px; height:24px; line-height:24px;border:solid 1px #ccc; font-family:"宋体"; }
+  .areasou{margin-left: 10px;width:50px;height:25px; line-height:25px; border:none; background:#090; color:#fff; font-family:"微软雅黑"; text-align:center;cursor: pointer;}
+  a.areasou{margin-left: 10px;width:50px;height:25px; line-height:25px; border:none; background:#090; color:#fff; font-family:"微软雅黑"; text-align:center;}
+  a.areasou:hover{margin-left: 10px;width:50px;height:25px; line-height:25px; border:none; background:#090; color:#fff; font-family:"微软雅黑"; text-align:center;}
+  </style>
+  <script>
+  function myBrowser(){
+    var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+    var isOpera = userAgent.indexOf("Opera") > -1;
+    if (isOpera) {
+      return "Opera"
+    }; //判断是否Opera浏览器
+    if (userAgent.indexOf("Firefox") > -1) {
+      return "FF";
+      /*firefox----这段js重新封装了event对象，经验证可以在火狐下支持！----*/
+      function __firefox(){
+        HTMLElement.prototype.__defineGetter__("runtimeStyle", __element_style);
+        window.constructor.prototype.__defineGetter__("event", __window_event);
+        Event.prototype.__defineGetter__("srcElement", __event_srcElement);
+      }
+      function __element_style(){
+        return this.style;
+      }
+      function __window_event(){
+        return __window_event_constructor();
+      }
+      function __event_srcElement(){
+        return this.target;
+      }
+      function __window_event_constructor(){
+        if(document.all){
+          return window.event;
+        }
+        var _caller = __window_event_constructor.caller;
+        while(_caller!=null){
+          var _argument = _caller.arguments[0];
+          if(_argument){
+            var _temp = _argument.constructor;
+            if(_temp.toString().indexOf("Event")!=-1){
+              return _argument;
+            }
+          }
+          _caller = _caller.caller;
+        }
+        return null;
+      }
+      if(window.addEventListener){
+        __firefox();
+      }
+    } //判断是否Firefox浏览器
+    if (userAgent.indexOf("Chrome") > -1){
+      return "Chrome";
+    }
+    if (userAgent.indexOf("Safari") > -1) {
+      return "Safari";
+    } //判断是否Safari浏览器
+    if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+      return "IE";
+    }; //判断是否IE浏览器
+  }
+  </script>
+</head>
+<body>
+  <div id="content">
+   <h1>首页 > 客户管理 > 商户及代理商</h1>
+   <h2>
+     <div class="h2_left">
+       <a href="__ACTION__" class="whole">全部</a>
+       <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+       <a href="javascript:history.back();" class="Retreat">后退</a>
+       <a href="javascript:history.go(1);" class="Advance">前进</a>
+     </div>
+     <div class="search">
+      <form method="get" id="search">
+        <input type="text" name="k" class="text" value="<{$key}>"/>
+        <input type="submit" class="so" value="搜 索" />
+      </form>
+      <font>小贴士：请输入公司名称</font>
+    </div>
+  </h2>
+
+  <div class="fen">
+    <ul class="select" style="height:175px;margin-top: 20px;margin-bottom: 20px;">
+      <li class="select-list List_more"> 
+        <dl id="select">
+          <dt>地区:</dt>
+          <script type="text/javascript">
+          $(function(){
+            new PCAS("state","city","area","<{$state}>","<{$city}>","<{$area}>");
+          });
+          </script>
+          <dd>
+            <form method="get" id="search">
+              <select name="state" class="input-medium state atext" datatype="*" nullmsg="请选择省份" class="Validform_error" style="margin-left: 10px;"></select>
+              <select name="city" class="input-medium city atext" datatype="*" nullmsg="请选择城市" class="Validform_error"></select>
+              <select name="area" class="input-medium area atext" datatype="*" nullmsg="请选择地区" class="Validform_error"></select> 
+            </dd>
+            <input type="submit" class="areasou" value="搜 索" />
+          </form>
+          <if condition="$_COOKIE['state'] neq ''">
+          <a href="<{:U('Client/agent',array('clear'=>'1'))}>" title="" class="areasou">清空</a>
+          </if> 
+        </dl>
+      </li>
+      <li class="select-list List_more"> 
+        <dl id="select">
+          <dt>用户类型:</dt>
+          <volist name="agent" id="val">
+            <dd <if condition="$Think.get.n eq $val['value']"> class="selected select-all"</if>><a href="<{$val.value|createsearchurl="/Client/agent",n,###,"add",null,null}>"><{$val.name}></a></dd>
+          </volist>
+        </dl>
+      </li>
+      <li class="select-list List_more"> 
+        <dl id="select">
+          <dt>商家店铺状态:</dt>
+          <volist name="enable" id="val">
+            <dd <if condition="$Think.get.e eq $val['value']"> class="selected select-all"</if>><a href="<{$val.value|createsearchurl="/Client/agent",e,###,"add",null,null}>"><{$val.name}></a></dd>
+          </volist>
+        </dl>
+      </li>
+      <li class="select-list List_more"> 
+        <dl id="select">
+          <dt>添加时间排序:</dt>
+          <volist name="asc" id="val">
+            <dd <if condition="$Think.get.c eq $val['value']"> class="selected select-all"</if>><a href="<{$val.value|createsearchurl="/Client/agent",c,###,"add",null,null}>"><{$val.name}></a></dd>
+          </volist>
+        </dl>
+      </li>
+    </ul>
+  </div>
+  <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+   <tr>
+     <th>公司名称</th>
+     <th>用户类型</th>
+     <th>手机号</th>
+     <th>地址</th>
+     <th>创建时间</th>
+     <th>商家店铺状态</th>
+     <th>业务范围</th>
+     <th>操作</th>       
+   </tr>
+   <volist name="agents" id="vo">
+    <tr>
+      <td style="text-align:center" class='tc'><{$vo.companyName}></td>
+      <td style="text-align:center" class='tc'>
+        <!-- 使用switch标签判断输出 -->
+        <switch name="vo.userRole">
+          <case value="1">特许经营商</case>
+          <case value="4">企业管家</case>
+          <case value="5">社区管家商户</case>
+          <default />缺少参数
+        </switch>
+      </td>
+      <td style="text-align:center" class='tc'><{$vo.userTelephone}></td>
+      <td style="text-align:center" class='tc'><{$vo.companyAddress}></td>
+      <td class='tc' style="text-align:center"><{$vo.userCreateDate}></td>
+      <td class='tc' style="text-align:center">
+        <if condition="$vo.isUse eq '1'">
+          启用
+          <elseif condition="$vo.isUse eq '0'"/>
+          停用
+        </if>
+      </td>
+      <td><{$vo.businessScope}></td>
+      <td class='tc' style="text-align:center">
+       <a href="<{:U('Client/agentedit',array('sid'=>$vo['sid'],'userRole'=>$vo['userRole']))}>" class="details" style="color:#0000FF">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<{:U('Client/agentedit',array('sid'=>$vo['sid'],'userRole'=>$vo['userRole'],'type'=>2))}>" class="details" style="color:#0000FF">查看</a>
+     </td>
+   </tr> 
+ </volist>
+</table>
+<div id="page">
+  <{$page}>
+</div>
+</div>
+
+</body>
+</html>

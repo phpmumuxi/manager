@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>活动管理|<{$configcache['Title']}></title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/winpop.js"></script>
+    <script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__JS__/layer/layer.js"></script>
+    <link rel="stylesheet" type="text/css" href="__JS__/layer/skin/layer.css"  />
+    <style type="text/css">
+    .tc{text-align:center; text-indent:0;font-family:"微软雅黑";font-size: 14px;color:#111;}
+    .came a{left:220px; top:10px; width:60px; height:28px; line-height:28px; border:none; background:#090; color:#fff; font-family:"微软雅黑";text-align:center;float:right;margin-right: 30px;margin-bottom: 10px;cursor: pointer;}
+    </style>
+    <script>
+    function myBrowser(){
+    var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+    var isOpera = userAgent.indexOf("Opera") > -1;
+    if (isOpera) {
+        return "Opera"
+    }; //判断是否Opera浏览器
+    if (userAgent.indexOf("Firefox") > -1) {
+        return "FF";
+        /*firefox----这段js重新封装了event对象，经验证可以在火狐下支持！----*/
+        function __firefox(){
+            HTMLElement.prototype.__defineGetter__("runtimeStyle", __element_style);
+            window.constructor.prototype.__defineGetter__("event", __window_event);
+            Event.prototype.__defineGetter__("srcElement", __event_srcElement);
+        }
+        function __element_style(){
+            return this.style;
+        }
+        function __window_event(){
+            return __window_event_constructor();
+        }
+        function __event_srcElement(){
+            return this.target;
+        }
+        function __window_event_constructor(){
+            if(document.all){
+                return window.event;
+            }
+            var _caller = __window_event_constructor.caller;
+            while(_caller!=null){
+                var _argument = _caller.arguments[0];
+                if(_argument){
+                    var _temp = _argument.constructor;
+                    if(_temp.toString().indexOf("Event")!=-1){
+                        return _argument;
+                    }
+                }
+                _caller = _caller.caller;
+            }
+            return null;
+        }
+        if(window.addEventListener){
+            __firefox();
+        }
+    } //判断是否Firefox浏览器
+    if (userAgent.indexOf("Chrome") > -1){
+      return "Chrome";
+    }
+      if (userAgent.indexOf("Safari") > -1) {
+        return "Safari";
+        } //判断是否Safari浏览器
+        if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+            return "IE";
+        }; //判断是否IE浏览器
+    }
+
+</script>
+</head>
+<body>
+    <div id="content">
+       <h1>首页 > 活动管理 > 报名用户</h1>
+       <h2>
+           <div class="h2_left">
+                <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+                <a href="javascript:history.back();" class="Retreat">后退</a>
+                <a href="javascript:history.go(1);" class="Advance">前进</a>
+           </div>
+
+        <div class="search">
+            <form method="get" id="search">
+            <input type="text" name="k" class="text" value="<{$kk}>" placeholder="请输入手机号"/>
+            <input type="submit" class="so" value="搜 索" />
+            </form>
+        </div>
+       </h2>
+
+       <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+        <tr>
+            <th>报名用户昵称</th>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>手机号</th>
+            <th>兑奖码</th>
+            <th>兑奖状态</th>
+            <th>操作</th>     
+        </tr>
+        <volist name="user" id="vo">
+            <tr>
+                <td style="text-align:center" class='tc'><{$vo.userNickName}></td>
+                <td style="text-align:center" class='tc'><{$vo.userName}></td>
+                <td style="text-align:center" class='tc'>
+                    <switch name="vo.gender">
+                        <case value="0">男</case>
+                        <case value="1">女</case>
+                        <default />
+                    </switch>
+                </td>
+                <td style="text-align:center" class='tc'><{$vo.phone}></td>
+                <td style="text-align:center" class='tc'><{$vo.verifyCode}></td>
+                <switch name="vo.verifyStatus">
+                    <case value="0">    
+                        <td style="text-align: center" class='tc'>未兑奖</td>
+                    </case>
+                    <case value="1">
+                        <td style="text-align: center" class='tc'>已兑奖</td>    
+                    </case>
+                    <case value="2">
+                        <td style="text-align: center;" class='tc'>失效</td>    
+                    </case>
+                    <default/>
+                    <td style="text-align: center;" class='tc'></td>
+                </switch>    
+                <switch name="vo.status">
+                    <case value="0">    
+                        <td class='tc' style="text-align:center"><a href="javascript:;" class="lottery" style="color:orange;" userId='<{$vo.userId}>' sid = '<{$vo.sid}>'>设置为中奖</a></td>
+                    </case>
+                    <case value="1">
+                        <td style="text-align:center" class='tc'>已中奖</td>
+                    </case>
+                    <default />
+                    <td style="text-align:center" class='tc'>缺少参数</td>   
+                </switch>
+            </tr> 
+        </volist>
+        </table>
+        <div id="page">
+            <{$page}>
+        </div>
+    </div>
+
+<script type="text/javascript">
+$(".lottery").click(function(){
+    var index = layer.load(0, {shade: false});
+    var adminUserId  = "<{$admin}>";
+    var userId  = $(this).attr('userId');
+    var sid = $(this).attr('sid');
+    var activeShopRel = "<{$activeShopRel}>";
+    if(activeShopRel == ''){
+        alert('请先设置商家手机号!');
+        layer.closeAll('loading');
+        return;
+    }
+    if(confirm("确定设置为中奖用户,不可撤销!")){
+        $.ajax({
+                url:'<{$url}>/manager/active/updatActivityUser',// 跳转到 action
+                data:{sid: sid,adminUserId:adminUserId,userId,userId},
+                type:'post',
+                cache:false,
+                dataType:'json',
+                success:function(data) {
+                    if(data.code =="2000" ){
+                        layer.closeAll('loading');
+                        alert(data.message);
+                        location.reload();
+                    }else{
+                        layer.closeAll('loading');
+                        alert(data.message);
+                    }
+                },
+                error:function() {
+                    alert("异常！");
+                }
+            });
+
+    }else{
+        layer.closeAll('loading');
+    }
+});
+</script>
+</body>
+</html>

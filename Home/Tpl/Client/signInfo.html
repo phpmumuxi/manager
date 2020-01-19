@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>合同管理|<<{$configcache['Title']}>></title>
+  <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+  <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+  <script type="text/javascript" src="__JS__/jquery.js"></script>
+  <script type="text/javascript" src="__JS__/Public.js"></script>
+  <script type="text/javascript" src="__JS__/winpop.js"></script> 
+  <style>
+  .sign_button{
+    border:1px solid #ddd;
+    padding: 8px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin:0 10px;
+    background: #009900;
+    color: white;
+  }
+  </style> 
+</head>
+<body>
+  <div id="content">
+     <h1>首页 > 合同管理 > 签署信息详情</h1>
+     <h2>
+       <div class="h2_left">
+         <a href="javascript:;" class="whole">全部</a>
+         <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+         <a href="javascript:history.back();" class="Retreat">后退</a>
+         <a href="javascript:history.go(1);" class="Advance">前进</a>
+       </div>
+    </h2>
+    <div style="margin-top:15px">
+    <if condition="$Think.session.ThinkUser.ID != 39">
+      <div style="width:90%;height:50px;margin:20px 0;border-bottom: 1px solid #ddd">
+        <switch name="info['status']">
+          <case value="0">
+            <button va="<{$info['id']}>" vb="1" class="sign_button sure_sign">同意签署</button>
+            <button va="<{$info['id']}>" vb="2" class="sign_button cancel_sign">作废</button>
+          </case>
+          <case value="1">
+            <button va="<{$info['id']}>" vb="2" class="sign_button cancel_sign">作废</button>
+          </case>
+          <case value="2">
+            <button va="<{$info['id']}>" vb="3" class="sign_button delete_sign">删除</button>
+          </case>
+          <default />
+        </switch>      
+      </div>
+    </if>
+      <table class="addbusiness_table" width="100%" border="0" rules="none"  cellspacing="0" cellpadding="0">
+          <tr style="height: 55px;">
+              <td style="text-align: center;width:8%;"> 合同标题：</td>
+              <td><{$info['title']}></td>                           
+          </tr>                       
+          
+          <tr style="height: 55px;">
+              <td style="text-align: center;width:8%;"> 签署方（发起人）：</td>
+              <td><{$info['sign_user']}></td>                           
+          </tr>
+          
+          <tr style="height: 55px;">
+              <td style="text-align: center;width:8%;"> 发起人手机号：</td>
+              <td><{$info['sign_user_tel']}></td>                           
+          </tr>
+
+          <tr style="height: 55px;">
+              <td style="text-align: center;width:8%;"> 营业执照：</td>
+              <td><a href="<{$info['business_img']}>" target="_blank"><img src="<{$info['business_img']}>" style="width: 80px;height: 80px;margin-top: 10px"/></a></td>                           
+          </tr>
+
+          <notempty name="info['recom_user_tel']">
+            <tr style="height: 55px;">
+                <td style="text-align: center;width:8%;"> 推荐人：</td>
+                <td><{$info['recom_user_tel']}></td>
+            </tr>
+          </notempty>
+
+          <notempty name="info['recom_img']">
+            <tr style="height: 55px;">
+                <td style="text-align: center;width:8%;"> 推荐函：</td>
+                <td><a href="<{$info['recom_img']}>" target="_blank"><img src="<{$info['recom_img']}>" style="width: 80px;height: 80px;margin-top: 10px"/></a></td>                           
+            </tr>
+          </notempty>
+
+          <tr style="height: 55px;">
+              <td style="text-align: center;width:8%"> 发起时间：</td>
+              <td><{$info['create_time']}></td>
+          </tr>
+          
+          <if condition="$info['status']!=0">
+            <tr style="height: 55px;">
+                <td style="text-align: center;width:8%"> 签署时间：</td>
+                <td><{$info['sign_time']}></td>
+            </tr>
+          </if>
+
+          <tr style="height: 55px;">
+              <td style="text-align: center;width:8%"> 状态：</td>
+              <td>
+                <switch name="info['status']">
+                  <case value="0">待签署</case>
+                  <case value="1">已签署</case>
+                  <case value="2">已作废</case>
+                  <case value="3">已删除</case>
+                  <default />
+                </switch>
+              </td>
+          </tr>
+      </table>
+    </div>
+  </div>
+    <!-- <script src="__PUBLIC__/js/layer/layer.js"></script> -->
+  <script>
+    $('.sure_sign,.cancel_sign,.delete_sign').click(function(){
+        var _type=$(this).attr('vb');
+        if(_type == '1'){         
+          if (!confirm('确认签署？确认后双方将完成在线签约!')) {
+              return false;
+          }
+        }else if(_type == '2'){
+          if (!confirm('确认要作废？')) {
+              return false;
+          }
+        }else if(_type == '3'){
+          if (!confirm('确认要删除？')) {
+              return false;
+          }
+        }else{
+
+        }
+        var _id=$(this).attr('va');
+        
+        $.ajax({
+            type: "POST",
+            url: "__APP__/Client/changeStatus",
+            data: {id :_id,status:_type},
+            success: function(res){
+              if(res.success){
+                if(_type == '3'){
+                  window.location.href = "__APP__/Client/contractmanager";
+                }else{
+                  f5();
+                }
+              }else{
+                alert(res.message);
+              }
+            },
+            error:function(){
+                alert('网络异常!');
+            }
+        });
+    })
+</script>
+
+</body>
+</html>

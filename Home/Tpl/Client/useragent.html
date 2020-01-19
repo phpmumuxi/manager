@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>商户管理|<{$configcache['Title']}></title>
+  <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+  <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+  <script type="text/javascript" src="__JS__/jquery.js"></script>
+  <script type="text/javascript" src="__JS__/Public.js"></script>
+  <script type="text/javascript" src="__JS__/winpop.js"></script>
+  <script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+  <script type="text/javascript" src="__JS__/PCASClass.js"></script>
+  <style type="text/css">
+  .select{padding:5px 10px;border:#ddd 1px solid;border-radius:4px;width:60%;margin:5% auto;font-size:12px}
+  .select li{list-style:none;padding:10px 0 5px 100px}
+  .select .select-list{border-bottom:#eee 1px dashed}
+  .select dl{zoom:1;position:relative;line-height:24px;}
+  .select dl:after{content:" ";display:block;clear:both;height:0;overflow:hidden}
+  .select dt{width:100px;margin-bottom:5px;position:absolute;top:0;left:-100px;text-align:right;color:#666;height:24px;line-height:24px}
+  .select dd{float:left;display:inline;margin:0 0 5px 5px;}
+  .select a{display:inline-block;white-space:nowrap;height:24px;padding:0 10px;text-decoration:none;color:#039;border-radius:2px;}
+  .select a:hover{color:#f60;background-color:#f3edc2}
+  .select .selected a{color:#fff;background-color:#f60}
+  .select-result dt{font-weight:bold}
+  .select-no{color:#999}
+  .select .select-result a{padding-right:20px;background:#f60 url("__PUBLIC__/image/close.gif") right 9px no-repeat}
+  .select .select-result a:hover{background-position:right -15px}
+  .tc{text-align:center; text-indent:0;font-family:"微软雅黑";font-size: 14px;color:#111;}
+  #content .atext { width:100px; height:24px; line-height:24px;border:solid 1px #ccc; font-family:"宋体"; }
+  </style>
+  <script>
+  function myBrowser(){
+  var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+  var isOpera = userAgent.indexOf("Opera") > -1;
+  if (isOpera) {
+    return "Opera"
+  }; //判断是否Opera浏览器
+  if (userAgent.indexOf("Firefox") > -1) {
+    return "FF";
+    /*firefox----这段js重新封装了event对象，经验证可以在火狐下支持！----*/
+    function __firefox(){
+      HTMLElement.prototype.__defineGetter__("runtimeStyle", __element_style);
+      window.constructor.prototype.__defineGetter__("event", __window_event);
+      Event.prototype.__defineGetter__("srcElement", __event_srcElement);
+    }
+    function __element_style(){
+      return this.style;
+    }
+    function __window_event(){
+      return __window_event_constructor();
+    }
+    function __event_srcElement(){
+      return this.target;
+    }
+    function __window_event_constructor(){
+      if(document.all){
+        return window.event;
+      }
+      var _caller = __window_event_constructor.caller;
+      while(_caller!=null){
+        var _argument = _caller.arguments[0];
+        if(_argument){
+          var _temp = _argument.constructor;
+          if(_temp.toString().indexOf("Event")!=-1){
+            return _argument;
+          }
+        }
+        _caller = _caller.caller;
+      }
+      return null;
+    }
+    if(window.addEventListener){
+      __firefox();
+    }
+  } //判断是否Firefox浏览器
+  if (userAgent.indexOf("Chrome") > -1){
+    return "Chrome";
+  }
+  if (userAgent.indexOf("Safari") > -1) {
+    return "Safari";
+  } //判断是否Safari浏览器
+  if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+    return "IE";
+  }; //判断是否IE浏览器
+}
+</script>
+</head>
+<body>
+  <div id="content">
+   <h1>首页 > 客户管理 > 区域代理商管理</h1>
+   <h2>
+    <div class="h2_left">
+     <a href="__ACTION__" class="whole">全部</a>
+     <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+     <a href="javascript:history.back();" class="Retreat">后退</a>
+     <a href="javascript:history.go(1);" class="Advance">前进</a>
+   </div>
+   <div class="search">
+    <form method="get" id="search">
+      <input type="text" name="k" class="text" value="<{$key}>"/>
+      <input type="submit" class="so" value="搜 索" />
+    </form>
+    <font>小贴士：请输入昵称/姓名/手机号/合同编号搜索</font>
+  </div>
+</h2>
+
+<div class="fen">
+  <ul class="select" style="height:155px;margin-top: 20px;margin-bottom: 20px;">
+  <li class="select-list List_more"> 
+    <dl id="select">
+      <dt>操作时间:</dt>
+      <dd <?php if(get('t') == ''){ echo 'class="selected select-all"';} $t = '';?>><a href="<{$t|createsearchurl="/Client/useragent",t,###,"add",null,null}>">全部</a></dd>
+      <volist name="datetime" id="val">
+        <dd <if condition="$Think.get.t eq $val['value']"> class="selected select-all"</if>><a href="<{$val.value|createsearchurl="/Client/useragent",t,###,"add",null,null}>"><{$val.name}></a></dd>
+      </volist>
+    </dl>
+  </li>
+    <li class="select-list List_more"> 
+    <dl id="select">
+      <dt>持股金额:</dt>
+      <volist name="desc" id="val">
+        <dd <if condition="$Think.get.d eq $val['value']"> class="selected select-all"</if>><a href="<{$val.value|createsearchurl="/Client/useragent",d,###,"add",null,null}>"><{$val.name}></a></dd>
+      </volist>
+    </dl>
+  </li>
+</ul>
+</div>
+<table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+  <tr>
+   <th>昵称</th>
+   <th>手机号</th>
+   <th>真实姓名</th>
+   <th>签约成功合同</th>
+   <th>操作时间</th>
+   <th>操作</th>      
+ </tr>
+ <volist name="local" id="vo">
+  <tr>
+    <td style="text-align:center" class='tc'><{$vo.userNickName}></td>
+    <td style="text-align:center" class='tc'><{$vo.userTelephone}></td>
+    <td style="text-align:center" class='tc'><{$vo.userRealName}></td>
+    <td class='tc' style="text-align:center"><{$vo.successCount}></td>
+    <td class='tc' style="text-align:center"><{$vo.agentCreateTime}></td>
+    <td class='tc' style="text-align:center">
+     <a href="<{:U('Client/contract',array('userId'=>$vo['sid']))}>" class="details" style="color:#0000FF">查看</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<{:U('Client/addcontract',array('sid'=>$vo['sid'],'userRole'=>$vo['userRole'],'type'=>2))}>" class="details" style="color:#0000FF">录入合同</a>
+   </td>
+ </tr> 
+</volist>
+</table>
+<div id="page">
+  <{$page}>
+</div>
+</div>
+
+</body>
+</html>

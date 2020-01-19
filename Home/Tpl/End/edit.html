@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>app管理|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script type="text/javascript" src="__JS__/check.js"></script>
+
+</head>
+<body>
+<div id="content" style="width:800px;height:565px;margin:50px auto;border:1px solid red;">
+
+    <dl id="cdl">
+        <dd>
+            <span class="dd_left">渠道名称:</span>
+            <span class="dd_right" style="margin-top:5px;">
+                <input type="text" class="qtext" name="channelName" value="" id="channelName" />
+                <input type="hidden" class="qtext" name="sid" value="" id="titlesid" />
+            </span>
+        </dd>
+
+        <dd>
+            <span class="dd_left">终端类型:</span>
+            <span class="dd_right" style="margin-top:5px;">
+                <input type="text" class="qtext" name="clientType" value="" id="clientType" />
+            </span>
+        </dd>
+
+        <dd>
+            <span class="dd_left">逸管家:</span>
+            <span class="dd_right" style="margin-top:5px;">
+                <input type="text" class="qtext" name="clientName" value="" id="clientName" />
+            </span>
+        </dd>
+
+        <dd>
+            <span class="dd_left">app版本号:</span>
+            <span class="dd_right" style="margin-top:5px;">
+                <input type="text" class="qtext" name="clientVersion" value="" id="clientVersion" />
+            </span>
+        </dd>
+
+        <dd>
+        	<span class="dd_left">app升级描述:</span>
+            <span class="dd_right">
+                <textarea style="border: 1px solid rgb(204, 204, 204); box-shadow: none; margin: 0px; width: 509px; height: 106px;" name="clientDescription" id="clientDescription"  maxlength="250"></textarea>
+            </span>
+        </dd>
+     
+        <dd>
+            <span class="dd_left">更新地址:</span>
+            <span class="dd_right">
+                <input type="text" class="qtext" name="updateUrl"  id="updateUrl"/>
+            </span>
+        </dd>
+
+        <dd>
+            <span class="dd_left">更新提示:</span>
+            <span class="dd_right" style="margin-top: 5px;" >
+                <label><input property="clientStatus" id="clientStatus" name="clientStatus" type="radio" value="0" />无需更新 </label> 
+                <label><input property="clientStatus" id="clientStatus" name="clientStatus" type="radio" value="1" />选择更新 </label>
+                <label><input property="clientStatus" id="clientStatus" name="clientStatus" type="radio" value="2" />强制更新 </label>  
+            </span>
+        </dd>
+   
+        
+    	<dd style="margin-top: 30px;"><input type="button" class="so" onclick="subimtBtn();" value="修 改" /></dd>
+    </dl>
+</div>
+
+<script type="text/javascript">
+
+  function getQueryString(name) {
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+      var r = window.location.search.substr(1).match(reg);
+      if (r != null) return unescape(r[2]); return null;
+    }
+
+  var sid = getQueryString("sid");
+
+  //请求数据
+  $.ajax({
+    url:'<{$url}>/manager/appClient/query',// 跳转到 action  
+    data:{sid:sid},  
+    type:'post',  
+    cache:false,  
+    dataType:'json',  
+    success:function(data) {
+        if(data.code =="2000"){
+         
+            var data = data.data;
+            var sid = $('#titlesid').val(data.sid);
+            var channelName = $('#channelName').val(data.channelName);
+            var clientType = $('#clientType').val(data.clientType);
+            var clientName = $('#clientName').val(data.clientName);
+            var clientVersion = $('#clientVersion').val(data.clientVersion);
+            var clientDescription = $('#clientDescription').val(data.clientDescription);
+            var updateUrl = $('#updateUrl').val(data.updateUrl);
+
+            // var clientStatus = $('#clientStatus').val();
+            document.all("clientStatus")[data.clientStatus].checked=true;
+            // var radio = data.clientStatus;
+            // if(radio == null){
+            //     var radio = "0";
+            // }
+           
+       }
+      }, 
+      error : function() {      
+        alert("异常！");  
+    }  
+  });
+
+
+
+function subimtBtn(){
+    var sid = $('#titlesid').val();
+    var channelName = $('#channelName').val();
+    var clientType = $('#clientType').val();
+    var clientName = $('#clientName').val();
+    var clientVersion = $('#clientVersion').val();
+    var clientDescription = $('#clientDescription').val();
+    var updateUrl = $('#updateUrl').val();
+    
+    var temp = document.getElementsByName("clientStatus");
+    for(var i=0;i<temp.length;i++)
+    {
+      if(temp[i].checked)
+      var clientStatus = temp[i].value;
+    }
+
+    if(channelName==''||clientVersion==''||sid==''){
+        alert('参数不完整!!!');
+        return
+    }
+    
+    
+    $.ajax({
+      type: "POST",
+      cache: true,
+      async: true,
+      ifModified:true,
+      timeout:12000,
+      url: "<{$url}>/manager/appClient/update",
+      data: {channelName:channelName,clientType:clientType,clientName:clientName,clientVersion:clientVersion,clientDescription:clientDescription,updateUrl:updateUrl,clientStatus:clientStatus,sid:sid}, 
+      dataType: "json",
+      success: function(data) {
+         if (data.code =='2000') {
+            alert(data.message);
+            window.location.href='index.html';
+         };
+            
+      },  
+      error: function(XMLHttpRequest, exception) {
+        if (XMLHttpRequest.status == 0) {
+          alert('网络不给力，请稍后再试！');
+        }else if (XMLHttpRequest.status == 404) {
+          alert('资源地址不存在');
+        }else if (XMLHttpRequest.status == 408) {
+          alert('网络不给力，请稍后再试！');
+        }else if (XMLHttpRequest.status == 500) {
+          alert('服务器出错啦')
+        }else if (XMLHttpRequest.status == 502) {
+          alert('Web服务器用作网关或代理服务器时收到了无效响应');
+        }else if (XMLHttpRequest.status == 503) {
+          alert('服务不可用');
+        }else if (XMLHttpRequest.status == 504) {
+          alert('网关超时！');
+        }else{
+         
+        }
+      }
+    })
+        
+}
+
+</script>
+</body>
+</html>

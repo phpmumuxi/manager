@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>banner管理|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+</head>
+<style>
+    .came a{left:220px; top:10px; width:60px; height:28px; line-height:28px; border:none; background:#090; color:#fff; font-family:"微软雅黑";text-align:center;float:right;margin-right: 30px;margin-bottom: 10px;cursor: pointer;}
+  .select{padding:5px 10px;border:#ddd 1px solid;border-radius:4px;width:60%;margin:5% auto;font-size:12px}
+    .select li{list-style:none;padding:10px 0 5px 100px}
+    .select .select-list{border-bottom:#eee 1px dashed}
+    .select dl{zoom:1;position:relative;line-height:24px;}
+    .select dl:after{content:" ";display:block;clear:both;height:0;overflow:hidden}
+    .select dt{width:100px;margin-bottom:5px;position:absolute;top:0;left:-100px;text-align:right;color:#666;height:24px;line-height:24px}
+    .select dd{float:left;display:inline;margin:0 0 5px 5px;}
+    .select a{display:inline-block;white-space:nowrap;height:24px;padding:0 10px;text-decoration:none;color:#039;border-radius:2px;}
+    .select a:hover{color:#f60;background-color:#f3edc2}
+    .select .selected a{color:#fff;background-color:#f60}
+    .select-result dt{font-weight:bold}
+    .select-no{color:#999}
+    .select .select-result a{padding-right:20px;background:#f60 url("__PUBLIC__/image/close.gif") right 9px no-repeat}
+    .select .select-result a:hover{background-position:right -15px}
+    .tc{text-align:center; text-indent:0;font-family:"微软雅黑";font-size: 14px;color:#111;}
+    a:link {color: #0000FF}     /* 未访问的链接 */
+	a:visited {color: #d90a81}  /* 已访问的链接 */
+	a:hover {color: #d90a81}    /* 当有鼠标悬停在链接上 */
+	a:active {color: #d90a81}   /* 被选择的链接 */
+	#select div{
+		float:top;
+	}
+    .nav_div{
+        border-bottom:1px solid #333333;
+        height:50px;
+        margin-top: 30px;    
+    }
+    .nav_div ul{
+        list-style:none;
+        text-align:center;
+        cursor:pointer; 
+        margin-left: 0;
+    }
+    .nav_div ul li{
+        float:left;
+        height:49px;
+        width:128px;
+        line-height:50px;
+    }
+    .nav_active{
+        color: #169BD5;
+        border-top: 1px solid #333333;
+        border-left: 1px solid #333333;
+        border-right: 1px solid #333333;
+        border-bottom: 2px solid white;
+    }
+</style>
+<body>
+<div id="content">
+	<h1>首页 > app管理 > app类别列表</h1>
+    <h2>
+    	<div class="h2_left">
+        	<a href="__ACTION__" class="whole">全部</a>
+        	<a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+        
+    </h2>
+    <div class="nav_div">
+        <ul>
+            <a href="<{:U('End/appcatelist')}>"><li class="nav_active">产品类目</li></a>
+             <a href="<{:U('Client/categoryManagement')}>"><li>服务类目</li></a>
+        </ul>
+        <p style="clear: both"></p>
+    </div>
+    <div class="fen">
+    <ul class="select" style="height:75px;margin-top: 20px;margin-bottom: 20px;">
+    	 <li class="select-list List_more"> 
+            <dl id="select" >
+      
+                <dt>平台：</dt>
+               <dd <if condition="$navPlat eq '-1'"> class="selected"</if>>
+                	<a href="<{:U('End/appcatelist',['navPlat' => -1,'bannerCategory'=>$bannerCategory])}>">全部</a>
+                </dd>
+              	<dd <if condition="$navPlat eq '0'"> class="selected"</if>>
+                	<a href="<{:U('End/appcatelist',['navPlat' => '0','bannerCategory'=>$bannerCategory])}>">APP</a>
+                </dd>
+                <dd <if condition="$navPlat eq '1'"> class="selected"</if>>
+                	<a href="<{:U('End/appcatelist',['navPlat' => '1','bannerCategory'=>$bannerCategory])}>">H5</a>
+                </dd>
+               </dl>
+          
+              
+            
+            </dl>
+        </li>
+        <li class="select-list List_more">
+         <dl id="select" >
+        	<dt>类目归属：</dt>
+              <dd <if condition="$bannerCategory eq '-1'"> class="selected"</if>>
+                	<a href="<{:U('End/appcatelist',['bannerCategory' => '-1','navPlat'=>$navPlat])}>">全部</a>
+                </dd>
+              	<dd <if condition="$bannerCategory eq '1'"> class="selected"</if>>
+                	<a href="<{:U('End/appcatelist',['bannerCategory' => '1','navPlat'=>$navPlat])}>">批发</a>
+                </dd>
+                <dd <if condition="$bannerCategory eq '2'"> class="selected"</if>>
+                	<a href="<{:U('End/appcatelist',['bannerCategory' => '2','navPlat'=>$navPlat])}>">零售</a>
+                </dd>
+               </dl>
+        </li>
+       
+	</ul>
+  	</div>
+  	
+  	
+    <div class="came"><a href="<{:U('End/appcateedit')}>" title="">添加</a></div>
+    <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+    	<tr>
+            <th><input type="checkbox" class="indel" value="del" /></th>
+       		 <th width="10%">类目名称</th>
+        	<th width="5%">序号</th>
+            <th  width="10%">类目归属</th>
+            <th  width="50%">链接</th>
+            <th  width="10%">平台</th>
+            <th  width="15%">操 作</th>
+        </tr>
+    <volist name="catelist" id="vo">
+    <tr>
+        <td class="tc" style="text-align:center"><input type="checkbox" class="delid" value="<{$vo.sid}>" /></td>
+		<td style="text-align:center" class='tc'><{$vo.navName}></td>
+		<td style="text-align:center" class='tc'><{$vo.navNo}></td>
+        <td style="text-align:center">
+         <switch name="vo.bannerCategory">
+		    <case value="1">批发</case>
+		    <case value="2">零售</case>
+		    
+		</switch>
+        </td>
+        <td style="text-align:center" class='tc'><{$vo.linkUrl}></td>
+		<td style="text-align:center" class='tc'>
+		<!-- 使用switch标签判断输出 -->
+		<switch name="vo.navPlat">
+		    <case value="0">APP平台</case>
+		    <case value="1">H5平台</case>
+		    
+		</switch>
+		</td>
+      
+		<td class='tc' style="text-align:center">
+        <a href="<{:U('End/appcateedit')}>?sid=<{$vo.sid}>" style="color:orange;" title="编辑">编辑</a>
+        &nbsp;&nbsp;&nbsp;<a href="<{:U('End/appcatedel')}>?sid=<{$vo.sid}>" style="color:orange;" title="删除">删除</a>
+		</td>
+	</tr> 
+	</volist>
+    </table>
+    <div id="page"><a href="javascript:;" class="selbox">全选</a><a href="javascript:;" class="anti">反选</a><a href="javascript:;" class="unselbox">全不选</a>&nbsp;&nbsp;对选中项进行&nbsp;&nbsp;<a href="javascript:;" id="dely">删除</a>&nbsp;&nbsp;&nbsp;&nbsp;<{$page}></div>
+</div>
+
+<script type="text/javascript">
+/*删除单个*/
+
+
+
+//批量删除
+$('#dely').click(function(event) {
+    event.preventDefault();
+    if (!confirm('确定要删除选择项吗？')) {
+        return false;
+    }
+    var delid='';
+    for (i=0; i<$('#table .delid').size(); i++) {
+        if (!$('#table .delid').eq(i).attr('checked')==false) {
+            delid=delid+$('#table .delid').eq(i).val()+',';
+        }
+    }
+    if (delid=='') {
+        wintq('请选中后再操作',2,1500,1,'');
+    }else {
+        wintq('正在删除，请稍后...',4,20000,0,'');
+        $.ajax({
+            url:'<{$url}>/manager/sysNavHome/deleteMoreSysNavHome',
+            dataType:'JSON',
+            type:'POST',
+            data:'ids='+delid,
+            success: function(data) {
+                if (data.code=='2000') {
+                    wintq('删除成功',1,1500,0,'?');
+                }else {
+                    wintq(data.s,3,1500,1,'');
+                }
+            }
+        });
+    }
+});
+</script>
+
+</body>
+</html>

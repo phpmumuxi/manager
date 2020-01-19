@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>招募活动详情|<{$configcache['Title']}></title>
+	<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+	<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+  <script type="text/javascript" src="__JS__/jquery.js"></script>
+	<script type="text/javascript" src="__JS__/Public.js"></script>
+	<script type="text/javascript" src="__JS__/winpop.js"></script>
+	<script type="text/javascript" src="__JS__/check.js"></script>
+  <style type="text/css"> 
+  #table td{  padding:5px; font-size:14px;text-align:left;}
+ .td1{
+  	width:15%
+  }
+  </style>
+</head>
+<body>
+  <dt>活动详情</dt>
+  <div id="content" style="text-align:center;">
+   <dl id="dl">
+    <h2>
+      <div class="h2_left">
+        <a href="__ACTION__" class="whole">全部</a>
+        <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+        <a href="javascript:history.back();" class="Retreat">后退</a>
+        <a href="javascript:history.go(1);" class="Advance">前进</a>
+      </div>
+    </h2>   
+    <table style="width:80%;" id="table">
+      <tr><td colspan="2"><b>活动详情</b><hr/></td></tr>
+      <tr>
+       	<td class="td1">活动名称:</td> <td><{$info.activityName}></td>
+      </tr>
+      <tr>
+        <td class="td1">活动地点:</td><td><{$info.serviceDetailedAddress}></td>
+      </tr>
+      <tr >
+        <td class="td1">服务类别：</td>
+        <td>
+            <volist name="seviceTypeList" id="val">
+                <{$val}>&nbsp;&nbsp;&nbsp;
+            </volist>
+        </td>
+      </tr>  
+      <tr>
+        <td class="td1">服务区域:</td><td><{$info.serviceArea}></td>
+      </tr>
+      <tr>
+        <td class="td1">已报名人员:</td>
+        <td>
+          <if condition="$info.enrolment gt '0' "><a href="__APP__/Client/getactivityuser?sid=<{$info.sid}>" style="text-decoration: underline;color:#009900"><{$info.enrolment}></a><else />0</if>
+        </td>
+      </tr>
+      <tr>
+        <td class="td1">活动日期:</td><td><{$info.activityTime}></td>
+      </tr>
+      <tr>
+        <td class="td1">报名截止日期 :</td><td><{$info.activitiesDeadline}></td>
+      </tr>
+      <tr>
+        <td class="td1">活动宣传照:</td>
+        <td>
+          <a style="margin-right:10px" href="<{$info.activitySurfacePlot}>" target="_blank"><img width=100px height='100px' src="<{$info.activitySurfacePlot}>"></a>
+        </td>
+      </tr>
+      <tr>
+        <td class="td1">活动状态:</td>
+        <td>
+            <switch name="info.activityStatus">
+              <case value="1">招募中</case>
+              <case value="2">违规下架 ( <{$info.causeShelf}> )</case>
+              <case value="3">活动到期停止</case>
+              <default />
+            </switch>
+        </td>
+      </tr>
+    </table>
+</div>
+</body>
+</html>

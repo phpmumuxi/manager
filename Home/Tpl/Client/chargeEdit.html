@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>添加收费配置|<{$configcache['Title']}></title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <link rel="stylesheet" type="text/css" href="__JS__/layer/skin/layer.css" />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/layer/layer.js"></script>   
+    <style type="text/css" >
+        .dd_left{margin-top: 5px;}
+        .registerform{margin:60px 0 0 40px;}
+        .classButton{
+        	width: auto;
+		    border: none;
+		    padding: 5px 18px;
+		    background: #b4b4b4;
+		    color: #fff;
+		    font-size: 14px;
+		    font-family: "微软雅黑";
+		    text-align: center;
+		    cursor: pointer;
+		    text-indent: 0;
+            display: inline-block;
+        }
+        #scale::-webkit-input-placeholder{
+         text-align: right;
+         font-size: 17px;
+         color:black;
+        }
+        #scale::-moz-placeholder{
+         text-align: right;
+         font-size: 17px;
+         color:black;
+        }
+        #scale:-ms-input-placeholder{
+         text-align: right;
+         font-size: 17px;
+         color:black;
+        }
+    </style>
+</head>
+<body>
+    <div id="content">
+        <h1>首页 > 逸管家 > 添加收费配置</h1>
+        <h2>
+            <div class="h2_left">
+                <a href="__ACTION__" class="whole">全部</a>
+                <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+                <a href="javascript:history.back();" class="Retreat">后退</a>
+                <a href="javascript:history.go(1);" class="Advance">前进</a>
+            </div>
+        </h2>
+        <div class="registerform">
+            <dl id="cdl">
+                <dd>
+                    <span class="dd_left">费用类型:</span>
+                    <span class="dd_right">                        
+                        <select class="qtext" id="costType" style="width:160px">
+                            <option value="0" selected>--请选择--</option>
+                            <option value="1" <eq name="info['costType']" value='1'>selected</eq> >扣费比例</option>
+                        </select>
+                    </span>
+                </dd>
+                <dd>
+                    <span class="dd_left">扣费比例:</span>
+                    <span class="dd_right">
+                        <input type="text" class="qtext" style="width:160px" placeholder="%" id="scale" <if condition="$info['plateformRatio']">value="<{$info['plateformRatio'] * 100}>" </if> />
+                    </span>
+                </dd>
+                <dd>
+                    <span class="dd_left">备注:</span>
+                    <span class="dd_right">
+                      <input type="text" class="qtext" id="remark"  value="<{$info['comment']}>"/>
+                    </span>
+                </dd>
+
+                <dd style="margin-top: 10px;margin-bottom: 160px;">
+                    <input type="button" class="so submit" id="saveButton" value="保存" />
+                    <if condition="$info['id']">
+                        <input type="hidden" id="hiddenSid" value="<{$info['id']}>" />
+                    <else />
+                        <input type="hidden" id="hiddenSid" value="" />
+                    </if>
+                </dd>
+            </dl>
+        </div>
+    </div>
+
+<script type="text/javascript">
+var _url='<{$Think.config.URL}>';
+
+//保存并发布
+$('#saveButton').click(function(){
+    var _costType = $('#costType').val();
+    if(_costType==0){
+        layer.msg('请选择费用类型！', {icon: 2}); 
+        return false;
+    }    
+    var _scale = $.trim($('#scale').val());
+    if (!/^(?:100|[1-9][0-9]?|0)$/.test(_scale)) {  
+        layer.msg('请输入0-100范围内的整数！', {icon: 2});
+        return false;
+    }    
+    if(_scale === "" || _scale ==null || isNaN(_scale)){
+        layer.msg('请正确填写扣费比例！', {icon: 2}); 
+        return false;
+    }
+    var _plateformRatio=(_scale/100).toFixed(2);
+
+    var _comment = $.trim($('#remark').val());
+
+    var _sid = $.trim($('#hiddenSid').val());
+    if(_sid){
+        $.post(_url+'/manager/congfig/update',{'id':_sid,'costType':_costType,'plateformRatio':_plateformRatio,'comment':_comment},function(result){
+            if(result.success){
+                layer.msg('更新成功！',{icon: 1,time: 1500},function(){
+                    window.location.href='__APP__/Client/chargeSet';
+                });
+            }else{
+                layer.msg('更新失败！',{icon: 2,time: 1500},function(){                
+                    f5();
+                });
+            }
+        },'json')
+
+    }else{        
+        $.post(_url+'/manager/congfig/addParamConfig',{'costType':_costType,'plateformRatio':_plateformRatio,'comment':_comment},function(result){            
+                if(result.success){
+                    layer.msg('保存成功！',{icon: 1,time: 1500},function(){
+                        window.location.href='__APP__/Client/chargeSet';
+                    });
+                }else{
+                    layer.msg('保存失败！',{icon: 2,time: 1500},function(){                
+                        f5();
+                    });
+                }
+        },'json')
+    }
+})
+</script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>banner管理|<{$configcache['Title']}></title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/winpop.js"></script>
+    <script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+</head>
+<style>
+    .select{padding:5px 10px;border:#ddd 1px solid;border-radius:4px;width:60%;margin:5% auto;font-size:12px}
+    .select li{list-style:none;padding:10px 0 5px 100px}
+    .select .select-list{border-bottom:#eee 1px dashed}
+    .select dl{zoom:1;position:relative;line-height:24px;}
+    .select dl:after{content:" ";display:block;clear:both;height:0;overflow:hidden}
+    .select dt{width:100px;margin-bottom:5px;position:absolute;top:0;left:-100px;text-align:right;color:#666;height:24px;line-height:24px}
+    .select dd{float:left;display:inline;margin:0 0 5px 5px;}
+    .select a{display:inline-block;white-space:nowrap;height:24px;padding:0 10px;text-decoration:none;color:#039;border-radius:2px;}
+    .select a:hover{color:#f60;background-color:#f3edc2}
+    .select .selected a{color:#fff;background-color:#f60}
+    .select-result dt{font-weight:bold}
+    .select-no{color:#999}
+    .select .select-result a{padding-right:20px;background:#f60 url("__PUBLIC__/image/close.gif") right 9px no-repeat}
+    .select .select-result a:hover{background-position:right -15px}
+    .tc{text-align:center; text-indent:0;font-family:"微软雅黑";font-size: 14px;color:#111;}
+    .came a{left:220px; top:10px; width:60px; height:28px; line-height:28px; border:none; background:#090; color:#fff; font-family:"微软雅黑";text-align:center;float:right;margin-right: 30px;margin-bottom: 10px;cursor: pointer;}
+</style>
+<body>
+<div id="content">
+    <h1>首页 > app管理 > 开机广告</h1>
+    <h2>
+        <div class="h2_left">
+            <a href="__ACTION__" class="whole">全部</a>
+            <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+    </h2>
+<!--     <div class="fen">
+        <ul class="select" style="height:105px;margin-top: 20px;margin-bottom: 20px;">
+            <li class="select-list List_more">
+                <dl id="select">
+                    <dt>广告状态：</dt>
+                    <dd <?php if(get('t')<0){ echo ' class="selected select-all"';}$t = -1;?>><a href="<{$t|createsearchurl="/End/adv",t,###,"add",null,null}>">全部</a></dd>
+                    <volist name="advstatus" id="val">
+                        <dd <if condition="$Think.get.t eq $val['value']"> class="selected select-all"</if>><a href="<{$val.value|createsearchurl="/End/adv",t,###,"add",null,null}>"><{$val.name}></a></dd>
+                    </volist>
+                </dl>
+            </li>
+            <li class="select-list List_more">
+                <dl id="select">
+                    <dt>开始&结束时间::</dt>
+                </dl>
+                <form method="get" id="search">
+            <span class="dd_right" style="margin-top:5px;">
+                <input name="startTime" type="text" id="start_date" name="start_date" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'2000-01-01',maxDate:&quot;#F{$dp.$D('end_date')}&quot;})" class="Wdate"/>&nbsp;~
+            </span>
+            <span class="dd_right" style="margin-top:5px;">
+                <input name="endTime" type="text" id="end_date" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss', minDate:&quot;#F{$dp.$D(\'start_date\')}&quot;,maxDate:'2038-01-01'})"  class="Wdate"/>
+            </span>
+                    <input type="submit" class="so" value="搜 索" />
+                </form>
+                </dl>
+            </li>
+        </ul>
+    </div> -->
+    <div class="came"><a href="<{:U('End/advadd')}>" title="">添加</a></div>
+    <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+        <tr>
+            <th>广告名称</th>
+            <th>广告开始时间</th>
+            <th>广告结束时间</th>
+            <th>广告状态</th>
+            <th>添加时间</th>
+            <th>操 作</th>
+        </tr>
+        <volist name="adv" id="vo">
+            <tr>
+                <td style="text-align:center" class='tc'><{$vo.advName}></td>
+                <td style="text-align:center" class='tc'><{$vo.advStartTime}></td>
+                <td style="text-align:center" class='tc'><{$vo.advEndTime}></td>
+                <td style="text-align:center" class='tc'>
+                    <!-- 使用switch标签判断输出 -->
+                    <switch name="vo.isUse">
+                        <case value="1">启用</case>
+                        <case value="0">停用</case>
+                        <default />
+                    </switch>
+                </td>
+                <td style="text-align:center" class='tc'><{$vo.createTime}></td>
+                <td class='tc' style="text-align:center">
+                    <a href="<{:U('End/advedit')}>?sid=<{$vo.sid}>&type=1" style="color:orange;" title="编辑">编辑</a>&nbsp;&nbsp;&nbsp;
+                    <a href="<{:U('End/advedit')}>?sid=<{$vo.sid}>&type=2" style="color:orange;" title="编辑">查看</a>&nbsp;&nbsp;&nbsp;
+                    <a href="javascript:;" style="color:red;" title="" onclick="delapp('<{$vo.sid}>');">删除</a>
+                </td>
+            </tr>
+        </volist>
+    </table>
+    <div id="page"><{$page}></div>
+</div>
+
+<script type="text/javascript">
+    /*删除单个*/
+    function delapp(sid){
+        $.ajax({
+            url:'<{$url}>/manager/guide/deleteGuideAdv',// 跳转到 action
+            data:{sid:sid},
+            type:'post',
+            cache:false,
+            dataType:'json',
+            success:function(data) {
+                if(data.code =="2000" ){
+                    alert(data.message);
+                    location.reload();
+                }else{
+                    alert(data.message);
+                }
+            },
+            error : function() {
+                alert("异常！");
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

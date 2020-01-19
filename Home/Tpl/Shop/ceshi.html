@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>商品信息|<{$configcache['Title']}></title>
+  <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+  <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+  <script type="text/javascript" src="__JS__/jquery.js"></script>
+  <script type="text/javascript" src="__JS__/Public.js"></script>
+  <script type="text/javascript" src="__JS__/winpop.js"></script>
+  <script type="text/javascript" src="__JS__/check.js"></script>
+  <script type="text/javascript" src="__JS__/layer/layer.js"></script>
+  <link rel="stylesheet" type="text/css" href="__JS__/layer/skin/layer.css"  />
+  <style type="text/css">
+  .shop-1{border:1px solid #ccc; width:60%;margin-left: auto;margin-right: auto;}
+  .shop-2{margin: 30px;}
+  .imgbox img{max-width:90%;}
+  .basetb td{ padding:6px; padding-top:8px; padding-bottom:8px; font-size:15px;}
+  .label{text-align: center;}
+  </style>
+</head>
+<body>
+<div class="img" ><img src="<{$pic.realPicUrl}>" width="190" height="180"></div>
+
+<div class="img-upload-clip upload-type" data-src="{$memberInfo.preAvatar}"></div>
+
+
+</div>
+<script src="//cdn.bootcss.com/cropper/2.3.4/cropper.min.js">
+function smWin(info){
+	if(!info) info = '';
+	var style='<style id="sm-win-style">'+
+				'.sm-win{position:fixed;border:1px solid #faebcc;color:#8a6d3b;background:#fcf8e3;padding:8px 10px; '+
+				' z-index:19991015; display:none;opacity:0.9}'+
+				'.sm-win.error{background:#f2dede;border:1px solid #ebccd1;color:#a94442}'+
+				'.sm-win.success{background:#dff0d8;border:1px solid #d6e9c6;color:#3c763d}'+
+				'.sm-win.left-bottom{display:block; left:0; bottom:10px;}'+
+				'.sm-win.center{width: auto;display: table;margin-left: auto; margin-right: auto;}'+
+			  '</style>';
+	var html = '<div class="sm-win"><span>' + info + '</span></div>';
+	var node = $(html);
+	this.add = function(){
+		if(!$('#sm-win-style').get(0))
+			$('head').append(style);
+		$('body').append(node); return node; 
+	};
+	this.del = function(){ node.remove(); };
+	this.show= function(str,pos){
+		if(str) node.find('span').text(str);
+		node.show();
+		this.setPosition('center');
+		return this;
+	}
+	this.hide = function(sec){ node.fadeOut(sec); }
+	this.alert = function(info, type){ 
+		this.show(info, 'center');
+		if(!type) type = 'error';
+		node.removeClass('error').removeClass('success').addClass(type);
+		setTimeout(function(){
+			node.fadeOut(300); return;
+			node.animate({left:0},800,function(){ node.hide(); });
+		}, 2500);
+	}
+	this.succ = function(info){ this.alert(info, 'success'); }
+	this.err = function(info){ this.alert(info, 'error'); }
+	this.getWin = function(){ return node; };
+	this.loading = function(){ 
+		node.show().find('span').text('加载数据中...');	
+		node.addClass('left-bottom'); 
+	}
+	//@param string   "lb", 'center'
+	this.setPosition = function(pos){
+		if('lb' == pos)
+			node.removeClass('center').addClass('left-bottom');
+		if('center' == pos)
+			setPos(node);	
+	}
+	this.add();
+}
+window.win = window.floatWin = new smWin();
+/**
+ * 图片上传裁剪，依赖jQuery,Bootstrap
+ * @param object initData 参数对象，以下为对象属性
+ * @param NaN aspectRatio (num/num)裁剪比例
+ * @param function onclick 上传按钮点击后的动作
+ * @param function onchange 文件改变后的动作
+ * @param function callback 回调函数
+ */
+function imgUploadClip(initData){
+	var length = $('.img-upload-clip').length;
+	for(var i = 0;i<length;i++){
+		var src = $('.img-upload-clip')[i].dataset.src;
+		var	html = '<button class="btn-outline upload-img" type="button">上传图片</button><input type="file" class="file0" multiple="multiple" style="display:none"><div class="img-area"><div class="img-operate"><img src="'+src+'" class="img0"></div><div class="img-handle" style="display:none;"><div class="img-preview" style="overflow:hidden;"><img src="" alt=""></div><button class="btn-outline save" type="button">裁剪</button></div></div>';
+		$($('.img-upload-clip')[i]).append(html);
+	}
+	$('body').on('click','.upload-img',function(){
+		var _this = $(this).parents('.img-upload-clip');
+		var _thisFile = _this.find('.file0');
+		_thisFile.val('');
+		_thisFile.click();
+		$.fn.cropper;
+		if(initData.onclick){
+			initData.onclick(_this);
+		}
+	});
+	var fileName = '';
+	$('body').on('change','.file0',function(){
+		var _this = $(this).parents('.img-upload-clip');
+		if(this.files[0]){
+			var objUrl = getObjectURL(this.files[0]) ;
+			if($('.upload-type').data('type')){
+				var imgType = $('.upload-type').data('type');
+			}else{
+				var imgType = 'images';
+			}
+			fileName = imgType+'/';
+			fileName += date('y-m-d',time())+'/';
+			fileName += time().toString()+Math.round(Math.random()*8999+1000+1).toString()+this.files[0].name.match(/\.[a-z]+$/)[0];
+			if (objUrl) {
+				_this.find(".img0").attr("src", objUrl) ;
+			}
+			_this.find('.img-handle').show();
+			_this.find('.img-operate>img').cropper({
+				aspectRatio: initData.aspectRatio,
+				crop: function() {},
+				preview:_this.find('.img-preview')
+			}); 
+			_this.find('.img-operate>img').cropper('replace', objUrl);
+			if(initData.onchange){
+				initData.onchange(_this);
+			}
+		}
+	});
+	//建立一个可存取到该file的url
+	function getObjectURL(file) {
+		var url = null ; 
+		if (window.createObjectURL!=undefined) { // basic
+			url = window.createObjectURL(file) ;
+		} else if (window.URL!=undefined) { // mozilla(firefox)
+			url = window.URL.createObjectURL(file) ;
+		} else if (window.webkitURL!=undefined) { // webkit or chrome
+			url = window.webkitURL.createObjectURL(file) ;
+		}
+		return url ;
+	}
+	$('body').on('click','.save', function(){
+		if(!$('.cropper-container')[0])
+			return;
+		var _this = $(this).parents('.img-upload-clip');
+		// token获取
+		var token = '';
+		var url = '/File/getQiNiuToken';
+		$.ajax({
+			url:url,
+			type:'post',
+			data:{'imageName':fileName},
+			dataType:'json',
+			success:function(data){
+				if(!data.error){
+					token = data.data.token;
+					uploadQiniu(fileName,token);
+				}
+			}
+		});
+		function uploadQiniu(fileName,token){
+			_this.find('.img-operate>img').cropper("getCroppedCanvas").toBlob(function(blob) {
+				var url = getObjectURL(blob);
+				var form = new FormData();
+				form.append("file", blob);
+				form.append('key', fileName);
+				form.append("token", token);
+				win.alert('图片上传中', 'info');
+				$.ajax({
+					processData: false,
+					contentType: false,
+					data:form,
+					url:'http://up-z2.qiniu.com/',
+					dataType:'json',
+					type:'post',
+					success:function(data){
+						if(initData.callback){
+							initData.callback(data,_this);
+						}
+						_this.find('.img-handle').hide();
+						_this.find('.img-operate>img').cropper('destroy');
+						_this.find('.img0').attr("src", url);
+					}
+				});
+			},'image/jpeg',0.8);
+		}
+	});
+};
+function fileUpload(file,fileType,callback){
+	var token = '';
+	var fileName = fileType+'/';
+	fileName += date('y-m-d',time())+'/';
+	fileName += time().toString()+Math.round(Math.random()*8999+1000+1).toString();//+file.name.match(/\.[a-z0-9A-Z]+$/)[0];
+	
+	var url = '/store/myFileToken';
+	$.ajax({
+		url:url,
+		type:'post',
+		data:{'imageName':fileName},
+		dataType:'json',
+		success:function(data){
+			if(!data.error){
+				token = data.data.token;
+				uploadQiniu(fileName,token);
+			}
+		}
+	});
+	function uploadQiniu(fileName,token){
+		var form = new FormData();
+		form.append("file", file);
+		form.append('key', fileName);
+		form.append("token", token);
+		win.alert('文件上传中', 'info');
+		$.ajax({
+			processData: false,
+			contentType: false,
+			data:form,
+			url:'http://up-z2.qiniu.com/',
+			dataType:'json',
+			type:'post',
+			success:function(data){
+				if(callback){
+					if(fileType=='myFileVoice'){
+						if(file.size>(1024*1024)){
+							var size = (file.size/(1024*1024)).toFixed(1)+'MB';
+						}else{
+							var size = (file.size/1024).toFixed(1)+'KB';
+						}
+						callback(data,size);
+					}else{
+						callback(data);
+					}
+				}
+			}
+		});
+	}
+}
+</script>
+</body>
+</html>

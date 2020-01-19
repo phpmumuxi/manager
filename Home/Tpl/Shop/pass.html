@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>审核说明|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script type="text/javascript" src="__JS__/check.js"></script>
+</head>
+<body>
+<div id="content">
+<form method="post" action="" id="fileForm" name="fileForm">
+    <table>
+        <tr>
+          <input type="hidden" name="goodsSid"  value="<{$pass.3}>" class="goodsSid">
+          <input type="hidden" name="goodsName"  value="<{$pass.5}>" class="goodsName">
+          <input type="hidden" name="checkUserId"  value="<{$pass.7}>" class="checkUserId">
+          <input type="hidden" name="checkUserName"  value="<{$pass.9}>" class="checkUserName">
+          <input type="hidden" name="userNickName"  value="<{$pass.11}>" class="userNickName">
+          <input type="hidden" name="userId"  value="<{$pass.13}>" class="userId">
+           <!--  <td><label for="txtname">审核说明：</label></td>
+            <td><textarea style="border: 1px solid rgb(204, 204, 204); box-shadow: none; margin: 0px; width: 509px; height: 106px;" name="checkComment" class="checkComment"></textarea></td> -->
+        </tr>
+        <tr>
+            <td colspan=2>
+                <input type="submit" class="so" onclick="subimtBtn();" value="确 定" style="margin-top: 125px;"/>
+            </td>
+        </tr>
+    </table>
+</form>
+</div>
+
+
+<script type="text/javascript">  
+    function subimtBtn() {  
+      // console.log(window.parent.document.getElementsByTagName("iframe"))
+      // window.parent.document.getElementsByTagName("iframe")[0].remove()
+       //window.parent.location.reload();
+
+        var goodsSid = $('.goodsSid').val();
+        var goodsName= $('.goodsName').val();
+        var checkUserId = $('.checkUserId').val();
+        var checkUserName = $('.checkUserName').val();
+        var userName = $('.userNickName').val();
+        //alert(userNickName);
+        var userId = $('.userId').val();
+        var checkStatus = 1;
+
+      $.ajax({
+      type: "POST",
+      cache: true,
+      async: true,
+      ifModified:true,
+      timeout:12000,
+      url: "<{$url}>/manager/serviceGoods/checkGoodsBase",
+      data: {goodsSid:goodsSid,goodsName:goodsName,checkUserId:checkUserId,checkUserName:checkUserName,userName:userName,userId:userId,checkStatus:checkStatus}, 
+      dataType: "json",
+      // accepts: "json",
+      success: function(json) {
+       window.parent.location.reload()
+      },  
+      error: function(XMLHttpRequest, exception) {
+       
+        if (XMLHttpRequest.status == 0) {
+          alert('网络不给力，请稍后再试！');
+        }else if (XMLHttpRequest.status == 404) {
+          alert('资源地址不存在');
+        }else if (XMLHttpRequest.status == 408) {
+          alert('网络不给力，请稍后再试！');
+        }else if (XMLHttpRequest.status == 500) {
+          alert('服务器出错啦')
+        }else if (XMLHttpRequest.status == 502) {
+          alert('Web服务器用作网关或代理服务器时收到了无效响应');
+        }else if (XMLHttpRequest.status == 503) {
+          alert('服务不可用');
+        }else if (XMLHttpRequest.status == 504) {
+          alert('网关超时！');
+        }else{
+         
+        }
+      }
+    })
+    }  
+</script>  
+
+</body>
+</html>

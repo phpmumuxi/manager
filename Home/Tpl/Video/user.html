@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>白名单列表|<{$configcache['Title']}></title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/winpop.js"></script>
+    <script src="__PUBLIC__/js/layer/layer.js" type="text/javascript"></script>
+    <style>
+    #sure{left:220px; top:10px; width:60px; height:28px; line-height:28px; border:none; background:#009900; color:#fff; font-family:"微软雅黑"; cursor:pointer;border-radius: 5px;}
+    .tel{left:0; top:10px; width:220px; height:26px; line-height:26px; color:#555; font-family:"微软雅黑"; repeat-x left top; border:solid 1px #ccc;}    
+    .sign_button{
+        border:1px solid #ddd;
+        padding: 6px 14px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin:0 10px;
+        background: #009900;
+        color: white;
+    }
+  </style> 
+</head>
+<body>
+<div id="content">
+    <h1>首页 > 白名单管理 > 白名单列表</h1>
+    <h2>
+        <div class="h2_left">
+            <a href="__ACTION__" class="whole">全部</a>
+            <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+    </h2>
+
+    <div style="margin-top:50px;margin-bottom: 10px;float: left;">        
+        <form method="get">
+            <input type="text" name="nickName" class="tel" value="<{$nickName}>" placeholder='用户昵称'>
+            &nbsp;&nbsp;&nbsp;           
+            <input type="text" name="telephone" class="tel" value="<{$telephone}>" placeholder='用户手机号'>           
+            &nbsp;&nbsp;&nbsp;
+            <input type="submit" id="sure" value="搜索" />
+        </form>
+    </div>        
+    <div style="margin-right:10px;margin-bottom: 10px;margin-top:50px;float: right;">
+        <a href="javascript:;"><button  id="addButton" class="sign_button">+添加白名单</button></a>
+    </div>
+    <p style="clear: both"></p>
+    
+
+    <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+        <tr>
+            <th>序号</th>
+            <th>用户昵称</th>
+            <th>手机号</th>
+            <th>添加时间</th>
+            <th>操作</th>
+        </tr>
+        <empty name="list">
+    	<tr><td style='text-align:center' colspan='5'>暂时没有数据</td></tr>
+    	<else/>
+	        <volist name="list" id="vo">
+	            <tr>
+	                <td style="text-align:center" class='tc'><{$key + 1}></td> 
+                    <td style="text-align:center" class='tc'><{$vo.userNickName}></td>
+                    <td style="text-align:center" class='tc'><{$vo.userTelephone}></td>
+                    <td style="text-align:center" class='tc'><{$vo.userCreateDate}></td>
+	                <td class='tc' style="text-align:center">
+	                   <a  href="javascript:;" onClick='delUser("<{$vo.sid}>")' style="margin-right: 10px;color:#169BD5">移除白名单</a>
+                    </td>
+	            </tr>
+	        </volist>
+        </empty>
+    </table>
+    <div id="page">
+        <{$page}>
+    </div>
+</div>	
+<script>
+var _url='<{$Think.config.URL}>';
+//添加
+$('#addButton').click(function(){
+    window.location.href = "__APP__/Video/addUser";         
+})
+
+// $('#sure').click(function(){
+//     var _userTelephone = $.trim($("input[name='telephone']").val());
+//     var _userNickName = $.trim($("input[name='nickName']").val());
+
+//     if (_userTelephone && !(/^[1][3,4,5,6,7,8,9][0-9]{9}$/.test(_userTelephone))) {  
+//         layer.msg('手机号不正确！', {icon: 2});
+//         return false;
+//     }    
+//     if(_userTelephone == "" && _userNickName ==""){
+//         return false;
+//     }          
+// })
+
+function delUser(sid){
+    layer.confirm('确认要移除白名单嘛？',function(){
+        $.post(_url + '/manager/video/updateWhiteListStatus',{'userId':sid,'status':'0'},function(res){
+                if(res.success){
+                    layer.msg(res.message,{icon: 1,time: 1500},function(){
+                        f5();
+                    });
+                }else{
+                    layer.msg('白名单移除失败！', {icon: 2 ,time: 1500},function(){
+                        f5();
+                    });
+                }
+        },'json')
+    })        
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>商户管理|<{$configcache['Title']}></title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/winpop.js"></script>
+    <script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__JS__/PCASClass.js"></script>
+    <style type="text/css">
+        .select{padding:5px 10px;border:#ddd 1px solid;border-radius:4px;width:60%;margin:5% auto;font-size:12px}
+        .select li{list-style:none;padding:10px 0 5px 100px}
+        .select .select-list{border-bottom:#eee 1px dashed}
+        .select dl{zoom:1;position:relative;line-height:24px;}
+        .select dl:after{content:" ";display:block;clear:both;height:0;overflow:hidden}
+        .select dt{width:100px;margin-bottom:5px;position:absolute;top:0;left:-100px;text-align:right;color:#666;height:24px;line-height:24px}
+        .select dd{float:left;display:inline;margin:0 0 5px 5px;}
+        .select a{display:inline-block;white-space:nowrap;height:24px;padding:0 10px;text-decoration:none;color:#039;border-radius:2px;}
+        .select a:hover{color:#f60;background-color:#f3edc2}
+        .select .selected a{color:#fff;background-color:#f60}
+        .select-result dt{font-weight:bold}
+        .select-no{color:#999}
+        .select .select-result a{padding-right:20px;background:#f60 url("__PUBLIC__/image/close.gif") right 9px no-repeat}
+        .select .select-result a:hover{background-position:right -15px}
+        .tc{text-align:center; text-indent:0;font-family:"微软雅黑";font-size: 14px;color:#111;}
+        #content .atext { width:100px; height:24px; line-height:24px;border:solid 1px #ccc; font-family:"宋体"; }
+    </style>
+    <script>
+        function myBrowser(){
+            var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+            var isOpera = userAgent.indexOf("Opera") > -1;
+            if (isOpera) {
+                return "Opera"
+            }; //判断是否Opera浏览器
+            if (userAgent.indexOf("Firefox") > -1) {
+                return "FF";
+                /*firefox----这段js重新封装了event对象，经验证可以在火狐下支持！----*/
+                function __firefox(){
+                    HTMLElement.prototype.__defineGetter__("runtimeStyle", __element_style);
+                    window.constructor.prototype.__defineGetter__("event", __window_event);
+                    Event.prototype.__defineGetter__("srcElement", __event_srcElement);
+                }
+                function __element_style(){
+                    return this.style;
+                }
+                function __window_event(){
+                    return __window_event_constructor();
+                }
+                function __event_srcElement(){
+                    return this.target;
+                }
+                function __window_event_constructor(){
+                    if(document.all){
+                        return window.event;
+                    }
+                    var _caller = __window_event_constructor.caller;
+                    while(_caller!=null){
+                        var _argument = _caller.arguments[0];
+                        if(_argument){
+                            var _temp = _argument.constructor;
+                            if(_temp.toString().indexOf("Event")!=-1){
+                                return _argument;
+                            }
+                        }
+                        _caller = _caller.caller;
+                    }
+                    return null;
+                }
+                if(window.addEventListener){
+                    __firefox();
+                }
+            } //判断是否Firefox浏览器
+            if (userAgent.indexOf("Chrome") > -1){
+                return "Chrome";
+            }
+            if (userAgent.indexOf("Safari") > -1) {
+                return "Safari";
+            } //判断是否Safari浏览器
+            if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+                return "IE";
+            }; //判断是否IE浏览器
+        }
+    </script>
+</head>
+<body>
+<div id="content">
+    <h1>首页 > 客户管理 > 区域代理合同审核</h1>
+    <h2>
+        <div class="h2_left">
+            <a href="__ACTION__" class="whole">全部</a>
+            <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+    </h2>
+    <table id="table" border="" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0" style="width:1600px;margin-left:50px">
+        <tr>
+            <td style="background-color:grey;" align="center" colspan="2">企业基本资料</td>
+        </tr>
+        <tr>
+            <td width="50%" align="center">公司名称</td>
+            <td width="50%" align="center"><{$data['companyName']}></td>
+        </tr>
+        <tr>
+            <td align="center">营业执照复印件（最新年检）</td>
+            <td align="center"><if condition="$data['combaseBusinessLicensePicUrl']"><a href="<{$data['combaseBusinessLicensePicUrl']}>" target='_blank' title="图片详情"><img style="height:60px;width:60px;margin-top:10px" src="<{$data['combaseBusinessLicensePicUrl']}>"></a></if></td>
+        </tr>
+        <tr>
+            <td align="center">组织机构代码复印件</td>
+            <td align="center"><if condition="$data['combaseOrgPicUrl']"><a href="<{$data['combaseOrgPicUrl']}>" target='_blank' title="图片详情"><img style="height:60px;width:60px;margin-top:10px" src="<{$data['combaseOrgPicUrl']}>"></a></if></td>
+        </tr>
+        <tr>
+            <td align="center">税务登记证复印件</td>
+            <td align="center"><if condition="$data['combaseTaxPicUrl']"><a href="<{$data['combaseTaxPicUrl']}>" target='_blank' title="图片详情"><img style="height:60px;width:60px;margin-top:10px" src="<{$data['combaseTaxPicUrl']}>"></a></if></td>
+        </tr>
+        <tr>
+            <td align="center">开户行许可证复印件</td>
+            <td align="center"><if condition="$data['combaseOpenBankPicUrl']"><a href="<{$data['combaseOpenBankPicUrl']}>" target='_blank' title="图片详情"><img style="height:60px;width:60px;margin-top:10px" src="<{$data['combaseOpenBankPicUrl']}>"></a></if></td>
+        </tr>
+        <tr>
+            <td align="center">商标注册证复印件（或商标受理通知书，申请时间须满6个月）</td>
+            <td align="center"><if condition="$data['combaseTrademarkPicUrl']"><a href="<{$data['combaseTrademarkPicUrl']}>" target='_blank' title="图片详情"><img style="height:60px;width:60px;margin-top:10px"src="<{$data['combaseTrademarkPicUrl']}>"></a></if></td>
+        </tr>
+        <tr>
+            <td align="center">品牌销售授权证明复印件 </td>
+            <td align="center"><if condition="$data['combaseBrandAuthPicUrl']"><a href="<{$data['combaseBrandAuthPicUrl']}>" target='_blank' title="图片详情"><img style="height:60px;width:60px;margin-top:10px" src="<{$data['combaseBrandAuthPicUrl']}>"></a></if></td>
+        </tr>
+        <tr>
+            <td align="center">质检报告复印件或产品质量合格证明</td>
+            <td align="center"><if condition="$data['combaseQualityPicUrl']"><a href="<{$data['combaseQualityPicUrl']}>" target='_blank' title="图片详情"><img  style="height:60px;width:60px;margin-top:10px" src="<{$data['combaseQualityPicUrl']}>"></a></if></td>
+        </tr>
+        <tr>
+            <td style="background-color:grey;" align="center" colspan="2">基本信息</td>
+        </tr>
+        <tr>
+            <td align="center">负责人姓名</td>
+            <td align="center"><{$data['basePrincipalName']}></td>
+        </tr>
+        <tr>
+            <td align="center">负责人手机号</td>
+            <td align="center"><{$data['basePrincipalPhone']}></td>
+        </tr>
+        <tr>
+            <td align="center">负责人微信</td>
+            <td align="center"><{$data['basePrincipalWx']}></td>
+        </tr>
+        <tr>
+            <td align="center">负责人邮箱</td>
+            <td align="center"><{$data['basePrincipalEmail']}></td>
+        </tr>
+        <tr>
+            <td align="center">办公地址</td>
+            <td align="center"><{$data['basePrincipalAddress']}></td>
+        </tr>
+        <tr>
+            <td align="center">办公电话</td>
+            <td align="center"><{$data['basePrincipalTelphone']}></td>
+        </tr>
+        <tr>
+            <td style="background-color:grey;" align="center" colspan="2">对接人信息</td>
+        </tr>
+        <tr>
+            <td align="center">姓名</td>
+            <td align="center"><{$data['dockingName']}></td>
+        </tr>
+        <tr>
+            <td align="center">手机号</td>
+            <td align="center"><{$data['dockingPhone']}></td>
+        </tr>
+        <tr>
+            <td align="center">邮箱</td>
+            <td align="center"><{$data['dockingEmail']}></td>
+        </tr>
+        <tr>
+            <td align="center">微信</td>
+            <td align="center"><{$data['dockingWx']}></td>
+        </tr>
+        <tr>
+            <td style="background-color:grey;" align="center" colspan="2">开户行信息</td>
+        </tr>
+        <tr>
+            <td  align="center">开户行</td>
+            <td align="center"><{$data['bankName']}></td>
+        </tr>
+        <tr>
+            <td align="center">账号</td>
+            <td align="center"><{$data['bankAccount']}></td>
+        </tr>
+        <tr>
+            <td style="background-color:grey;" align="center" colspan="2">企业经营</td>
+        </tr>
+        <tr>
+            <td align="center">企业性质</td>
+            <td align="center"><if condition="$data['companyNature'] eq 0">私企</if>
+                <if condition="$data['companyNature'] eq 1">民营</if>
+                <if condition="$data['companyNature'] eq 2">合资</if>
+                <if condition="$data['companyNature'] eq 3">外资</if>
+                <if condition="$data['companyNature'] eq 4">其他</if></td>
+        </tr>
+        <tr>
+            <td align="center">企业规模</td>
+            <td align="center"><if condition="$data['companyScale'] eq 0">1-49人</if>
+                <if condition="$data['companyScale'] eq 1">50-99人</if>
+                <if condition="$data['companyScale'] eq 2">100-199人</if>
+                <if condition="$data['companyScale'] eq 3">200-500人</if>
+                <if condition="$data['companyScale'] eq 4">500人以上</if></td>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">年度销售额</td>
+            <td align="center"><if condition="$data['companyMarket'] eq 0">1-49万</if>
+                <if condition="$data['companyMarket'] eq 1">50-99万</if>
+                <if condition="$data['companyMarket'] eq 2">100-199万</if>
+                <if condition="$data['companyMarket'] eq 3">200-500万</if>
+                <if condition="$data['companyMarket'] eq 4">500万以上</if></td>
+        </tr>
+        <tr>
+            <td style="background-color:grey;" align="center" colspan="2">服务需求</td>
+        </tr>
+        <tr>
+            <td align="center">服务需求</td>
+            <td align="center">
+                <if condition="strpos($data['companyService'], '0') !== false">销售/推广</if>
+                <if condition="strpos($data['companyService'], '1') !== false">&nbsp;资金&nbsp;</if>
+                <if condition="strpos($data['companyService'], '2') !== false">&nbsp;品牌&nbsp;</if>
+                <if condition="strpos($data['companyService'], '3') !== false">&nbsp;其他</if>                
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+
+<script>
+
+</script>
+</html>

@@ -1,0 +1,581 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>商品信息|<{$configcache['Title']}></title>
+  <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+  <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+  <script type="text/javascript" src="__JS__/jquery.js"></script>
+  <script type="text/javascript" src="__JS__/Public.js"></script>
+  <script type="text/javascript" src="__JS__/winpop.js"></script>
+  <script type="text/javascript" src="__JS__/check.js"></script>
+  <script type="text/javascript" src="__JS__/layer/layer.js"></script>
+  <link rel="stylesheet" type="text/css" href="__JS__/layer/skin/layer.css"  />
+  <script type="text/javascript" src="__PUBLIC__/ueditor/ueditor.config.js"></script>
+<script type="text/javascript"  src="__PUBLIC__/ueditor/ueditor.all.min.js"></script>
+
+  <style type="text/css">
+  .shop-1{border:1px solid #ccc; width:60%;margin-left: auto;margin-right: auto;}
+  .shop-2{margin: 30px;}
+  .imgbox img{max-width:90%;}
+  .basetb td{ padding:6px; padding-top:8px; padding-bottom:8px; font-size:15px;}
+  .label{text-align: center;}
+  </style>
+</head>
+<body>
+  <dt>详情信息</dt>
+  <div id="content" style="font-size:18px; color:#333; text-align:center;width:1190px;">
+   <dl id="dl">
+    <h2>
+      <div class="h2_left">
+        <a href="<{:U('Shop/index')}>" class="whole">商品</a>
+        <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+        <a href="javascript:history.back();" class="Retreat">后退</a>
+        <a href="javascript:history.go(1);" class="Advance">前进</a>
+          <a href="javascript:;" id="del" class="whole" >删除</a>
+        <label class="message"></label>
+         <input type="hidden" id='sid' value="<{$sid}>">
+         <input type="hidden" id='httpreferer' value="<{$httpreferer}>">
+      </div>
+    </h2><br/>
+    <volist name="picture" id="pic">
+      <div class="img" style="width:200px;height:200px; float:left"><img src="<{$pic.realPicUrl}>" width="190" height="180"></div>
+    </volist>
+    <div style="clear:both"></div>
+    <!-- 判断类别 -->
+    <switch name="module">
+      <case value="community_se_dryclean"><!-- 社区干洗服务 -->
+      
+          <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0" class="basetb">
+            <tr>
+              <td class="label">营业时间:</td>
+              <td><{$goodsData.openTime}></td>
+            </tr>
+            <tr>
+              <td class="label">折扣:</td>
+              <td><?php echo $goodsData['discount']*10;?> 折</td>
+            </tr>
+            <tr>
+              <td class="label">洗护周期:</td>
+              <td><{$goodsData.cycle}> 天</td>
+            </tr>
+            <tr>
+              <td class="label">联系电话:</td>
+              <td><{$goodsData.telephone}></td>
+            </tr>
+            <tr>
+              <td class="label">附加介绍:</td>
+              <td><{$goodsData.comment}></td>
+            </tr>
+            <tr>
+              <td class="label" style="width:120px;">是否支持送取货:</td>
+              <td>
+                <if condition="$goodsData.istSendTake eq 0">不支持
+                  <elseif condition="$goodsData.istSendTake eq 1"/>支持
+                  <else />
+                </if>
+              </td>
+            </tr>
+            <tr>
+              <td class="label">运费:</td>
+              <td><{$goodsData.freight}> <{$goodsData.serviceUnit}></td>
+            </tr>
+            <tr>
+              <td class="label">限时上门取:</td>
+              <td><{$goodsData.timeLimit}> 小时</td>
+            </tr>
+            <tr>
+              <td class="label">收藏量:</td>
+              <td><{$goodsData.collectNum}></td>
+            </tr> 
+            <tr>
+              <td class="label">创建时间:</td>
+              <td><{$goodsData.createTime}></td>
+            </tr> 
+            <tr>
+              <td class="label">是否启用:</td>
+              <td>
+                <if condition="$goodsData.istUse eq 0">不启用
+                  <elseif condition="$goodsData.istUse eq 1"/>启用
+                  <else />
+                </if>
+              </td>
+            </tr>
+            <tr>
+              <td class="label">服务名称:</td>
+              <td><{$goodsData.serviceName}></td>
+            </tr> 
+            <tr>
+              <td class="label">用户昵称:</td>
+              <td><{$goodsData.userNickName}></td>
+            </tr> 
+
+            <if condition="$goodsData.checkStatus eq 2">
+             <tr>
+              <td class="label">不通过原因:</td>
+              <td><{$goodsData.checkComment}></td>
+            </tr>
+            <else />
+          </if>
+        
+        </table>
+  
+    </case>
+    <case value="community_se_running_leg"><!-- 社区跑腿服务 -->
+      <table class="basetb">
+        <tr>
+          <td class="label">用户名:</td>
+          <td><{$goodsData.userName}></td>
+        </tr>
+        <!-- <tr>
+          <td class="label">起步重量:</td>
+          <td><{$goodsData.initialWeight}>kg</td>
+        </tr>
+        <tr>
+          <td class="label">超出部分:</td>
+          <td><{$goodsData.moreOneWeight}></td>
+        </tr>
+        <tr>
+          <td class="label"> 0-2公里 :</td>
+          <td><{$goodsData.oneTwoKm}><{$goodsData.serviceUnit}></td>
+        </tr>
+        <tr>
+          <td class="label">2-5公里:</td>
+          <td><{$goodsData.twoFiveKm}><{$goodsData.serviceUnit}></td>
+        </tr>
+        <tr>
+          <td class="label">5-20公里 :</td>
+          <td><{$goodsData.fiveTwentyKm}><{$goodsData.serviceUnit}></td>
+        </tr>
+        <tr>
+          <td class="label">20公里以上 :</td>
+          <td><{$goodsData.moreTwentyKm}><{$goodsData.serviceUnit}></td>
+        </tr>
+        <tr>
+          <td class="label">每一公里 :</td>
+          <td><{$goodsData.eachOneKm}><{$goodsData.serviceUnit}></td>
+        </tr>
+        <tr>
+          <td class="label">收藏数量:</td>
+          <td><{$goodsData.collectNum}></td>
+        </tr> -->
+        <tr>
+          <td class="label">商品描述:</td>
+          <td><{$goodsData.serviceDetail}></td>
+        </tr>
+        <tr>
+          <td class="label">备注:</td>
+          <td><{$goodsData.comment}></td>
+        </tr>
+        <tr>
+          <td class="label" style="110px;">创建时间:</td>
+          <td><{$goodsData.createTime}></td>
+        </tr> 
+        <tr>
+          <td class="label">是否启用:</td>
+          <td>
+            <if condition="$goodsData.istUse eq 0">不启用
+              <elseif condition="$goodsData.istUse eq 1"/>启用
+              <else />
+            </if>
+          </td>
+        </tr>
+
+        <if condition="$goodsData.checkStatus eq 2">
+         <tr>
+          <td class="label">不通过原因:</td>
+          <td><{$goodsData.checkComment}></td>
+        </tr>
+        <else />
+      </if>
+
+    </table>
+  </case>
+  <case value="community_se_general"><!-- 社区通用服务 -->
+   <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0" class="basetb">
+    <tr>
+      <td class="label">营业时间:</td>
+      <td><{$goodsData.openTime}></td>
+    </tr>
+    <tr>
+      <td class="label">折扣:</td>
+      <td><?php echo $goodsData['discount']*10;?> 折</td>
+    </tr>
+    <tr>
+      <td class="label">联系电话:</td>
+      <td><{$goodsData.telephone}></td>
+    </tr>
+    <tr>
+      <td class="label">备注:</td>
+      <td><{$goodsData.comment}></td>
+    </tr>
+    <tr>
+      <td class="label" style="width:120px;">是否有WIFI:</td>
+      <td>
+        <if condition="$goodsData.istSendTake eq 0">没有
+          <elseif condition="$goodsData.istSendTake eq 1"/>有
+          <else />
+        </if>
+      </td>
+    </tr>
+    <tr>
+      <td class="label">人均消费:</td>
+      <td><{$goodsData.consumptionPerPerson}></td>
+    </tr>
+
+    <tr>
+      <td class="label">收藏量:</td>
+      <td><{$goodsData.collectNum}></td>
+    </tr> 
+    <tr>
+      <td class="label">创建时间:</td>
+      <td><{$goodsData.createTime}></td>
+    </tr> 
+    <tr>
+      <td class="label">是否启用:</td>
+      <td>
+        <if condition="$goodsData.istUse eq 0">不启用
+          <elseif condition="$goodsData.istUse eq 1"/>启用
+          <else />
+        </if>
+      </td>
+    </tr>
+    <tr>
+      <td class="label">服务名称:</td>
+      <td><{$goodsData.serviceName}></td>
+    </tr> 
+    <tr>
+      <td class="label">用户昵称:</td>
+      <td><{$goodsData.userNickName}></td>
+    </tr> 
+    <if condition="$goodsData.checkStatus eq 2">
+     <tr>
+      <td class="label">不通过原因:</td>
+      <td><{$goodsData.checkComment}></td>
+    </tr>
+    <else />
+  </if>
+</table> 
+</case>
+
+
+      <case value="community_ticket"><!-- 电子券 -->
+        <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0" class="basetb">
+          <tr>
+            <td class="label">用户名:</td>
+            <td><{$goodsData.userNickName}></td>
+          </tr>
+          <tr>
+            <td class="label">产品名称:</td>
+            <td><{$goodsData.serviceName}></td>
+          </tr>
+          <tr>
+            <td class="label">产品类别:</td>
+            <td><{$goodsData.ticketTypeName}></td>
+          </tr>
+          <tr>
+            <td class="label">产品描述:</td>
+            <td><{$goodsData.serviceDetail}></td>
+          </tr>
+
+          <tr>
+            <td class="label">库存:</td>
+            <td><{$goodsData.stockNum}></td>
+          </tr>
+          <tr>
+            <td class="label">价格:</td>
+            <td><{$goodsData.servicePrice}></td>
+          </tr>
+          <tr>
+            <td class="label">更新时间:</td>
+            <td><{$goodsData.expireTime}></td>
+          </tr>
+        </table>
+      </case>
+
+
+
+
+<case value="trade_manger"><!--销售商品详情-->   
+  <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0" class="basetb">
+    <tr>
+      <td class="label" style="width:100px;">产品名称:</td>
+      <td><{$goodsData.serviceName}></td>
+    </tr>
+    <tr>
+      <td class="label">产品型号:</td>
+      <td><{$goodsData.goodsModel}></td>
+    </tr>
+    <tr>
+      <td class="label">产品类别:</td>
+      <td><{$goodsData.tchList.0.text}>&nbsp;&nbsp;<{$goodsData.tchList.1.text}>&nbsp;&nbsp;<{$goodsData.tchList.2.text}> </td>
+    </tr>
+    <tr>
+      <td class="label">品牌:</td>
+      <td><{$goodsData.goodsBrand}></td>
+    </tr>
+    <tr>
+      <td class="label">产品描述:</td>
+      <td style="width:800px;height:600px">
+              <textarea style="width:100%;height:100%" type="text"  name="serviceDetail" id="EditorId" placeholder="请输入内容"><{$goodsData.serviceDetail}></textarea>
+      </td>
+    </tr>
+    <tr>
+      <td class="label">规格库存:</td>
+      <td>
+        <if condition="count($goodsData['specStockList']) gt 0 ">
+            <foreach name="goodsData.specStockList" item="tsp">
+                <{$tsp.specParameterNameData}><if condition="$tsp['specPrice']">&nbsp;&nbsp;<{$tsp.specPrice}>元&nbsp;&nbsp;</if>（库存:<{$tsp.specStockNum}>）<br/>
+            </foreach>
+        </if>
+      </td>
+    </tr>
+    <tr>
+      <td class="label">总库存:</td>
+      <td>
+        <{$goodsData.stockNum}>
+      </td>
+    </tr>
+    <tr>
+      <td class="label">价格区间:</td>
+      <td>
+        <foreach name="goodsData.tprList" item="price">
+          <?php if($price['maxBuyNum'] == 0){$price['maxBuyNum']='max';} ?>
+          <{$price.minBuyNum}><{$price.unit}> ~ <{$price.maxBuyNum}><{$price.unit}>(<{$price.price}>元)&nbsp;&nbsp;&nbsp;&nbsp;
+        </foreach>
+
+      </td>
+    </tr>
+    <tr>
+      <td class="label">更新时间:</td>
+      <td><{$goodsData.picList.0.picCreateTime}></td>
+    </tr> 
+    <tr>
+      <td class="label">发货地址:</td>
+      <td><{$goodsData.serviceDistrict}></td>
+    </tr> 
+    <tr>
+      <td class="label">用户昵称:</td>
+      <td><{$goodsData.userNickName}></td>
+    </tr>
+    <tr>
+      <td class="label">单位重量:</td>
+      <td><{$goodsData.goodsWeight}>公斤</td>
+    </tr> 
+
+    <if condition="$goodsData.checkStatus eq 2">
+     <tr>
+      <td class="label">不通过原因:</td>
+      <td><{$goodsData.checkComment}></td>
+    </tr>
+    <else />
+  </if>
+</table>
+</case>
+<case value="community_goods_extend">
+  <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0" class="basetb">
+    <tr>
+      <td class="label" style="width:100px;">商品名称:</td>
+      <td><{$goodsData.serviceName}></td>
+    </tr>
+    <tr>
+      <td class="label">商品型号:</td>
+      <td><{$goodsData.goodsModel}></td>
+    </tr>
+    <tr>
+      <td class="label">商品类目:</td>
+      <td>
+        <volist name="list" id="vo">
+          <if condition="$goodsData.goodsType eq $vo['value']">
+            <{$vo.text}>
+          </if>
+        </volist>
+      </td>
+    </tr>
+    <!-- <tr>
+      <td class="label">品牌:</td>
+      <td><{$goodsData.goodsBrand}></td>
+    </tr> -->
+    <tr>
+      <td class="label">计量单位</td>
+      <td><{$goodsData.goodsUnit}></td>
+    </tr>
+    <tr>
+      <td class="label">规格库存:</td>
+      <td>
+        <if condition="$specList neq ''">
+            <foreach name="goodsData.specList" item="tsp">&nbsp;&nbsp;&nbsp;&nbsp;
+                规格:<{$tsp.communitySpec}>&nbsp;&nbsp;&nbsp;&nbsp;￥<{$tsp.communityPrice}>&nbsp;&nbsp;&nbsp;&nbsp; 库存:<{$tsp.communityStock}><{$goodsData.goodsUnit}> <br/>
+            </foreach>
+          <else/>
+              规格参数: --<br/>
+              商品单价: <{$goodsData.servicePrice}><br/>
+              供应总量: <{$goodsData.stockNum}>
+        </if>
+     
+      </td>
+    </tr>
+    <tr>
+      <td class="label">优惠折扣</td>
+      <td><{$goodsData['discount']*10}> 折</td>
+    </tr>
+    <tr>
+      <td class="label">是否有配送费</td>
+      <td><if condition="$goodsData.isFreight eq '1'">有
+          <elseif condition="$goodsData.isFreight eq '0'"/>无
+          </if>
+      </td>
+    </tr>
+    <tr>
+      <td class="label">商品描述:</td>
+      <td style="word-wrap:break-word;word-break:break-all;"><{$goodsData.serviceDetail}></td>
+    </tr>
+    <tr>
+      <td class="label">更新时间:</td>
+      <td><{$goodsData.specList.0.createTime}></td>
+    </tr> 
+    <tr>
+      <td class="label">用户昵称:</td>
+      <td><{$goodsData.userNickName}></td>
+    </tr>
+    <if condition="$goodsData.checkStatus eq 2">
+     <tr>
+      <td class="label">不通过原因:</td>
+      <td><{$goodsData.checkComment}></td>
+    </tr>
+    <else />
+  </if>
+</table>
+</case>
+<default /> 
+</switch>
+<div class="tong" style="width:20%;margin-top:50px;margin-bottom:180px;">
+  <switch name="checkStatus.checkStatus">
+    <case value="0"><button class="pass" approveStatus="2" style="background-color:#f60;color:#fff;cursor:pointer;width:80px;height:40px;" sid='<{$goodsData.serviceId}>' goodsName='<{$goodsData.serviceName}>' checkUserId='<{$admin.ID}>' checkUserName='<{$admin.Username}>' userId='<{$goodsData.userId}>' userNickName='<{$goodsData.userNickName}>'>通过</button> &nbsp;&nbsp;&nbsp;&nbsp;<button class="nopass" approveStatus="2" style="background-color:#f60;color:#fff;cursor:pointer;width:80px;height:40px;" sid='<{$goodsData.serviceId}>' goodsName='<{$goodsData.serviceName}>' checkUserId='<{$admin.ID}>' checkUserName='<{$admin.Username}>' userId='<{$goodsData.userId}>' userNickName='<{$goodsData.userNickName}>'>不通过<button></case>
+    <default />
+  </switch>
+</div>
+</div>
+
+<script type="text/javascript">
+
+UE.getEditor('EditorId',{    //content为要编辑的textarea的id
+    initialFrameWidth: 1100,   //初始化宽度
+    initialFrameHeight: 500,   //初始化高度
+});
+
+$(function (){
+
+$('#del').click(function(){
+    var sid = $('#sid').val();
+    $.post('/Shop/delgoods',{sid:sid},function(data){
+      if(data.success){
+        $(".message").html('<font color="green">删除成功，正在跳转....</font>');
+        var rfererurl = $('#httpreferer').val();
+        var registurl = window.location.href=rfererurl;
+        setTimeout(registurl);
+    
+      }else{
+        $(".message").html('<font color="red">删除失败</font>');
+      }
+    })
+  });
+
+ $('.pass').click(function(){
+  var goodsSid = ($(this).attr('sid'));
+  var goodsName= ($(this).attr('goodsName'));
+  var checkUserId = $(this).attr('checkUserId');
+  var checkUserName = $(this).attr('checkUserName');
+  var userName = $(this).attr('userNickName');
+  var userId = $(this).attr('userId');
+  // console.log(goodsSid);
+  // console.log(goodsName);
+  // console.log(checkUserId);
+  // console.log(checkUserName);
+  // console.log(userName);
+  // console.log(userId);
+  // return;
+  if(!goodsSid){
+   alert('参数不完整');
+   return;
+ }
+ if(!goodsName){
+   alert('参数不完整');
+   return;
+ }
+ if(!checkUserId){
+   alert('参数不完整');
+   return;
+ }
+ if(!checkUserName){
+   alert('参数不完整');
+   return;
+ }
+ if(!userName ){
+   alert('参数不完整');
+   return;
+ }
+ if(!userId){
+   alert('参数不完整');
+   return;
+ }
+
+ var index = layer.load(0, {shade: false});
+    // return;
+    var checkStatus = 1;
+    $.ajax({
+      type: "POST",
+      cache: true,
+      async: true,
+      ifModified:true,
+      timeout:20000,
+      url: "<{$url}>/manager/serviceGoods/checkGoodsBase",
+      data: {goodsSid:goodsSid,goodsName:goodsName,checkUserId:checkUserId,checkUserName:checkUserName,userName:userName,userId:userId,checkStatus:checkStatus}, 
+      dataType: "json",
+      // accepts: "json",
+      success: function(json) {
+        alert('操作成功');
+        layer.closeAll('loading');
+        f5();
+      },  
+      error: function(XMLHttpRequest, exception) {
+        layer.closeAll('loading');
+        if (XMLHttpRequest.status == 0) {
+          alert('网络不给力，请稍后再试！');
+        }else if (XMLHttpRequest.status == 404) {
+          alert('资源地址不存在');
+        }else if (XMLHttpRequest.status == 408) {
+          alert('网络不给力，请稍后再试！');
+        }else if (XMLHttpRequest.status == 500) {
+          alert('服务器出错啦')
+        }else if (XMLHttpRequest.status == 502) {
+          alert('Web服务器用作网关或代理服务器时收到了无效响应');
+        }else if (XMLHttpRequest.status == 503) {
+          alert('服务不可用');
+        }else if (XMLHttpRequest.status == 504) {
+          alert('网关超时！');
+        }else{
+
+        }
+      }
+    })
+
+});
+
+$('.nopass').click(function(){
+  var goodsSid = ($(this).attr('sid'));
+  var goodsName= ($(this).attr('goodsName'));
+  var checkUserId = $(this).attr('checkUserId');
+  var checkUserName = $(this).attr('checkUserName');
+  var userNickName = $(this).attr('userNickName');
+  var userId = $(this).attr('userId');
+  popload('审核说明',650,350,'__APP__/Shop/nopass/goodsSid/'+goodsSid+'/goodsName/'+goodsName+'/checkUserId/'+checkUserId+'/checkUserName/'+checkUserName+'/userNickName/'+userNickName+'/userId/'+userId);
+  addDiv($('#iframe_pop'));
+  popclose();
+
+});
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>商户管理|<{$configcache['Title']}></title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/winpop.js"></script>
+    <script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__JS__/PCASClass.js"></script>
+    <style type="text/css">
+		 .h2_left .hover{color:#f60;background-color:#f3edc2}
+        .h2_left .selected {color:#fff;background-color:#f60}
+        .h2_left a{display: inline-block; white-space: nowrap;height: 24px;padding: 0 10px;text-decoration: none;color: #039;border-radius: 2px;}
+        .tc{text-align:center; text-indent:0;font-family:"微软雅黑";font-size: 14px;color:#111;}
+        #content .atext { width:100px; height:24px; line-height:24px;border:solid 1px #ccc; font-family:"宋体"; }
+        .datainp{ width:100px; height:30px; border:1px #ccc solid;}
+        .h2_left .dateFind{margin-left: 10px;width: 50px;height: 25px;line-height: 25px;border: none;background: #090;color: #fff;font-family: "微软雅黑";text-align: center;cursor: pointer;}
+        
+    </style>
+    <script>
+        function myBrowser(){
+            var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+            var isOpera = userAgent.indexOf("Opera") > -1;
+            if (isOpera) {
+                return "Opera"
+            }; //判断是否Opera浏览器
+            if (userAgent.indexOf("Firefox") > -1) {
+                return "FF";
+                /*firefox----这段js重新封装了event对象，经验证可以在火狐下支持！----*/
+                function __firefox(){
+                    HTMLElement.prototype.__defineGetter__("runtimeStyle", __element_style);
+                    window.constructor.prototype.__defineGetter__("event", __window_event);
+                    Event.prototype.__defineGetter__("srcElement", __event_srcElement);
+                }
+                function __element_style(){
+                    return this.style;
+                }
+                function __window_event(){
+                    return __window_event_constructor();
+                }
+                function __event_srcElement(){
+                    return this.target;
+                }
+                function __window_event_constructor(){
+                    if(document.all){
+                        return window.event;
+                    }
+                    var _caller = __window_event_constructor.caller;
+                    while(_caller!=null){
+                        var _argument = _caller.arguments[0];
+                        if(_argument){
+                            var _temp = _argument.constructor;
+                            if(_temp.toString().indexOf("Event")!=-1){
+                                return _argument;
+                            }
+                        }
+                        _caller = _caller.caller;
+                    }
+                    return null;
+                }
+                if(window.addEventListener){
+                    __firefox();
+                }
+            } //判断是否Firefox浏览器
+            if (userAgent.indexOf("Chrome") > -1){
+                return "Chrome";
+            }
+            if (userAgent.indexOf("Safari") > -1) {
+                return "Safari";
+            } //判断是否Safari浏览器
+            if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+                return "IE";
+            }; //判断是否IE浏览器
+        }
+    </script>
+</head>
+<body>
+<div id="content">
+    <h1>首页 > 客户管理 > 新增商家统计</h1>
+	  <h2>
+        <div class="h2_left">
+            <a href="__ACTION__" class="whole">全部</a>
+            <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+    </h2>
+     <!--    <div class="h2_left " style="padding:16px;font-weight:normal;width:97%;margin-top:15px;margin:0px,5px;display: block;border: solid 1px #ccc;">
+            <a href="<{$dayUrl.today}>"  style="padding:0px 20px;white-space:nowrap;margin:auto;text-decoration:none" data-url=""  data-day='0'>今天 (<{$daynum.todayCompanyNum}>)条</a>
+            <a href="<{$dayUrl.beforeOne}>"  data-url="" class="" data-day='1'>昨天(<{$daynum.yesterdayCompanyNum}>)条</a>
+            <a href="<{$dayUrl.beforeTwo}>" data-url="" class="" data-day='2'>前天(<{$daynum.beforeyesterday}>)条</a>
+            <a href="<{$dayUrl.beforeThree}>" data-url="" class="" data-day='3'>3天前(<{$daynum.bbyesterday}>)条</a>
+            <a href="<{$dayUrl.beforeFore}>" data-url="" class="" data-day='4'>4天前(<{$daynum.bbbyesterday}>)条</a>
+            <input type="text" id="start_date"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="<{$date}>" class="Wdate sBeginTime"/>
+            <input  class="dateFind"  style="height:25px" type="button" value="查询" />
+        </div> -->
+  
+    
+    <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+        <input type="hidden" name="userId" value="<{$userId}>">
+        <input type="hidden" name="name" value="<{$checkName}>">
+      
+        <tr>
+            <th>用户名称</th>
+            <th>电话号码</th>
+            <th>主营项目</th>
+            <th>费率</th>
+            <th>添加时间</th>
+        </tr>
+    
+      
+        <foreach name="list" item="vo">
+            <tr class="datelist">
+                <td style="text-align:center" class='tc'><{$vo.name}></td>
+                <td style="text-align:center" class='tc'><{$vo.telphone}></td>
+                <td style="text-align:center" class='tc'><{$vo.main_project}></td>
+                <td style="text-align:center" class='tc'><{$vo.proxy_rate}></td>
+                <td style="text-align:center" class='tc'><{$vo.add_time}></td>
+            </tr>
+       </foreach>
+     
+    </table>
+	<{$page}>
+</div>
+</body>
+<script>
+//选择每页显示数量
+$('.h2_left a').each(function(){
+	console.log($(this)[0]);
+	if ($(this)[0].href == String(window.location))  
+        $(this).addClass('selected');
+});
+
+
+$('.h2_left a').on('mouseover',function(){
+	$(this).addClass("hover");
+})
+
+$('.h2_left a').on('mouseout',function(){
+	$(this).removeClass("hover");
+})
+
+  $("#selectpagesize").on('change',function(){
+	    var pageSize=$(this).val();
+	    var date = $(this).data('date');
+	    window.location.href = "__APP__/Client/agreementlist?pageSize="+pageSize+"&date="+date;
+	});
+	
+   $(".dateFind").on('click',function(){
+	    var sdate = $('#start_date').val();
+	    window.location.href = "__APP__/Client/agreementlist?date="+sdate;
+	});
+
+    //通过
+    $('.pass').click(function(){
+        if (!confirm('是否通过?')) {
+            return false;
+        }
+        var sid=$(".pass").attr('href');
+        var userId=$("input[name=userId]").val();
+        var name=$("input[name=name]").val();
+        var status=2;
+        $.ajax({
+            type: "POST",
+            url: "__APP__/Client/checkpass/",
+            data: {sid :sid,userId:userId,name:name,status:status},
+            success: function(msg){
+                location.reload();
+            },
+            error:function(){
+                alert('网络异常!');
+            }
+        });
+    })
+
+</script>
+</html>

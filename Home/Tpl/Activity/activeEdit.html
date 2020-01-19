@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>app管理|<{$configcache['Title']}></title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <link rel="stylesheet" type="text/css" href="__JS__/layer/skin/layer.css" />
+	<link rel="stylesheet" href="__CSS__/jquery.bigcolorpicker.css" type="text/css" />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/layer/layer.js"></script>   
+    <script type="text/javascript" src="__JS__/jquery.bigcolorpicker.js"></script>
+    <style type="text/css" >
+        .dd_left{margin-top: 5px;}
+        .dtext{text-align: center;}
+        .img{width:80px;height:80px;margin-right: 20px}
+        .registerform{margin:40px 0 0 20px;}
+        .classButton{
+        	width: auto;
+		    border: none;
+		    padding: 5px 18px;
+		    background: #b4b4b4;
+		    color: #fff;
+		    font-size: 14px;
+		    font-family: "微软雅黑";
+		    text-align: center;
+		    cursor: pointer;
+		    text-indent: 0;
+            display: inline-block;
+        }    
+        .uploadImg{
+        	width: 90px;
+            height: 40px;
+		    line-height: 40px;
+		    border: none;
+		    background: #b4b4b4;
+		    color: #fff;
+		    font-size: 14px;
+		    font-family: "微软雅黑";
+		    text-align: center;
+		    cursor: pointer;
+		    text-indent: 0;
+    }
+    </style> 
+    <script type="text/javascript">
+
+</script> 
+</head>
+<body>
+    <div id="content">
+        <h1>首页 > 活动管理 > 专题活动编辑</h1>
+        <h2>
+            <div class="h2_left">
+                <a href="__ACTION__" class="whole">全部</a>
+                <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+                <a href="javascript:history.back();" class="Retreat">后退</a>
+                <a href="javascript:history.go(1);" class="Advance">前进</a>
+            </div>
+        </h2>
+        <div class="registerform">
+            <dl id="cdl">
+                <dd>
+                    <span class="dd_left">活动主题:</span>
+                    <span class="dd_right">
+                        <input type="text" class="qtext" name="title" value="<{$info['topic']}>" id="title"  />                        
+                    </span>
+                </dd>
+                
+				 <dd>
+                    <span class="dd_left">展示样式:</span>
+                    <span class="dd_right" style="margin-top:5px;">
+                        <input type="radio" class="type" name="type" value="0" <eq name="info.style" value='0'>checked</eq> checked >两列 &nbsp &nbsp
+                        <input type="radio" class="type" name="type" value="1" <eq name="info.style" value='1'>checked</eq> >三列                        
+                    </span>
+                </dd> 
+
+                <dd>
+                    <span class="dd_left">活动banner:</span>
+                    <span class="dd_right">
+                        <div <if condition="$info['sid']"> style="display:inline-block;margin-right:15px" <else />style="display:none;margin-right:15px"</if> ><img id="bannerImg" class="img" src="<{$info['bannerUrl']}>" /></div>
+                    	<div class="classButton" onclick="buttonClick(this)" >+上传</div>
+                        <input type="file" style="display:none" name="file"  onchange="load(this,1)" class=''>
+                    </span>
+                </dd>
+
+                <dd>
+                  <span class="dd_left">背景颜色:</span>
+                  <span class="dd_right">
+                      <input type="text" id="showColor" value="<{$info['backgroundColor']}>"/><input id="activeColor" type="button" value="选色&nbsp;" />
+                </dd>
+
+                <dd>
+                    <span class="dd_left">添加商品:</span>
+                    <span class="dd_right">
+                    <table>
+                       <tr><td width="180px">*商品展示图</td><td>*商品链接/UserID</td></tr>
+                       <if condition="$info['apList']">
+                            <volist name="info['apList']" id="vo"> 
+                                <tr height="60px" class="goodsItem">
+                                   <td width="150px">
+                                    <img class="img goodsUrl" src="<{$vo['realProductImageUrl']}>" /><a href="javascript:;" style="color: #333;text-decoration: underline;" onClick="$(this).next().click()">重新上传</a><input type="file" style="display:none" name="file" onchange="load(this,3)">
+                                   </td>
+                                   <td width="180px"><input type="text" class="qtext" name="goodsUrl" value="<{$vo['productUrl']}>"  style="width:150px" /></td>
+                                   <td><a href="javascript:;" style="color: #333;text-decoration: underline;" onClick="$(this).parent().parent().remove()">删除商品</a></td>
+                               </tr>
+                           </volist>
+                       <else />
+                           <tr height="60px" class="goodsItem">
+    	                       <td width="150px"><div class="uploadImg" onclick="buttonClick(this)" >+上传图片</div>
+    	                        <input type="file" style="display:none" name="file"  onchange="load(this,2)" class=''>
+    	                       </td>
+                               <td width="180px"><input type="text" class="qtext" name="goodsUrl" value=""  style="width:150px" /></td>
+    	                       <td><a href="javascript:;" style="color: #333;text-decoration: underline;" onClick="$(this).parent().parent().remove()">删除商品</a></td>
+                           </tr>
+                       </if>                      
+                        <tr id="addTr" style="height:90px">
+	                       <td style="text-align:left" colspan="3" >
+	                       <div style="width:90px" class="classButton" id="addTrGoods">+添加</div>
+	                       </td>	                     
+                       </tr>                       
+                     </table>
+                    </span>
+                </dd>
+                <dd style="margin-top: 10px;margin-bottom: 160px;">
+                    <input type="button" class="so submit" id="saveButton" value="保存并发布" />
+                    <if condition="$info['sid']">
+                        <input type="hidden" id="hiddenSid" value="<{$info['sid']}>" />
+                    <else />
+                        <input type="hidden" id="hiddenSid" value="" />
+                    </if>
+                </dd>
+            </dl>
+        </div>
+    </div>
+
+<script type="text/javascript">
+$(function(){
+    $("#activeColor").bigColorpicker("showColor");
+})
+
+function buttonClick(a){    
+    $(a).next().click();
+}
+//添加商品
+$("#addTrGoods").click(function(){
+    var _ht='<tr height="60px" class="goodsItem"><td width="120px"><div class="uploadImg" onclick="buttonClick(this)" >+上传图片</div><input type="file" style="display:none" name="file"  onchange="load(this,2)"></td><td width="180px"><input type="text" class="qtext" name="goodsUrl" value=""  style="width:150px" /></td><td><a href="javascript:;" style="color: #333;text-decoration: underline;" onClick="$(this).parent().parent().remove()">删除商品</a></td></tr>';
+    $("#addTr").before(_ht);
+})
+var _url='<{$Think.config.URL}>';
+
+//上传图片
+function load(a,n) {
+    var uri = _url + '/manager/trade/uploadImg';
+    var img = new FormData();
+    var file = $(a)[0].files[0];
+
+    file_name = file.name;
+    var extStart=file_name.lastIndexOf("."); 
+    var ext=file_name.substring(extStart,file_name.length).toUpperCase(); 
+    if(ext!=".JPEG"&&ext!=".JPG"&&ext!=".BMP"&&ext!=".PNG"){ 
+        alert("文件选择错误,图片类型必须是jpeg,jpg,bmp,png中的一种"); 
+        return false; 
+    }
+
+    file_size = file.size;
+    var size = file_size / 1024;
+    if (size > 10240) {
+      return alert("上传的图片大小不能超过10M！");
+    }else{
+        if(size < 10){
+             return alert("图片太小！");
+        }
+    }
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", uri, true);
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState == 4 && xhr.status == 200) {
+            var keyval = $.parseJSON(xhr.responseText);
+            if(n==1){
+                $("#bannerImg").parent().css('display','inline-block');
+                $("#bannerImg").attr("src", keyval.keyUrl);
+            }else if(n==2){
+                var _html='<img class="img goodsUrl" src="'+keyval.keyUrl+'" /><a href="javascript:;" style="color: #333;text-decoration: underline;" onClick="$(this).next().click()">重新上传</a><input type="file" style="display:none" name="file" onchange="load(this,3)">';
+                $(a).parent().empty().html(_html);
+            }else{
+                $(a).parent().find('img').attr("src", keyval.keyUrl);
+            }             
+        }
+    };
+    img.append('file', file);
+    xhr.send(img);
+}
+
+//保存并发布
+$('#saveButton').click(function(){
+    var _sid = $.trim($('#hiddenSid').val());
+    var _title = $.trim($('#title').val());
+    if(_title==''){
+        layer.msg('请填写活动主题！', {icon: 2}); 
+        return false;
+    }
+    var _type=$('input[type=radio]:checked').val();
+    if(!_type){
+        layer.msg('请选择展示样式！', {icon: 2}); 
+        return false;
+    }
+    var _bannerImgUrl = $('#bannerImg').attr('src');
+    if(_bannerImgUrl==''){
+        layer.msg('请上传活动banner图片！', {icon: 2}); 
+        return false;
+    }
+    var _bgColor = $.trim($('#showColor').val());
+    if(_bgColor==''){
+        layer.msg('请选择背景颜色！', {icon: 2}); 
+        return false;
+    }
+    var item_goods = new Array();
+    $('.goodsItem').each(function(){
+        var item_goods_img_url = {};
+        item_goods_img_url.productImageUrl=$(this).find('img').attr('src');
+        item_goods_img_url.productUrl=$.trim($(this).find('input[name=goodsUrl]').val());
+        item_goods.push(item_goods_img_url);
+    })
+    console.log(item_goods);
+    for (var i = 0,_len =item_goods.length; i < _len; i++) {           
+        if(_len <= 0 || item_goods[i].productImageUrl==undefined || item_goods[i].productUrl==''){
+            layer.msg('请上传商品图片或填写商品连接！', {icon: 2}); 
+            return false;
+        }
+    }   
+    $.post(_url+'/manager/activity/saveActivity',{'sid':_sid,'topic':_title,'style':_type,'bannerUrl':_bannerImgUrl,'backgroundColor':_bgColor,'activityProductArray':JSON.stringify(item_goods)},function(result){
+            if(result.success){
+                layer.msg('保存并发布成功！',{icon: 1,time: 1500},function(){
+                    window.location.href='__APP__/Activity/bannerActive';
+                });
+            }else{
+              layer.msg('发布失败！',{icon: 2,time: 1500},function(){                
+                    f5();
+              });
+            }
+    },'json')
+})
+</script>
+</body>
+</html>

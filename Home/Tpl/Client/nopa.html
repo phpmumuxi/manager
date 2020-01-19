@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>拒绝原因|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script type="text/javascript" src="__JS__/check.js"></script>
+<script>
+function myBrowser(){
+    var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+    var isOpera = userAgent.indexOf("Opera") > -1;
+    if (isOpera) {
+        return "Opera"
+    }; //判断是否Opera浏览器
+    if (userAgent.indexOf("Firefox") > -1) {
+        return "FF";
+        /*firefox----这段js重新封装了event对象，经验证可以在火狐下支持！----*/
+        function __firefox(){
+        HTMLElement.prototype.__defineGetter__("runtimeStyle", __element_style);
+        window.constructor.prototype.__defineGetter__("event", __window_event);
+        Event.prototype.__defineGetter__("srcElement", __event_srcElement);
+        }
+        function __element_style(){
+        return this.style;
+        }
+        function __window_event(){
+        return __window_event_constructor();
+        }
+        function __event_srcElement(){
+        return this.target;
+        }
+        function __window_event_constructor(){
+        if(document.all){
+        return window.event;
+        }
+        var _caller = __window_event_constructor.caller;
+        while(_caller!=null){
+        var _argument = _caller.arguments[0];
+        if(_argument){
+        var _temp = _argument.constructor;
+        if(_temp.toString().indexOf("Event")!=-1){
+        return _argument;
+        }
+        }
+        _caller = _caller.caller;
+        }
+        return null;
+        }
+        if(window.addEventListener){
+        __firefox();
+        }
+    } //判断是否Firefox浏览器
+    if (userAgent.indexOf("Chrome") > -1){
+  return "Chrome";
+ }
+    if (userAgent.indexOf("Safari") > -1) {
+        return "Safari";
+    } //判断是否Safari浏览器
+    if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+        return "IE";
+    }; //判断是否IE浏览器
+}
+</script>
+
+</head>
+<body>
+<div id="content">
+<form method="post" action="" id="fileForm" name="fileForm">
+    <table>
+        <tr>
+          <input type="hidden" name="checkUserId"  value="<{$nopa.7}>" class="checkUserId">
+          <input type="hidden" name="checkUserName"  value="<{$nopa.9}>" class="checkUserName">
+          <input type="hidden" name="approveStatus"  value="3" class="approveStatus">
+          <input type="hidden" name="sid"  value="<{$nopa.3}>" class="sid">
+            <td><label for="txtname">拒绝原因：</label></td>
+            <td><textarea style="border: 1px solid rgb(204, 204, 204); box-shadow: none; margin: 0px; width: 509px; height: 106px;" name="userRefusalReason" class="userRefusalReason" maxlength="120"></textarea></td>
+        </tr>
+        <tr>
+            <td colspan=2>
+                <input type="submit" class="so" onclick="subimtBtn();" value="确 定" style="margin-top: 125px;"/>
+            </td>
+        </tr>
+    </table>
+</form>
+</div>
+
+
+<script type="text/javascript">  
+    function subimtBtn() {  
+
+        var checkUserId = $('.checkUserId').val();
+        if(!checkUserId){
+           alert('参数不完整');
+           return;
+        }
+
+        var checkUserName = $('.checkUserName').val();
+        if(!checkUserName){
+           alert('参数不完整');
+           return;
+        }
+
+        var approveStatus = $('.approveStatus').val();
+        if(!approveStatus){
+           alert('参数不完整');
+           return;
+        }
+
+        var sid = $('.sid').val();
+        if(!sid){
+           alert('参数不完整');
+           return;
+        }
+
+        var userRefusalReason = $('.userRefusalReason').val();
+        if(!userRefusalReason){
+          alert('请输入拒绝原因');
+          return;
+        }
+       
+    
+      $.ajax({
+      type: "POST",
+      cache: true,
+      async: true,
+      ifModified:true,
+      timeout:12000,
+      url: "<{$url}>/manager/user/applyUser",
+      data: {approveStatus:approveStatus,sid:sid,checkUserId:checkUserId,checkUserName:checkUserName,userRefusalReason:userRefusalReason}, 
+      dataType: "json",
+      // accepts: "json",
+      success: function(json) {
+      
+      
+      },  
+      error: function(XMLHttpRequest, exception) {
+       
+        // if (XMLHttpRequest.status == 0) {
+        //   alert('网络不给力，请稍后再试！');
+        // }else if (XMLHttpRequest.status == 404) {
+        //   alert('资源地址不存在');
+        // }else if (XMLHttpRequest.status == 408) {
+        //   alert('网络不给力，请稍后再试！');
+        // }else if (XMLHttpRequest.status == 500) {
+        //   alert('服务器出错啦')
+        // }else if (XMLHttpRequest.status == 502) {
+        //   alert('Web服务器用作网关或代理服务器时收到了无效响应');
+        // }else if (XMLHttpRequest.status == 503) {
+        //   alert('服务不可用');
+        // }else if (XMLHttpRequest.status == 504) {
+        //   alert('网关超时！');
+        // }else{
+         
+        // }
+        window.parent.location.reload()
+      }
+    })
+    }  
+</script>  
+
+</body>
+</html>

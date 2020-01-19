@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>app管理|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+</head>
+<style>
+.came a{left:220px; top:10px; width:60px; height:28px; line-height:28px; border:none; background:#090; color:#fff; font-family:"微软雅黑";text-align:center;float:right;margin-right: 30px;margin-bottom: 10px;cursor: pointer;}
+</style>
+<body>
+<div id="content">
+	<h1>首页 > app管理 > 终端列表</h1>
+    <h2>
+    	<div class="h2_left">
+        	<a href="__ACTION__" class="whole">全部</a>
+        	<a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+    </h2>
+    <div class="came"><a href="<{:U('End/add')}>" title="">添加</a></div>
+    <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+    	<tr>
+            <th><input type="checkbox" class="indel" value="del" /></th>
+        	<th>渠道名称</th>
+            <th>终端类型</th>
+            <th>逸管家</th>
+            <th>app版本号</th>
+            <th>app升级描述</th>
+            <th>状态</th>
+            <th>更新地址</th>
+            <th>操 作</th>
+      </tr>
+    <volist name="end" id="vo">
+    <tr>
+        <td class="tc"><input type="checkbox" class="delid" value="<{$vo.sid}>" /></td>
+		<td style="text-align:center" class='tc'><span class="username"  style="cursor:pointer" sid="<{$vo.sid}>"><{$vo.channelName}></span></td>
+		<td style="text-align:center" class='tc'><{$vo.clientType}></td>
+		<td style="text-align:center" class='tc'><{$vo.clientName}></td>
+        <td style="text-align:center" class='tc'><{$vo.clientVersion}></td>
+        <td style="text-align:center" class='tc'><{$vo.clientDescription|mbsubstr=0,30}></td>
+		<td style="text-align:center" class='tc'>
+		<!-- 使用switch标签判断输出 -->
+		<switch name="vo.clientStatus">
+		    <case value="0">无需更新</case>
+		    <case value="1">选择更新</case>
+		    <case value="2">强制更新</case>
+		    <default />缺少参数
+		</switch>
+		</td>
+        <td style="text-align:center" class='tc'><{$vo.updateUrl|mbsubstr=0,30}></td>
+		<td class='tc' style="text-align:center">
+		<div style="cursor:pointer;color:orange;" onclick="delapp('<{$vo.sid}>');">删除</div>
+        <a href="<{:U('End/edit')}>?sid=<{$vo.sid}>" style="color:orange;" title="编辑">编辑</a>
+		</td>
+	</tr> 
+	</volist>
+  <p>
+</p>
+    </table>
+    <div id="page"><a href="javascript:;" class="selbox">全选</a><a href="javascript:;" class="anti">反选</a><a href="javascript:;" class="unselbox">全不选</a>&nbsp;&nbsp;对选中项进行&nbsp;&nbsp;<a href="javascript:;" id="dely">删除</a>&nbsp;&nbsp;&nbsp;&nbsp;<{$page}></div>
+</div>
+
+<script type="text/javascript">
+/*删除单个*/
+function delapp(sid){
+    $.ajax( {  
+        url:'<{$url}>/manager/appClient/delete',// 跳转到 action  
+        data:{ids:sid},  
+        type:'post',  
+        cache:false,  
+        dataType:'json',  
+        success:function(data) { 
+            if(data.code =="2000" ){ 
+                alert(data.message);
+                location.reload(); 
+            }else{
+                alert(data.message);
+            }
+        }, 
+        error : function() {      
+            alert("异常！");  
+        }  
+    });
+}
+
+
+//批量删除
+$('#dely').click(function(event) {
+    event.preventDefault();
+    if (!confirm('确定要删除选择项吗？')) {
+        return false;
+    }
+    var delid='';
+    for (i=0; i<$('#table .delid').size(); i++) {
+        if (!$('#table .delid').eq(i).attr('checked')==false) {
+            delid=delid+$('#table .delid').eq(i).val()+',';
+        }
+    }
+    if (delid=='') {
+        wintq('请选中后再操作',2,1500,1,'');
+    }else {
+        wintq('正在删除，请稍后...',4,20000,0,'');
+        $.ajax({
+            url:'<{$url}>/manager/appClient/delete',
+            dataType:'JSON',
+            type:'POST',
+            data:'ids='+delid,
+            success: function(data) {
+                if (data.code=='2000') {
+                    wintq('删除成功',1,1500,0,'?');
+                }else {
+                    wintq(data.s,3,1500,1,'');
+                }
+            }
+        });
+    }
+});
+</script>
+
+</body>
+</html>

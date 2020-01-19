@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商品管理|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+<style type="text/css">
+    .select{padding:5px 10px;border:#ddd 1px solid;border-radius:4px;width:60%;margin:5% auto;font-size:12px}
+    .select li{list-style:none;padding:10px 0 5px 100px}
+    .select .select-list{border-bottom:#eee 1px dashed}
+    .select dl{zoom:1;position:relative;line-height:24px;}
+    .select dl:after{content:" ";display:block;clear:both;height:0;overflow:hidden}
+    .select dt{width:100px;margin-bottom:5px;position:absolute;top:0;left:-100px;text-align:right;color:#666;height:24px;line-height:24px}
+    .select dd{float:left;display:inline;margin:0 0 5px 5px;}
+    .select a{display:inline-block;white-space:nowrap;height:24px;padding:0 10px;text-decoration:none;color:#039;border-radius:2px;}
+    .select a:hover{color:#f60;background-color:#f3edc2}
+    .select .selected a{color:#fff;background-color:#f60}
+    .select-result dt{font-weight:bold}
+    .select-no{color:#999}
+    .select .select-result a{padding-right:20px;background:#f60 url("__PUBLIC__/image/close.gif") right 9px no-repeat}
+    .select .select-result a:hover{background-position:right -15px}
+    .tc{text-align:center; text-indent:0;font-family:"微软雅黑";font-size: 14px;color:#111;}
+    a:link {color: #0000FF}     /* 未访问的链接 */
+	a:visited {color: #d90a81}  /* 已访问的链接 */
+	a:hover {color: #d90a81}    /* 当有鼠标悬停在链接上 */
+	a:active {color: #d90a81}   /* 被选择的链接 */
+	#select div{
+		float:top;
+	}
+
+	td{
+		text-align:center;
+		padding:0px;
+	}
+	.buttons{
+	background:#029be1;
+	color:white;
+	height:25px;
+	width:100px;
+	margin:10px;
+	border-radius:10px;
+	}
+
+</style>
+</head>
+<body>
+<div id="content">
+	<h1>首页 > 商品管理 >商家统计</h1>
+    <h2>
+    	<div class="h2_left">
+        	<a href="__ACTION__" class="whole">全部</a>
+        	<a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+            <input type="hidden" id="url" value="<{$url}>">
+        </div>
+        <div class="search">
+            <form method="get" id="search">
+        	<input type="text" name="k" class="text" value="<{$key}>"/>
+            <input type="submit" class="so" value="搜 索" />
+            </form>
+            <font>小贴士：输入商品标题或者服务名称</font>
+        </div>
+    </h2>
+    <div class="fen" style="margin-left:500px">
+    	<input type="text" id="startDate"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="" class="Wdate sBeginTime"/>至
+         <input type="text" id="overDate"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="" class="Wdate sBeginTime"/>
+         <input type="button" class="buttons checkNum" value="点击查看产品数" />
+         <input type="text" class="numResult" placeholder="该时间段商品数" value=""  />
+    </div>
+    <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+    	<tr >
+    		<th>ID</th>
+        	<th>名称</th>
+        	<th>分配产品数</th>
+            <th>开始时间</th>
+            <th>结束时间</th>
+            <th>分配任务</th>
+            <th>上架数/下架数</th>
+      </tr>
+     <foreach name="userlist" item="vo">
+	 	<tr style="height:10px">
+	 	<td  class="userId"><{$vo.ID}></td>
+	 	<td style="width:250px"class="userName"><{$vo.Username}></td>
+	 	<td style="width:250px" ><input type="text" id="productNum" placeholder="请输入分配数" value="" /></td>
+	 	<td style="width:200px" > <input type="text" id="startDate"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="" class="Wdate sBeginTime"/></td>
+	 	<td style="width:200px" > <input type="text" id="overDate"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="" class="Wdate sBeginTime"/></td>
+	 	<td style="width:250px" ><input type="button" class="buttons sendButton" value="点击分配" /></td>
+	 	<td class="<{$vo.ID}>outputnum" style="width:250px" > <input type="button" class="buttons upOut" value="点击查看上下架" /></td>
+		</tr> 
+</foreach>
+    </table>
+
+</div>
+
+<script type="text/javascript">
+$(function (){
+	var url = $("#url").val();
+	
+	//发送产品给用户
+	$(".sendButton").click(function(){
+		var userName = $(this).parent().parent().find(".userName").text();
+		var userId = $(this).parent().parent().find(".userId").text();
+		var startDate = $(this).parent().parent().find("#startDate").val();
+		var overDate = $(this).parent().parent().find("#overDate").val();
+		var num = $(this).parent().parent().find("#productNum").val();
+		if(isNaN(Number(num)) || Number(num) ==""){
+			alert("请输入分配数目");
+			return;
+		}
+		if(startDate == "" || overDate =="" ){
+			alert("开始或者结束日期不能为空");
+			return;
+		}
+		$.ajax({
+			type:"POST",
+			url:url+"/manager/operateUserInfo/addInfo",
+			data:{userName:userName,userId:userId,startDate:startDate,overDate:overDate,num:num},
+			dataType:"json",
+			success:function(data){
+				alert(data.message);		
+			},
+			 error: function(XMLHttpRequest, exception) {
+			        if (XMLHttpRequest.status == 0) {
+			          alert('网络不给力，请稍后再试！');
+			        }else if (XMLHttpRequest.status == 404) {
+			          alert('资源地址不存在');
+			        }else if (XMLHttpRequest.status == 408) {
+			          alert('网络不给力，请稍后再试！');
+			        }else if (XMLHttpRequest.status == 500) {
+			          alert('服务器出错啦')
+			        }else if (XMLHttpRequest.status == 502) {
+			          alert('Web服务器用作网关或代理服务器时收到了无效响应');
+			        }else if (XMLHttpRequest.status == 503) {
+			          alert('服务不可用');
+			        }else if (XMLHttpRequest.status == 504) {
+			          alert('网关超时！');
+			        }
+			      }  
+		});
+	})
+		
+	//查看用户操作下架数量
+	$(".upOut").click(function(){
+		var userId = $(this).parent().parent().find(".userId").text();
+		$.ajax({
+			type:"POST",
+			url:url+"/manager/operateUserInfo/querySumUserInfo",
+			data:{"userId":userId},
+			dataType:"json",
+			success:function(data){
+				if(data.success){
+					$('.'+data.data.userId+'outputnum').html(data.data.sumGround + "/" + data.data.sumUnderCarriage);
+				}else{
+					alert(data.message);	
+				}		
+			},
+			error:function(){
+				if (XMLHttpRequest.status == 0) {
+			          alert('网络不给力，请稍后再试！');
+			        }else if (XMLHttpRequest.status == 404) {
+			          alert('资源地址不存在');
+			        }else if (XMLHttpRequest.status == 408) {
+			          alert('网络不给力，请稍后再试！');
+			        }else if (XMLHttpRequest.status == 500) {
+			          alert('服务器出错啦')
+			        }else if (XMLHttpRequest.status == 502) {
+			          alert('Web服务器用作网关或代理服务器时收到了无效响应');
+			        }else if (XMLHttpRequest.status == 503) {
+			          alert('服务不可用');
+			        }else if (XMLHttpRequest.status == 504) {
+			          alert('网关超时！');
+			        }
+			}
+		});
+	})
+	
+	//该时间段产品数
+	$(".checkNum").click(function(){
+		var startDate = $(this).parent().find("#startDate").val();
+		var overDate = $(this).parent().find("#overDate").val();
+		if(startDate == "" || overDate =="" ){
+			alert("开始或者结束日期不能为空");
+			return;
+		}
+		$.ajax({
+			type:"POST",
+			url:url+"/manager/operateUserInfo/findUnabsorbedGoods",
+			data:{startDate:startDate,overDate:overDate},
+			dataType:"json",
+			success:function(data){
+				if(data.success){
+					$(".numResult").val("商品总数为："+data.data);
+				}else{
+					alert(data.message);	
+				}		
+			},
+			error:function(){
+				if (XMLHttpRequest.status == 0) {
+			          alert('网络不给力，请稍后再试！');
+			        }else if (XMLHttpRequest.status == 404) {
+			          alert('资源地址不存在');
+			        }else if (XMLHttpRequest.status == 408) {
+			          alert('网络不给力，请稍后再试！');
+			        }else if (XMLHttpRequest.status == 500) {
+			          alert('服务器出错啦')
+			        }else if (XMLHttpRequest.status == 502) {
+			          alert('Web服务器用作网关或代理服务器时收到了无效响应');
+			        }else if (XMLHttpRequest.status == 503) {
+			          alert('服务不可用');
+			        }else if (XMLHttpRequest.status == 504) {
+			          alert('网关超时！');
+			        }
+			}
+		});
+	})
+	
+})
+
+</script>
+</body>
+</html>

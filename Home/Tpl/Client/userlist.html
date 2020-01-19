@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>报名人员|<{$configcache['Title']}></title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/winpop.js"></script>
+    <script src="__PUBLIC__/js/layer/layer.js" type="text/javascript"></script>
+    <style>
+    .sure{left:220px; top:10px; width:60px; height:28px; line-height:28px; border:none; background:#009900; color:#fff; font-family:"微软雅黑"; cursor:pointer;}
+   .tel{left:0; top:10px; width:220px; height:26px; line-height:26px; color:#555; font-family:"微软雅黑"; repeat-x left top; border:solid 1px #ccc;}
+    .nav_div{
+        border-bottom:1px solid #333333;    
+        /*width:100%;*/
+        height:50px;
+        margin-top: 30px;    
+    }
+    .nav_div ul{
+        list-style:none;
+        text-align:center;
+        cursor:pointer; 
+        margin-left: 0;
+    }
+    .nav_div ul li{
+        float:left;
+        height:49px;
+        width:128px;
+        line-height:50px;
+    }
+    .nav_active{
+        color: #169BD5;
+        border-top: 1px solid #333333;
+        border-left: 1px solid #333333;
+        border-right: 1px solid #333333;
+        border-bottom: 2px solid white;
+    }
+    .sign_button{
+        border:1px solid #ddd;
+        padding: 6px 14px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin:0 10px;
+        background: #009900;
+        color: white;
+    }
+  </style> 
+</head>
+<body>
+<div id="content">
+    <h1>首页 > 公益服务 > 报名人员</h1>
+    <h2>
+        <div class="h2_left">
+            <a href="__ACTION__" class="whole">全部</a>
+            <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+    </h2>
+    <div class="nav_div">
+        <ul>
+            <a href="<{:U('Client/publicservice')}>"><li>公益服务类型</li></a>
+            <a href="javascript:;"><li class="nav_active">报名人员</li></a>
+            <a href="<{:U('Client/getactivity')}>"><li>招募活动</li></a>
+        </ul>
+        <p style="clear: both"></p>
+    </div>
+    <div style="margin:30px 10px;">
+        审核状态:&nbsp;&nbsp;&nbsp;
+        <a href="<{:U('Client/userlist',array('auditStatus'=>'0','keyWord'=>$keyWord))}>" <if condition="$auditStatus eq '0' ">style="color: #169BD5;"</if> >全部</a>&nbsp;&nbsp;&nbsp;
+        <a href="<{:U('Client/userlist',array('auditStatus'=>'1','keyWord'=>$keyWord))}>" <if condition="$auditStatus eq '1' ">style="color: #169BD5;"</if>>待审核</a>&nbsp;&nbsp;&nbsp;
+        <a href="<{:U('Client/userlist',array('auditStatus'=>'2','keyWord'=>$keyWord))}>" <if condition="$auditStatus eq '2' ">style="color: #169BD5;"</if>>审核通过</a>&nbsp;&nbsp;&nbsp;
+        <a href="<{:U('Client/userlist',array('auditStatus'=>'3','keyWord'=>$keyWord))}>" <if condition="$auditStatus eq '3' ">style="color: #169BD5;"</if>>审核驳回</a><br/><br/>
+        <form method="get">
+            <input type="text" name="keyWord" class="tel" value="<{$keyWord}>" placeholder='手机号/真实姓名'>
+            <input type="hidden" name="auditStatus" value="<{$auditStatus}>">
+            &nbsp;&nbsp;&nbsp;
+            <input type="submit" class="sure" value="搜索" />
+        </form>
+    </div>
+    <br/>
+    <div style="margin:20px 10px;">
+        <button vb="2" class="sign_button sure_sign">审核通过</button>
+        <button vb="3" class="sign_button cancel_sign">审核驳回</button>
+    </div>
+    
+    <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+        <tr>
+            <th><input type="checkbox" id="check_all"> 全选</th>
+            <th>手机号</th>
+            <th>真实姓名</th>
+            <th>意向服务领域</th>
+            <th>报名时间</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        <empty name="list">
+            <tr><td style='text-align:center' colspan='7'>暂时没有数据</td></tr>
+        <else/>
+            <volist name="list" id="vo">
+                <tr>
+                    <td style="text-align:center"><input type="checkbox" vd="<{$vo.fundServiceUserInfo.sid}>" vs="<{$vo.fundServiceUserInfo.auditEnrollStatus}>" class="check_list"></td>
+                    <td style="text-align:center" class='tc'><{$vo.fundServiceUserInfo.userTelephone}></td>
+                    <td style="text-align:center" class='tc'><{$vo.fundServiceUserInfo.userRealName}></td>
+                    <td style="text-align:center" class='tc'>
+                        <volist name="vo.serviceTypes" id="val">
+                            <{$val.typeName}>&nbsp;&nbsp;
+                        </volist>
+                    </td>
+                    <td style="text-align:center" class='tc'><{$vo.fundServiceUserInfo.applyTime}></td>
+                    <td class='tc' style="text-align:center">
+                        <switch name="vo.fundServiceUserInfo.auditEnrollStatus">
+                        <case value="1">待审核</case>
+                        <case value="2">审核通过</case>
+                        <case value="3">审核驳回</case>
+                        <default />
+                        </switch>
+                    </td>
+                    <td class='tc' style="text-align:center">
+                        <a href="__APP__/Client/userlistinfo?sid=<{$vo.fundServiceUserInfo.sid}>" style="margin-right: 5px;color:#169BD5">详情</a>
+                    </td>
+                </tr>
+            </volist>
+        </empty>
+    </table>
+    <div id="page">
+        <{$page}>
+    </div>
+</div>
+<script>
+//全选中
+$("#check_all").click(function() {
+    $("input[class='check_list']").prop('checked', $(this).prop("checked"));
+});
+
+$('.sure_sign,.cancel_sign').click(function(){  
+    var checked_ids = '';
+    var checked_status = [];
+    $.each($("input[class='check_list']:checked"),function(){
+        checked_ids += $(this).attr("vd")+',';      
+        checked_status.push($(this).attr("vs"));       
+    });
+    checked_ids = checked_ids.slice(0,-1);
+    if(checked_ids.length==0){
+        layer.alert('当请先选择!',{icon: 5});
+        return false;
+    }
+    var _type=$(this).attr('vb');
+    if(_type == '2'){ 
+        if($.inArray("2", checked_status) >= 0){
+            layer.alert('请审核 待审核或驳回状态的人员!',{icon: 2});
+            return false;
+        }
+        layer.confirm('确认审核通过嘛？', function(index){
+            changeAllStatus(checked_ids,_type,'')
+            layer.close(index);
+        });       
+    }else if(_type == '3'){
+        if($.inArray("3", checked_status) >= 0){
+            layer.alert('请驳回 待审核或通过状态的人员!',{icon: 2});
+            return false;
+        }
+
+        layer.confirm('确认审核驳回嘛？', function(){
+            var _html='<div style="text-align: left;margin-top:20px"><p style="margin-left:35px;">驳回原因：</p><textarea style="border:1px solid #ddd;width:240px;margin:15px 0 20px 35px" id="remarkContent"></textarea><br/><span style="width:100%;margin-left:40%"><button type="button" id="layerCancelButton" class="sign_button" style="cursor: pointer">确认</button></span></div>';
+            layer.open({
+                type: 1,
+                title: "<div style='text-align:center;'><strong>审核驳回</strong></div>",
+                content: _html,
+                skin: 'layer-ext-moon',
+                area: ['26%','25%'],
+                resize: false,
+                shadeClose: true,
+                success:function(){
+                    $("#layerCancelButton").click(function(){
+                        var remark =  $.trim($('#remarkContent').val());
+                        if(remark){                            
+                            changeAllStatus(checked_ids,_type,remark)
+                            layer.closeAll();                
+                        }else{
+                            layer.msg('驳回原因必填！',{icon: 2,time: 2000},function(){
+                                f5();
+                            });
+                        }                        
+                    })
+                }
+            });
+        });
+    }else{
+
+    }
+ })  
+
+ function changeAllStatus(_ids,_ty,_remark){
+ var _url='<{$Think.config.URL}>';   
+ var _name='<{$Think.session.ThinkUser.Username}>';   
+ var _userId='<{$Think.session.ThinkUser.ID}>'; 
+    $.ajax({
+        type: "POST",
+        url: _url+"/manager/fundServiceUserInfo/serviceUserAudit",
+        data: {sids:_ids,auditEnrollStatus:_ty,reasonRejection:_remark,checkUserId:_userId,checkUserName:_name},
+        success: function(res){
+            layer.alert(res.message);
+            f5();
+        },
+        error:function(){
+            layer.alert('网络异常!');
+        }
+    });
+ } 
+
+</script>
+</body>
+</html>

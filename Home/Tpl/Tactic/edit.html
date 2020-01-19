@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>更新视频|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script type="text/javascript" src="__JS__/check.js"></script>
+<script type="text/javascript" src="__ROOT__/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="__ROOT__/ueditor/ueditor.all.min.js"> </script>
+<script type="text/javascript" src="__ROOT__/ueditor/lang/zh-cn/zh-cn.js"></script>
+  <link rel="stylesheet" href="__JS__/Validform/images/style.css" type="text/css" media="all" /> 
+  <script type="text/javascript" src="__JS__/Validform/images/jquery-1.9.1.min.js"></script> 
+  <script type="text/javascript" src="__JS__/Validform/images/Validform_v5.3.2.js"></script> 
+  <script type="text/javascript" src="__JS__/Validform/plugin/passwordStrength/passwordStrength-min.js"></script> 
+  <script type="text/javascript">
+$(function(){
+    $(".registerform").Validform({
+        tiptype:2,
+        /*表单验证*/
+        tiptype:function(msg,o,cssctl){
+            if(!o.obj.is("form")){
+                var objtip=o.obj.parent().find(".Validform_checktip");
+                cssctl(objtip,o.type);
+                objtip.text(msg);
+                
+                var infoObj=o.obj.parent().find(".info");
+                if(o.type==2){
+                    infoObj.fadeOut(200);
+                }else{
+                    if(infoObj.is(":visible")){return;}
+                    infoObj.css({
+                        left:0,
+                        top:-30
+                    }).show().animate({
+                        top:-27
+                    },200);
+                }
+                
+            }   
+        },  
+    });
+    
+   })
+</script>
+</head>
+<body>
+<div id="content">
+    <h1>首页 > 合作案例 > 修改信息</h1>
+    <h2>
+        <div class="h2_left">
+            <a href="__ACTION__" class="whole">全部</a>
+            <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+    </h2>
+    <form action="<{:U('Tactic/edit_do')}>" method="post" enctype="multipart/form-data" name="form" class="registerform">
+    <dl id="cdl">
+        <dd>
+            <span class="dd_left">简单描述:</span>
+            <span class="dd_right">
+                <textarea style="border: 1px solid rgb(204, 204, 204); box-shadow: none; margin: 0px; width: 509px; height: 106px;" name="desc" class="checkComment" maxlength="250" datatype="*2-250" errormsg="描述内容在2~250位之间！"  nullmsg="请填描述！"><{$vo.desc}></textarea> <font class="defi defi-01"><span class="Validform_checktip"></span></font>
+                <input type="hidden" name="id"  value="<{$vo.id}>"/>
+            </span>
+        </dd>
+
+        <dd>
+            <span class="dd_left">url 地址:</span>
+            <span class="dd_right">
+                <input type="text" class="qtext" name="url" value="<{$vo.url}>" datatype="*" nullmsg="请填写url地址！"/> <font class="defi defi-01"><span class="Validform_checktip"></span></font>
+            </span>
+        </dd>
+    
+        <dd>
+            <span class="dd_left">排序ID：</span>
+            <span class="dd_right">
+                <input type="text" class="dtext" name="sortid" datatype="n" value="<{$vo.sortid}>" /><font>* 排序ID，请填写数字</font><font class="defi defi-01"><span class="Validform_checktip"></span></font>
+            </span>
+        </dd>
+         <dd>
+            <span class="dd_left">是否显示：</span>
+            <span class="dd_right">
+                <label><input property="show" name="show" type="radio" value="1" />显示 </label> 
+                <label><input property="show" name="show" type="radio" value="0" />不显示 </label> 
+            </span>
+        </dd>
+        <dd>
+            <if condition="$vo.img neq ''"><img src="__UPLOAD__/photo/<{$vo.img}>" style="width:280px;height:200px;">
+            <else />
+            </if>
+           
+        </dd>
+         <dd>
+            <div id="reader_box"></div>
+            <span class="dd_left">上传图片:</span>
+            <span class="dd_right">
+              <input type="file" name="img" id="readerfile"/>
+              请选择jpg,png,gif,jpeg类型的图片(默认一张图片,上传新的即删除原来的)
+            </span>
+        </dd>
+        
+        <dd><input type="submit" name="submit" value="修 改" class="submit" /></dd>
+    </dl>
+    </form>
+</div>
+<script type="text/javascript">
+document.all("show")[0].checked=true;
+</script>
+</body>
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>合同管理|<{$configcache['Title']}></title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/winpop.js"></script>
+    <script type="text/javascript" src="__JS__/check.js"></script>
+    <script type="text/javascript" src="__JS__/jquery-form.js"></script>
+    <link rel="stylesheet" href="__JS__/Validform/images/style.css" type="text/css" media="all" />
+    <script type="text/javascript" src="__JS__/Validform/images/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="__JS__/Validform/images/Validform_v5.3.2.js"></script>
+    <script type="text/javascript" src="__JS__/Validform/plugin/passwordStrength/passwordStrength-min.js"></script>
+    <script src="__JS__/jquery-form.js" type="text/javascript"></script>
+    <script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__JS__/PCASClass.js"></script>
+    <script type="text/javascript" src="__JS__/layer/layer.js"></script>
+    <link rel="stylesheet" type="text/css" href="__JS__/layer/skin/layer.css" />
+    <style type="text/css" >
+    #view{} .imgbox{float:left;position:relative;width:100px;height: 100px;margin-left: 10px;margin-top: 10px;
+      padding:5px;border:solid 1px #ccc;border-radius: 5px;;}
+      #view{} .imgbox .close{border: solid 1px #ccc;position: absolute;top: -15px;width: 20px;height: 20px; display: inherit;cursor: pointer;text-align: center;background: red;color: #fff;right: -10px;z-index: 20;border-radius: 100%;}
+      #view{} .imgbox input{width:100%;height: 100%;z-index: 10;}
+      #view{} .mimgbox{float:left;position:relative;width:100px;height: 100px;margin-left: 10px;margin-top: 10px;padding:5px;border:solid 1px #ccc;border-radius: 5px;;}
+      #view{} .mimgbox .close{border: solid 1px #ccc;position: absolute;top: -15px;width: 20px;height: 20px; display: inherit;cursor: pointer;text-align: center;background: red;color: #fff;right: -10px;z-index: 20;border-radius: 100%;}
+      #view{} .mimgbox input{width:100%;height: 100%;z-index: 10;}
+      .tablecon{width: 800px; margin-left:80px;}
+      #content .tablecon #cdl dd .dd_left { display:block; width:110px; line-height:24px; float:left; text-align:left; font-weight:900; color:#444; margin-right:6px; }
+      .bang{cursor: pointer;background-color: #090;color: #fff;margin-right: 365px;float:right;text-align: center;width: 60px;height: 26px;margin-top: 5px;}
+      .acttitle{font-size: 28px;margin: 0 auto;width: 120px;font-weight: bold;}
+      #content #cdl dd font span { font-family:"Georgia"; font-weight:900; font-size:18px; color:#444; }
+      #content .atext { width:100px; height:24px; line-height:24px;border:solid 1px #ccc; font-family:"宋体"; }
+      </style>
+      <script type="text/javascript">
+      $(function(){
+        $(".registerform").Validform({
+            tiptype:2,
+            /*表单验证*/
+            tiptype:function(msg,o,cssctl){
+                if(!o.obj.is("form")){
+                    var objtip=o.obj.parent().find(".Validform_checktip");
+                    cssctl(objtip,o.type);
+                    objtip.text(msg);
+
+                    var infoObj=o.obj.parent().find(".info");
+                    if(o.type==2){
+                        infoObj.fadeOut(200);
+                    }else{
+                        layer.closeAll('loading');
+                        if(infoObj.is(":visible")){return;}
+                        infoObj.css({
+                            left:0,
+                            top:-30
+                        }).show().animate({
+                            top:-27
+                        },200);
+                    }
+                }
+            },
+        });
+    })
+      </script>
+  </head>
+  <body>
+    <div id="content">
+        <h1>首页 > 合同管理 > 合同录入</h1>
+        <h2>
+            <div class="h2_left">
+                <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+                <a href="javascript:history.back();" class="Retreat">后退</a>
+                <a href="javascript:history.go(1);" class="Advance">前进</a>
+            </div>
+        </h2>
+        <div class="tablecon">
+            <form action="<{$url}>/manager/newContract/saveContractRecord" method="post" class="registerform" id="form"  enctype="multipart/form-data">
+                <dl id="cdl">
+                    <dd>
+                        <span class="dd_left">合同类型:</span>
+                        <span class="dd_right" style="margin-top:5px;">
+                            <volist name="data" id="vo">
+                            <input type="radio" name="contractType" value="<{$vo['contractType']}>">
+                                <input type="hidden" name="type<{$vo['contractType']}>" value="<{$vo['contractTitle']}>">
+                            <{$vo['contractTitle']}>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </volist>
+                        </span>
+                    </dd>
+
+                    <dd>
+                        <span class="dd_left">合同标题:</span>
+                        <span class="dd_right">
+                            <input type="text" class="qtext" name="contractTitle" value="" id="contractTitle" readonly="readonly" />
+                            <font class="defi defi-01"><span class="Validform_checktip"></span></font>
+                        </span>
+                    </dd>
+                    <dd>
+                        <span class="dd_left">合同日期:</span>
+                        <span class="dd_right" style="margin-top:5px;">
+                            <input name="startDateStr" type="text" id="start_date" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'2000-01-01',maxDate:&quot;#F{$dp.$D('end_date')||'2038-01-01'}&quot;})" class="Wdate"/>&nbsp;~
+                        </span>
+
+                        <span class="dd_right" style="margin-top:5px;">
+                         <input name="endDateStr" type="text" id="end_date" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss', minDate:&quot;#F{$dp.$D(\'start_date\')}&quot;,maxDate:&quot;'2038-01-01'&quot;})" class="Wdate"/>
+                     </span>
+                 </dd>
+
+                 <dd>
+                    <span class="dd_left">公司:</span>
+                    <span class="dd_right">
+                        <input type="text" class="qtext" name="partyB" value="" id="partyB" datatype="*2-250" errormsg="公司名称在2~250位之间！"  nullmsg="请填写公司名或个人!" maxlength=250 placeholder="请填写公司名或个人"/>
+                        <font class="defi defi-01"><span class="Validform_checktip"></span></font>
+                    </span>
+                </dd>
+                <dd>
+                    <span class="dd_left">法人:</span>
+                    <span class="dd_right">
+                        <input type="text" class="qtext" name="partyBAgentName" value="" id="partyBAgentName" datatype="*2-20" errormsg="法人名称在2~20位之间！"  nullmsg="请填写姓名!" maxlength=20 placeholder="请填写姓名"/>
+                        <font class="defi defi-01"><span class="Validform_checktip"></span></font>
+                    </span>
+                </dd>
+
+                <dd>
+                    <span class="dd_left">住所地:</span>
+                    <span class="dd_right">
+                        <script type="text/javascript">
+                        $(function(){
+                            new PCAS("crm_afgmsj['state']","crm_afgmsj['city']","crm_afgmsj['area']","","","");
+                        });
+                        </script>
+                        <select name="crm_afgmsj['state']" class="input-medium state atext" datatype="*" nullmsg="请选择省份" class="Validform_error"></select>
+                        <select name="crm_afgmsj['city']" class="input-medium city atext"  class="Validform_error"></select>
+                        <select name="crm_afgmsj['area']" class="input-medium area atext"  class="Validform_error"></select>
+                        <div id="statestr"></div>
+                    </span>
+                </dd>
+                <dd>
+                    <span class="dd_left">详情地址:</span>
+                    <span class="dd_right">
+                        <input type="text" class="qtext" name="partyBDetailedAddress" value="" id="partyBDetailedAddress" datatype="*2-250" errormsg="详细地址在2~250位之间！"  nullmsg="请填写详细地址！" maxlength=250 />
+                        <font class="defi defi-01"><span class="Validform_checktip"></span></font>
+                    </span>
+                </dd>
+
+                <!--<dd>-->
+                    <!--<span class="dd_left">持股金额:</span>-->
+                    <!--<span class="dd_right">-->
+                        <!--<input type="text" class="dtext" name="sharesNum" value="" id="sharesNum" style="text-align: center;"/>-->
+                        <!--<font class="defi defi-01"><span class="Validform_checktip"></span></font>-->
+                    <!--</span>-->
+                <!--</dd>-->
+
+                <!--<dd>-->
+                    <!--<span class="dd_left">甲方平台导入的资金流量最低/万:</span>-->
+                    <!--<span class="dd_right">-->
+                        <!--<input type="text" class="dtext" name="money" value="" id="money" style="text-align: center;"/>-->
+                        <!--<font class="defi defi-01"><span class="Validform_checktip"></span></font>-->
+                    <!--</span>-->
+                <!--</dd>-->
+                    <dd>
+                        <div id="reader_box"></div>
+                        <span class="dd_left">上传图片:</span>
+                                <span class="dd_right">
+                      <input type="file" name="files" id="readerfile" multiple/>
+                      请选择jpg,png,gif,jpeg类型的图片
+                    </span>
+                    </dd>
+                <input type="hidden" name="partyA" value="意梓（上海）电子商务有限公司">
+                <input type="hidden" name="partyAAgentName" value="TIAN YI TINA CHANG">
+                <input type="hidden" name="partyADetailedAddress" value="中国（上海）自由贸易试验区富特西一路115号2号楼7层J部">
+                <input type="hidden" name="userSid" value="<{$userId}>">
+                <dd style="margin-top: 10px;margin-bottom: 160px;"><input type="submit" class="so submit" value="提 交" /></dd>
+                <input type="hidden" name="" value="<{:U('Client/useragent')}>" id="jump">
+            </dl>
+        </form>
+    </div>
+</div>
+    <script type="text/javascript" src="__PUBLIC__/js/uploadPreview.js"></script>
+<script type="text/javascript">
+    //图片上传
+    //$(document).on("change", "input[type=file]", update);
+$('.area').change(function(){
+        var city = $('.state option:selected').val()+'-'+$('.city option:selected').val()+'-'+$('.area option:selected').val();//区域
+        var html = '<input type="hidden" name="partyBCity" value='+city+'>';
+        document.getElementById("statestr").innerHTML = html
+    })
+
+    $(document).ready(function(){
+        $('.submit').click(function(){
+            var index = layer.load(1, {
+                shade: [0.1,'#fff'] //0.1透明度的白色背景
+            });
+        });
+        $('#form').ajaxForm(function(data){
+        //弹出ajax请求后的回调结果，data回调数据  onclick="sub()"
+            if(data.code =="2000" ){
+                layer.closeAll('loading');
+                alert(data.message);
+                var url = $('#jump').val();
+                window.location.href = url;
+                // location.href=document.referrer;
+            }else{
+                layer.closeAll('loading');
+                console.log(data);
+                alert(data.message);
+            }
+        });
+    });
+
+$("[name='contractType']").on("change",function(){
+    var type = $("input[type='radio']:checked").val();
+    var text = $("input[name=type"+type+"]").val();
+    $("#contractTitle").val(text);
+    $("#sharesNum").removeAttr("readonly");
+    $("#money").removeAttr("readonly");
+//    if(type == 1){
+//        $("#contractTitle").val("百万服务企业联合体发起人合作协议");
+//        $("#sharesNum").removeAttr("readonly");
+//        $("#money").removeAttr("readonly");
+//    }else if(type == 2){
+//        $("#contractTitle").val("百万企业服务业及门店联合代理合作协议");
+//        $('#sharesNum').attr("readonly","readonly");
+//        $('#money').attr("readonly","readonly");
+//    }else if(type == 3){
+//        $("#contractTitle").val("百万生产企业联合体发起人合作协议——工厂合同");
+//        $('#sharesNum').attr("readonly","readonly");
+//        $('#money').attr("readonly","readonly");
+//    }else if(type == 4){
+//        $("#contractTitle").val("百万门店联合体发起人合作协议");
+//        $("#sharesNum").removeAttr("readonly");
+//        $("#money").removeAttr("readonly");
+//    }
+});
+
+
+
+
+//初始化上传图片
+//$("body").on('click', 'input[type="file"]', function() {
+//    var selector = $(this).attr('id');
+//    $("#" + selector).uploadPreview({
+//        Img: selector + "_prev",
+//        Width: 120,
+//        Height: 120
+//    });
+//});
+//
+//
+//
+//    function maskshow() {
+//        $("#mask").css({
+//            display: "block",
+//            height: $(document).height()
+//        });
+//        $(".dialog").css("display", "block");
+//    }
+//
+//    function maskhide() {
+//        $("#mask").css({
+//            display: "none",
+//            height: $(document).height()
+//        });
+//        $(".dialog").css("display", "none");
+//    }
+//function update() {
+//    maskshow();
+////	$("#submit").attr("disabled", "disabled");
+//    var uri = 'http://192.168.1.207:8003/manager/trade/uploadImg';
+//    var xhr = new XMLHttpRequest();
+//    var img = new FormData();
+//    xhr.open("POST", uri, true);
+//    xhr.onreadystatechange = function() {
+//        if(xhr.readyState == 4 && xhr.status == 200) {
+//            var keyval = $.parseJSON(xhr.responseText);
+//            button.attr("key", keyval.key);
+//            //console.log(keyval.key);
+//            alert("图片上传成功");
+//            maskhide();
+//            //$("#submit").removeAttr("disabled");
+//            //console.log(keyval.key)
+//            //alert(xhr.responseText);
+//        }else{
+//            maskhide();
+//        }
+//    };
+//    //var file = document.getElementById("file").files[0];
+//    var file = $(this)[0].files[0];
+//    var button = $(this);
+//    img.append('file', file);
+//    xhr.send(img);
+//}
+
+
+
+</script>
+</body>
+</html>

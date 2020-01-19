@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>商品信息|<{$configcache['Title']}></title>
+	<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+	<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+	<link rel="stylesheet" type="text/css" href="__JS__/layer/skin/layer.css" />
+	
+	<link rel="stylesheet" href="__PUBLIC__/jcrop/css/jquery.Jcrop.css" />
+
+	
+	<script type="text/javascript" src="__JS__/jquery.js"></script>
+	
+	
+	<script type="text/javascript" src="__JS__/Public.js"></script>
+	<script type="text/javascript" src="__JS__/winpop.js"></script>
+	<script type="text/javascript" src="__JS__/check.js"></script>
+
+	
+	<script type="text/javascript" src="__PUBLIC__/jcrop/js/jquery.Jcrop.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/js/productkinds.js"></script>
+	
+	
+    <script type="text/javascript" src="__PUBLIC__/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript"  src="__PUBLIC__/ueditor/ueditor.all.min.js"></script>
+
+  <style type="text/css">
+  .shop-1{border:1px solid #ccc; width:60%;margin-left: auto;margin-right: auto;}
+  .shop-2{margin: 30px;}
+  .imgbox img{max-width:90%;}
+  .basetb td{ padding:6px; padding-top:8px; padding-bottom:8px; font-size:15px;}
+  .label{text-align: center;}
+  
+  #target {
+    background-color: #ccc;
+    width: 500px;
+    height: 330px;
+    font-size: 24px;
+    display: block;
+  }
+	.inputtd input{
+  	 width: 100%;
+    height: 100%;
+    text-align:center;
+  }
+  
+  .file {
+		    position: relative;
+		    display: inline-block;
+		    background: #D0EEFF;
+		    border: 1px solid #99D3F5;
+		    border-radius: 4px;
+		    padding: 4px 12px;
+		    overflow: hidden;
+		    color: #1E88C7;
+		    text-decoration: none;
+		    text-indent: 0;
+		    line-height: 20px;
+		}
+		.file input {
+		    position: absolute;
+		    font-size: 100px;
+		    right: 0;
+		    top: 0;
+		    opacity: 0;
+		}
+		.file:hover {
+		    background: #AADFFD;
+		    border-color: #78C3F3;
+		    color: #004974;
+		    text-decoration: none;
+		}
+		
+		
+.delete{
+
+    line-height:10px;
+    text-align:center;
+    font-weight:bold;
+    cursor:pointer;
+    font-size:10px;
+    color:red;
+
+}
+.type_content td div{
+    width: 30%;
+    height: 210px;
+    overflow: auto;
+    float: left;
+	}
+	
+	.buttonstyle{
+	background:#029be1;
+	color:white;
+	height:23px;
+	width:80px;
+	margin:10px;
+	border-radius:10px
+	}
+	
+	input[type="text"]{
+    display: inline-block;
+    padding: 4px;
+    font-size: 13px;
+    line-height: 18px;
+    color: #808080;
+    border: 1px solid #ccc;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+	
+  </style>
+</head>
+<body>
+  <dt>详情信息</dt>
+  <div id="content" style="font-size:18px; color:#333; text-align:center;width:1190px;">
+   <dl id="dl">
+    <h2>
+      <div class="h2_left">
+        <a href="<{:U('Shop/index')}>" class="whole">商品</a>
+        <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+        <a href="javascript:history.back();" class="Retreat">后退</a>
+        <a href="javascript:history.go(1);" class="Advance">前进</a>
+        <input type="hidden" id="httpreferer" value="<{$httpreferer}>">
+        <input type="hidden" id="consult_url" value="<{$url}>">
+        
+      </div>
+    </h2><br/>
+   
+    <div style="clear:both"></div>
+    <!-- action="<{:U('Shop/shopedit')}>"判断类别 -->
+
+
+      <form class='formdata'>
+       
+    	<input type="hidden" id="sid" name='serviceId' value="<{$goodsData.serviceId}>">
+    	<input type="hidden" id="userId" name='userId' value="<{$goodsData.userId}>">
+ 
+        <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0" class="basetb">
+           <tr>
+	      <!-- <td>产品图：</td>
+	      
+		      <td>
+
+		      <volist name="picture" id="pic">
+
+		      <div class='imagelist' style="width:200px;height:200px; float:left">
+		      <img class='image' id="<{$pic.sid}>" data-key="<{$pic.picServiceUrl}>" data-main="<{$pic.mainPage}>" src="<{$pic.realPicUrl}>" width="190" height="180" />
+		      </div>
+		      
+		      </volist>
+		          
+		    </td> -->
+		    <td>产品图：</td>
+	      
+		      <td>
+
+		      <volist name="picture" id="pic">
+ 				<div class='imagelist' style="width:200px;height:200px;margin:10px;padding:10px; float:left">
+					<div >
+						<img class="img-sm image"  id="<{$pic.sid}>" data-key="<{$pic.picServiceUrl}>" data-main="<{$pic.mainPage}>" src="<{$pic.realPicUrl}>" width="190" height="180"  />
+						<span class="delete" style="float:right">X</span>
+					</div>
+					<div class="file">
+						<span>更换</span>
+			    		<input type="file" name='hiddenfile' class="hiddenfile" />
+					</div>
+			    </div>
+		      </volist>         
+		    </td>    
+		     
+   		 </tr>
+   		 <tr>
+   		 <td class="tdleft" width="30%">计量单位：</td>
+							<td colspan="3">
+								<select id="crm_fwuzfa" name="crm_fwuzfa" class="input-medium">
+									<option value=''>--请选择--</option>
+									<option value='个'>个</option>
+									<option value='箱'>箱</option>
+									<option value='盒'>盒</option>
+									<option value='套'>套</option>
+									<option value='袋'>袋</option>
+									<option value='双'>双</option>
+									<option value='件'>件</option>
+									<option value='条'>条</option>
+									<option value='卷'>卷</option>
+									<option value='台'>台</option>
+									<option value='支'>支</option>
+									<option value='只'>只</option>
+									<option value='瓶'>瓶</option>
+									<option value='千克'>千克</option>
+									<option value='克'>克</option>
+									<option value='包'>包</option>
+									<option value='升'>升</option>
+									<option value='副'>副</option>
+									<option value='袋'>袋</option>
+									<option value='把'>把</option>
+									<option value='本'>本</option>
+									<option value='次'>次</option>
+									<option value='米'>米</option>
+									<option value='吨'>吨</option>
+									<option value='顶'>顶</option>
+									<option value='批'>批</option>
+									<option value='pcs'>pcs</option>
+									<option value='天'>天</option>
+								</select> &nbsp; <span id="crm_fwuzfaTip" style="color:red;"></span>
+							</td>
+   		 
+   		 </tr>
+   		 
+   		 <tr>
+   		 	<td class="tdleft" width="30%">价格区间：</td>
+							<td colspan="3">
+								<table class="table add_table" id="price">
+									<tbody>
+										<tr style="width:1000px">
+											<th width="200px">起批量</th>
+											<th width="200px">产品单价</th>
+											<th width="300px">预览</th>
+										</tr>
+										<tr>
+											<td width="30%"><input type="text" name="minnum_0" class="add_input_text minnum" digits="true" min="0" required /></td>
+											<td width="30%" class="td_center">
+												<input type="text" class="add_input_text unitprice" name="unitprice_0" number="true" min="0" required/> 元</td>
+											<td width="40%" class="td_center">
+												<sapn class="pronum"> </sapn>个以上 <span class="price" class="mar-lefts2"> </span>元
+
+											</td>
+										</tr>
+
+									</tbody>
+									<tfoot>
+										<tr>
+											<td colspan="3">
+												<a class="btn btn-primary" href="javascript:void(0);" onclick="addprice()">
+													<i class="icon-plus"></i>&nbsp;&nbsp;<input type="button" class="buttonstyle"  value="增加价格区间" />
+												</a>
+											</td>
+										</tr>
+									</tfoot>
+								</table>
+
+							</td>
+   		 </tr>
+   		 <tr>
+   		 		<td class="tdleft" width="30%">规格参数：</td>
+							<td colspan="3">
+								<table class="table add_table">
+									<tbody>
+										<tr>
+											<td colspan="2" id="guige"></td>
+											<td width="100%">
+												<a class=" buttonstylebtn btn-primary pull-right" id="guige_add" href="javascript:void(0);" onclick="addguige()">
+													<i class="icon-plus"></i>&nbsp;&nbsp;<input type="button" class="buttonstyle"  style="width:60px" value="新增规格" />
+												</a>
+												<input type="text" class="input-medium pull-right" id="guige_v" />
+											</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<table class="table add_table">
+									<tbody id="guige_tab" style="display: none;">
+										<tr>
+											<th width="10%"></th>
+											<th width="40%">规格参数</th>
+											<th width="50%">库存</th>
+										</tr>
+									</tbody>
+									<tfoot id="guige_foot">
+										<tr>
+											<td width="300px">供应总量：</td>
+											<td width="90%"><input type="text" name="total" id="total" class="input-medium" /></td>
+
+										</tr>
+									</tfoot>
+								</table>
+							</td>
+   		 </tr>
+   		 
+   		 
+   		 <tr>
+            <td class="label">公司名称:</td>
+            <td class='inputtd'><input type="text" name='userCompany' value="<{$goodsData.userCompany}>" /></td>
+          </tr>
+          <tr>
+            <td class="label">商品名称:</td>
+            <td class='inputtd'><input type="text" name='serviceName' value="<{$goodsData.serviceName}>" /></td>
+          </tr>
+          
+       		<tr>
+				<td class="tdleft" width="30%">产品类别:</td>
+				<td width="35%">
+					<span id="typename"><{$goodsData.tchList.0.text}>&nbsp;&nbsp;<{$goodsData.tchList.1.text}>&nbsp;&nbsp;<{$goodsData.tchList.2.text}></span>
+
+					<a class="btn btn-primary pull-right" id="#" href="javascript:void(0);" onclick="typelistshow()">
+						<i class="icon-plus"></i>&nbsp;&nbsp;<input type="button" class="buttonstyle"  value="重新分类" />
+					</a>
+				</td>
+
+		</tr>
+		<tr class="type_content" style="display: none;">
+			<td class="tdleft" width="30%">类别选择</td>
+			<td colspan="3">
+				<div id="typelist1">
+					加载中，请稍后……
+				</div>
+				<div id="typelist2"></div>
+				<div id="typelist3"></div>
+			</td>
+		</tr>
+          
+          <tr>
+            <td class="label">地域:</td>
+            <td class='inputtd'><input type="text" name='serviceDistrict' value="<{$goodsData.serviceDistrict}>" /></td>
+          </tr>
+          <tr>
+            <td class="label">地址:</td>
+            <td class='inputtd'><input type="text" name='address' value="<{$goodsData.address}>" /></td>
+          </tr>
+          <tr>
+            <td class="label">价格:</td>
+            <td class='inputtd'><input type="text" name='servicePrice' value="<{$goodsData.servicePrice}>" /></td>
+          </tr>
+          <tr>
+            <td class="label">单位:</td>
+            <td class='inputtd'><input type="text" name='serviceUnit' value="<{$goodsData.serviceUnit}>" /></td>
+          </tr>
+          <tr>
+            <td class="label" >详情:</td>
+            <td style="width:800px;height:600px">
+            	<textarea style="width:100%;height:100%" type="text"  name="serviceDetail" id="EditorId" placeholder="请输入内容"><{$goodsData.serviceDetail}></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">上下架:</td>
+            <td>
+            <input type="radio" name='serviceStatus' value="1" <if condition="$goodsData['serviceStatus'] eq 1 " >checked</if> /><span>上架</span>
+            <input type="radio" name='serviceStatus' value="0" <if condition="$goodsData['serviceStatus'] eq 0 " >checked</if> /><span>下架</span>
+            </td>
+          </tr>
+          
+          
+          <tr>
+            <td class="label">是否删除:</td>
+            <td>
+            <input type="radio" name='isUser' value="1" <if condition="$goodsData['isUse'] eq 1 " >checked</if> /><span>是</span>
+            <input type="radio" name='isUser' value="0" <if condition="$goodsData['isUse'] eq 0 " >checked</if> /><span>否</span>
+            </td>
+          </tr>
+          
+        <tr>
+        	<td colspan="2" class="label"><input style="background:#029be1;color:white;height:43px;width:100px;margin:10px;border-radius:10px" type="button"  class="shopsave" value="保存" /><label class="message"></label></td>
+        	
+        </tr>
+
+		<div class="levelone" style="display:none">
+			<input type="hidden" class="value" value="" />
+			<input type="hidden"  class="text" value="" />
+			<input type="hidden"  class="level" value="" />
+			<input type="hidden"  class="parentCatCode" value="" />
+			<input type="hidden"  class="hasChild" value="" />
+			<input type="hidden"  class="catStatus" value="" />
+		</div>
+		
+		<div class="levetwo" style="display:none">
+			<input type="hidden" class="value" value="" />
+			<input type="hidden"  class="text" value="" />
+			<input type="hidden"  class="level" value="" />
+			<input type="hidden"  class="parentCatCode" value="" />
+			<input type="hidden"  class="hasChild" value="" />
+			<input type="hidden"  class="catStatus" value="" />
+		</div>
+		
+		<div class="levethree" style="display:none">
+			<input type="hidden" class="value" value="" />
+			<input type="hidden"  class="text" value="" />
+			<input type="hidden"  class="level" value="" />
+			<input type="hidden"  class="parentCatCode" value="" />
+			<input type="hidden"  class="hasChild" value="" />
+			<input type="hidden"  class="catStatus" value="" />
+		</div>
+		
+		<input />
+		<input />
+      </table>
+      <div id="delSpecArrary" style="display:none;"></div>
+      </form>
+   
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/shopedit.js"></script>
+<script type="text/javascript">
+UE.getEditor('EditorId',{    //content为要编辑的textarea的id
+    initialFrameWidth: 1100,   //初始化宽度
+    initialFrameHeight: 500,   //初始化高度
+});
+var ggnum = 0;
+var ggarr = $("#guige").html().split("；");
+
+function addguige() {
+	var guige = $("#guige_v").val();
+	var str;
+	str = guige + '；';
+	var foot = '<tr style="display: none"><td colspan="4">供应总量：<input type="button" class="btn btn-success" onclick="num()" value="计算总量" />' +
+		'<input type="text" class="input-small mar-left2" id="total" readonly="readonly" /> </td></tr>';
+
+	if(guige != "") {
+		if(jQuery.inArray(guige, ggarr) < 0) {
+			$("#guige").append(str);
+			$("#guige_tab").show();
+			$("#guige_foot").html(foot);
+			var tab = '<tr><td width="10%" class="td_center"><input type="checkbox" class="kccheck" checked /></td><td width="50px">' + guige + '</td>' +
+				'<td width="350px" class="td_center"><input name="kc_' + ggnum + '" type="text" class="add_input_text" digits="true" min="0" /><a class=" buttonstyle btn btn-warning removeguige"><span>删除</span></a></td></tr>';
+			$("#guige_tab").append(tab);
+			ggnum++;
+		} else {
+			alert("请不要重复输入规格")
+		}
+	}
+	ggarr = $("#guige").html().split("；");
+	$("#guige_v").val("");
+
+}
+//删除规格
+$("#guige_tab").on("click", ".removeguige", function() {
+	//debugger;
+	ggarr = $("#guige").html().split("；");
+	var ggdel= $(this).parent().prev().html();
+	$("#delSpecArrary").append('<span>'+ggdel+'</span>');
+	var ggindex=jQuery.inArray(ggdel, ggarr);
+	//console.log(ggarr)
+	ggarr.splice(ggindex,1);
+	$("#guige").html(ggarr.join("；"));	
+	//console.log(ggarr)
+	$(this).parent().parent().remove();
+});
+
+
+//价格区间展示
+$("#price").on("change", ".minnum", function() {
+	var minnum = $(this).val();
+	if(minnum <= 0){
+		alert('起批量不能为0');
+		return false;
+	}
+	$(this).parent().next().next().children(".pronum").html(minnum)
+});
+
+$("#price").on("change", ".unitprice", function() {
+	var price = $(this).val();
+	$(this).parent().next().children(".price").html(price)
+});
+
+//增加价格区间
+var jgnum = 1;
+
+function addprice() {
+	var pricestr = '<tr><td width="30%"><input type="text" name="minnum_' + jgnum + '" class="add_input_text minnum" digits="true" min="0" required /></td><td width="30%" class="td_center">' +
+		'<input type="text" class="add_input_text unitprice" name="unitprice_' + jgnum + '" number="true" min="0" required /> 元</td><td width="40%" class="td_center">' +
+		'<sapn class="pronum"> </sapn>个以上 <span class="price" class="mar-lefts2"> </span>元 <a class="buttonstyle btn btn-warning removeprice"><span>删除</span></a></td></tr>';
+
+	$("#price>tbody").append(pricestr);
+	jgnum++;
+
+}
+//删除价格区间
+$("#price").on("click", ".removeprice", function() {
+	//console.log($(this).parent().parent());
+	$(this).parent().parent().remove();
+});
+
+
+
+
+//产品分类确认
+$(".type_content").on("click", ".typeli", function() {
+	var lv = Number($(this).attr("data-level"));
+	var val = $(this).attr("data-value");
+	var child = $(this).attr("data-haschild");
+	var name = $(this).attr("data-text");
+	var faval = $(this).attr("data-faval");
+	var faname = $(this).attr("data-faname");
+
+	switch(lv) {
+		case 1:
+			$('.classValueOne').attr("value",val);
+			$('.levelone').find('.value').attr("value",val);
+			$('.levelone').find('.text').attr("value",name);
+			$('.levelone').find('.level').attr("value",1);
+			$('.levelone').find('.parentCatCode').attr("value",'');
+			$('.levelone').find('.hasChild').attr("value",'');
+			$('.levelone').find('.catStatus').attr("value",1);
+			typeList(2, val, name);
+			
+			$("#typename").html("");
+			$("#typelist3").html("");
+			$("#typename").attr({
+				"data-lv1-value": val,
+				"data-lv2-value": '',
+				"data-lv3-value": '',
+				"data-lv1-name": name,
+				"data-lv2-name": '',
+				"data-lv3-name": ''
+			})
+			
+			break;
+		case 2:
+			$('.classValueTwo').attr("value",val);
+			$('.levetwo').find('.value').attr("value",val);
+			$('.levetwo').find('.text').attr("value",name);
+			$('.levetwo').find('.level').attr("value",2);
+			$('.levetwo').find('.parentCatCode').attr("value",faval);
+			$('.levelone').find('.hasChild').attr("value",1);
+			$('.levetwo').find('.hasChild').attr("value",'');
+			$('.levetwo').find('.catStatus').attr("value",1);
+			$("#typename").attr({
+				"data-level": lv,
+				"data-lv2-value": val,
+				"data-lv3-value": '',
+				"data-lv2-name": name,
+				"data-lv3-name": ''
+			})
+			if(child == 'true') {
+				typeList(3, val, name);
+				$("#typename").html("");
+				$(this).siblings().removeClass("type_active");
+			} else {
+				$("#typename").attr({
+					"data-level": lv
+				})
+				$("#typename").html(name);
+				$("#typelist3").html("");
+				$(this).siblings().removeClass("type_active");
+				$(this).addClass("type_active");
+			}
+			break;
+		case 3:
+			$('.classValueThree').attr("value",val);
+			$('.levethree').find('.value').attr("value",val);
+			$('.levethree').find('.text').attr("value",name);
+			$('.levethree').find('.level').attr("value",3);
+			$('.levethree').find('.parentCatCode').attr("value",faval);
+			$('.levethree').find('.hasChild').attr("value",'');
+			$('.levetwo').find('.hasChild').attr("value",1);
+			$('.levethree').find('.catStatus').attr("value",1);
+			$("#typename").html(name);
+			$("#typename").attr({
+				"data-level": lv,
+				"data-lv3-value": val,
+				"data-lv3-name": name
+			})
+			$(this).siblings().removeClass("type_active");
+			$(this).addClass("type_active");
+			break;
+
+	}
+})
+
+var specstr; //库存数组
+function num() {
+	specstr = [];
+	var tol = 0;
+	$(".kccheck").each(
+		function(index, val) {
+			if($(val).context.checked) {
+				var kc = $(val).parent().next().next().children("input").val();
+				var kctext = $(val).parent().next().text();
+				tol += Number(kc);
+				var specitem = '{"specName":"' + kctext + '", "specStockNum":' + kc + '}';
+				specstr.push(specitem);
+			}
+			// console.log($(val).context.checked);
+		}
+	);
+	$("#total").val(tol);
+}
+	
+$(function (){
+	
+	$('.delete').click(function(){
+		$(this).parents('.imagelist').remove() ;
+	});
+	//图片上传
+	$('.hiddenfile').change(function(){
+		var file = event.target.files[0];
+		var url = URL.createObjectURL(file);
+		var imgid = $('.imagelist').find('.img-sm').attr('id');
+	
+		$('#'+imgid).attr('src',url);
+		var consult_url = $('#consult_url').val();
+		var form = new FormData();
+		var xhr = new XMLHttpRequest();
+		form.append("file", file);
+//xhr.open("post",'http://192.168.1.27:8080/manager/trade/uploadImg', true);
+		xhr.open("post",consult_url + '/manager/trade/uploadImg', true);
+		xhr.onreadystatechange = function() {
+			if(xhr.readyState == 4 && xhr.status == 200) {
+				var result = jQuery.parseJSON(xhr.responseText);
+				$('#'+imgid).attr('data-key',result.key);
+//console.log(xhr.responseText);
+			}
+		};
+		xhr.send(form);	
+	})
+
+//遍历取信息	
+$('.shopsave').click(function(){
+	num();
+	var specstrarr;
+	if($("#guige").text().indexOf('；') > 0) {
+		num();
+		specstrarr = '[' + specstr.toString() + ']';
+	}
+	
+	var type = $("#typename");
+	var formdata = $('.formdata').serializeArray();
+	var imgList = new Array;
+	$('.imagelist').each(function(i){
+		var data = {};
+		if(i==0){
+			data.mainPage=1;
+		}else{
+			data.mainPage=0;
+		}
+		data.picServiceUrl=$(this).find('.image').data('key');
+		imgList.push(data);
+	});
+	//价格区间
+	var tradearr = [];
+	$(".minnum").each(
+		function() {
+			var price = $(this).parent().next().children(".unitprice").val();
+			var item = {
+				"minBuyNum": $(this).val(),
+				"price": price
+			};
+			tradearr.push(item);
+		}
+	);
+	//单价
+	var servicePrice = tradearr[0].price;
+	//价格区间
+	var tradePriceArrary = [];
+	var tradeunit = $("#crm_fwuzfa").val();
+	for(i = 0; i < tradearr.length; i++) {
+		if(i < tradearr.length - 1) {
+			var priceitem = '{"minBuyNum": ' + tradearr[i].minBuyNum + ',"maxBuyNum": ' + (tradearr[i + 1].minBuyNum - 1) + ',"price": ' + tradearr[i].price + ',"unit": "' + tradeunit + '","number":"' + i + '"}';
+			tradePriceArrary.push(priceitem);
+		} else {
+			var priceitem = '{"minBuyNum": ' + tradearr[i].minBuyNum + ',"maxBuyNum":0,"price": ' + tradearr[i].price + ',"unit": "' + tradeunit + '","number":"' + i + '"}';
+			tradePriceArrary.push(priceitem);
+		}
+
+	}
+	var pricearr = '[' + tradePriceArrary.toString() + ']';
+	//分类
+	var classValueOne = type.attr("data-lv1-value");
+	var classValueTwo = type.attr("data-lv2-value");
+	var classValueThree;
+	if(type.attr("data-level") == 2) {
+		classValueThree = type.attr("data-lv2-value");
+	} else {
+		classValueThree = type.attr("data-lv3-value");
+	}
+	var sumStockNum = $("#total").val();//总库存
+	//删除的规格
+	var delSpecArrary = [];
+	$("#delSpecArrary span").each(function(){
+		var specvalue = $(this).html();
+		var delspec ='{"specName":"'+specvalue+'"}';
+		delSpecArrary.push(delspec);
+	});
+	var userId = $("#userId").val();
+	delSpecArrary = '['+delSpecArrary+']';
+	//规格
+	var typestr;
+	if(type.attr("data-level") == 3) {
+		typestr = '[{"value":"' + type.attr("data-lv1-value") + '","text":"' + type.attr("data-lv1-name") + '","level":"1","parentCatCode":"","hasChild":"1","catStatus":"1"},' +
+			'{"value":"' + type.attr("data-lv2-value") + '","text":"' + type.attr("data-lv2-name") + '","level":"2","parentCatCode":"' + type.attr("data-lv1-value") + '","hasChild":"1","catStatus":"1"},' +
+			'{"value":"' + type.attr("data-lv3-value") + '","text":"' + type.attr("data-lv3-name") + '","level":"3","parentCatCode":"' + type.attr("data-lv2-value") + '","hasChild":"0","catStatus":"1"}]'
+	} else if(type.attr("data-level") == 2) {
+		typestr = '[{"value":"' + type.attr("data-lv1-value") + '","text":"' + type.attr("data-lv1-name") + '","level":"1","parentCatCode":"","hasChild":"1","catStatus":"1"},' +
+			'{"value":"' + type.attr("data-lv2-value") + '","text":"' + type.attr("data-lv2-name") + '","level":"2","parentCatCode":"' + type.attr("data-lv1-value") + '","hasChild":"0","catStatus":"1"}]'
+	}
+	
+
+	
+	//console.log(imgList);
+	var url = '__APP__/Shop/shopedit';
+	if($("input[name='serviceStatus']:checked").val()=='1' && tradeunit == "") {
+		alert("请选择计量单位")
+	}else{
+		$.post(url,{
+			serviceUnit: "元/" + tradeunit,
+			formdata:formdata,
+			pricearr:pricearr,
+			imagelist:imgList,
+			tradeClassHeadArrary: typestr,
+			servicePrice:servicePrice,
+			delSpecArrary:delSpecArrary,
+			classValueOne:classValueOne,
+			classValueTwo:classValueTwo,
+			classValueThree:classValueThree,
+			tradeSpecParameterArrary: specstrarr,
+			tradePriceRangeArrary: pricearr,
+			sumStockNum:sumStockNum,
+			userId:userId
+			},
+			function(data){
+			if(data.success){				
+				$(".message").html('<font color="green">修改成功</font>');
+				var rfererurl = $('#httpreferer').val();
+				var registurl = window.location.href=rfererurl;
+
+			}else{
+				$(".message").html('<font color="red">修改失败</font>');
+			}
+		});
+	} 
+	
+})
+	
+
+ }); 
+
+
+</script>
+
+</body>
+</html>

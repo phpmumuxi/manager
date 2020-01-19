@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>管家推荐统计|<{$configcache['Title']}></title>
+  <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+  <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+  <script type="text/javascript" src="__JS__/jquery.js"></script>
+   <script type="text/javascript" src="__JS__/Public.js"></script>
+  <style type="text/css">
+  .select{padding:5px 10px;border:#ddd 0px solid;border-radius:4px;width:60%;margin:5% auto;font-size:12px}
+  .select li{list-style:none;padding:10px 0 5px 100px}
+  .select .formli{list-style:none;padding:10px 0 5px 20px}
+  .select .select-list{border-bottom:#eee 1px dashed}
+  .select dl{zoom:1;position:relative;line-height:24px;}
+  .select dl:after{content:" ";display:block;clear:both;height:0;overflow:hidden}
+  .select dt{width:100px;margin-bottom:5px;position:absolute;top:0;left:-100px;text-align:right;color:#666;height:24px;line-height:24px}
+  .select dd{float:left;display:inline;margin:0 0 5px 5px;}
+  .select a{display:inline-block;white-space:nowrap;height:24px;padding:0 10px;text-decoration:none;color:#039;border-radius:2px;}
+  .select a:hover{color:#f60;background-color:#f3edc2}
+  .select .selected a{color:#fff;background-color:#f60}
+  .select-result dt{font-weight:bold}
+  .select-no{color:#999}
+  .select .select-result a{padding-right:20px;background:#f60 url("__PUBLIC__/image/close.gif") right 9px no-repeat}
+  .select .select-result a:hover{background-position:right -15px}
+  .tc{text-align:center; text-indent:0;font-family:"微软雅黑";font-size: 14px;color:#111;} 
+  td{
+  	text-align:center;
+  }
+  th{
+  	text-align:center;
+  }
+  .countborder{
+  	color:#f60;
+  	border:1px solid #d1d1d1;
+  	border-bottom:1px solid white;
+  }
+  .sure{left:220px; top:10px; width:60px; height:28px; line-height:28px; border:none; background:#090; color:#fff; font-family:"微软雅黑"; cursor:pointer;}
+  .tel{left:0; top:10px; width:220px; height:26px; line-height:26px; color:#555; font-family:"微软雅黑"; repeat-x left top; border:solid 1px #ccc;}
+  </style>  
+</head>
+<body>
+  <div id="content">
+   <h1>首页 > 逸管家 >共享分销统计</h1>
+   <h2>
+     <div class="h2_left">
+       <a href="__ACTION__" class="whole">全部</a>
+       <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+       <a href="javascript:history.back();" class="Retreat">后退</a>
+       <a href="javascript:history.go(1);" class="Advance">前进</a>
+     </div>
+     <input type="hidden" id="url" value="<{$url}>">      
+  </h2>
+  
+ 
+<div class="fen" style="margin-top:15px;">
+
+    <ul class="select" style="line-height:60px;border:0px;border-bottom:1px solid #d1d1d1;;height:180px;margin-top: 20px;margin-bottom: 20px;">
+    <div style="height:61px;line-height:60px;border-bottom:1px solid #d1d1d1;">
+     	<li style="cursor:pointer;text-align:center;padding:0px;float:left;width:150px;height:60px"  <if condition="($countType eq '1') OR ($countType eq '3')">class="countborder" </if> id="access">接单统计</li>
+        <li  style="cursor:pointer;text-align:center;padding:0px;float:left;width:150px;height:60px"  <if condition="$countType eq '2'">class="countborder " </if> id="share" >商品分享统计</li>
+         <li  style="cursor:pointer;text-align:center;padding:0px;float:left;width:150px;height:60px"  <if condition="$countType eq '4'">class="countborder" </if> id="sale" >销售人员统计</li>
+     </div>
+     <div style="clear:both"></div>
+ 	<!-- 接单统计div form表单 -->	
+ 	<switch name="countType">
+ 		<case value="1">
+	      <li class="select-list List_more">
+	       <dl id="select" >
+	      	<dt>统计类型：</dt>
+	      		<dd <if condition="$serviceType eq '-1'"> class="selected"</if>>
+	              	<a href="<{:U('Client/sharecount',['countType' => 1,'serviceType'=>-1])}>">全部</a>
+	              </dd>
+	      		<dd <if condition="$serviceType eq '1'"> class="selected"</if>>
+	              	<a href="<{:U('Client/sharecount',['countType' => 1,'serviceType'=>1])}>">商品</a>
+	              </dd>
+	
+	              <dd <if condition="$serviceType eq '2'"> class="selected"</if>>
+	              	<a href="<{:U('Client/sharecount',['countType' => '1','serviceType'=>2])}>">需求</a>
+	              
+	              </dd>
+	             </dl>
+	      </li>
+	      <li class="formli" >	
+	        <form action="<{:U('Client/sharecount',['countType' => '1','serviceType' =>$serviceType])}>" method="post">
+		        <div>
+		            <input type="text" name="keyWords" class="tel orderno"  placeholder="请输入需求标题" value="<{$keyWords}>"/>&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="submit" class="sure" value="查询" /> 
+		        </div>
+	   		</form>
+	      </li>
+ 		</case>
+ 		<case value="2">
+ 			 <!-- 分享统计div form表单 -->
+	          <li class="formli" >
+		        <form  action="<{:U('Client/sharecount',['countType' => '2'])}>" method="post">
+		        <div>
+		            <input type="text" name="keyWords" class="tel orderno"  placeholder="请输入企业昵称查询" value="<{$keyWords}>"/>&nbsp;&nbsp;&nbsp;&nbsp;
+		            <input type="submit" class="sure" value="查询" /> 
+		        </div>
+		   		</form>
+	        </li>
+ 		</case>
+ 		<case value="3">
+ 			<!-- 接单人数统计div form表单 -->
+	 		<li class="formli" >
+		         <form action="<{:U('Client/sharecount',['countType' => '3','shareServiceId'=>$shareServiceId])}>" method="post">
+			        <div>
+			   			<input type="text" name="keyWords" class="tel orderno"  placeholder="请输入昵称，手机号查询" value="<{$keyWords}>"/>&nbsp;&nbsp;&nbsp;&nbsp;
+		
+			            <input type="submit" class="sure" value="查询" /> 
+			        </div>
+		    	</form>
+	        </li>
+ 		</case>
+ 		<case value="4">
+ 		<!-- 销售人员统计form表单 -->
+			<li class="select-list List_more">
+	       <dl id="select" >
+	      	<dt>销售人员等级：</dt>
+	      		<dd <if condition="$sellerLevel eq '-1'"> class="selected"</if>>
+	              	<a href="<{:U('Client/sharecount',['countType' => 4,'sellerLevel'=>-1])}>">全部</a>
+	              </dd>
+	      		<dd <if condition="$sellerLevel eq '1'"> class="selected"</if>>
+	              	<a href="<{:U('Client/sharecount',['countType' => 4,'sellerLevel'=>1])}>">初级</a>
+	              </dd>
+	
+	              <dd <if condition="$sellerLevel eq '2'"> class="selected"</if>>
+	              	<a href="<{:U('Client/sharecount',['countType' => '4','sellerLevel'=>2])}>">中级</a>
+	              
+	              </dd>
+	               <dd <if condition="$sellerLevel eq '3'"> class="selected"</if>>
+	              	<a href="<{:U('Client/sharecount',['countType' => '4','sellerLevel'=>3])}>">高级</a>
+	              
+	              </dd>
+	             </dl>
+	      </li>
+	      <li class="formli" >	
+	        <form action="<{:U('Client/sharecount',['countType' => '4','serviceType' =>$serviceType])}>" method="post">
+		        <div>
+		            <input type="text" name="keyWords" class="tel orderno"  placeholder="请输入昵称，手机号查询" value="<{$keyWords}>"/>&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="submit" class="sure" value="查询" /> 
+		        </div>
+	   		</form>
+	      </li>
+ 		</case>
+ 		<default />
+ 		<div>....</div>
+ 	</switch>  
+	</ul>
+  	</div>
+  	
+ <!-- countType 1:接单统计  2：分享统计 3：接单统计里的接单人数统计 4销售人员统计-->  
+  <switch name="countType">
+	   <case value="2"><!-- 分享统计 -->
+	   		 <table id="table" border="1" style="table-layout：fixed" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+			   <tr>
+			   <th width="10%">发布企业</th>
+			     <th width="20%">商品标题</th>  
+			     <th width="20%">商品链接</th>  
+			     <th width="10%">发布时间</th>
+			     <th width="10%">接单人</th> 
+			     <th width="5%">分享次数</th>       
+			   </tr>
+			   <empty name="list">
+			   <tr><td style="text-align:center" colspan="8" class='tc'>当前请求无数据</td></tr>
+			    <else />
+			   <volist name="list" id="vo">
+			    <tr>
+			     <td style="text-align:center" class='tc'><{$vo.companyName}></td>
+			      <td style="text-align:center" class='tc'><{$vo.productTitle}></td>
+			        <td style="word-break:break-all" class='tc'><{$vo.productLink}></td>
+			      <td style="text-align:center" class='tc'><{$vo.publishTime}></td>
+			      <td style="text-align:center" class='tc'><{$vo.shareUserName}></td>
+			      <td style="text-align:center" class='tc'><{$vo.shareNumber}></td>
+			    </tr>
+			  </volist>
+			  </empty>
+			</table>
+	   </case>
+	   <case value="1"><!-- 接单统计 -->
+	   		<table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+		   <tr>
+			   <th width="10%">发布企业</th>
+			   <th width="20%">发布类型</th>		
+		     <th width="20%">需求标题</th>		
+		     <th width="15%">发布时间</th>  
+		     <th width="10%">需接单人数</th>
+		    <th width="15%">已接单人数</th>     
+		   </tr>
+		   <empty name="list">
+		   <tr><td style="text-align:center" colspan="6" class='tc'>当前请求无数据</td></tr>
+		    <else />
+		   <volist name="list" id="vo">
+		    <tr>
+		     <td style="text-align:center" class='tc'><{$vo.companyName}></td>
+		     <td>
+		     	<switch name="vo.serviceType">
+		     		<case value="1">商品</case>
+		     		<case value="2">需求</case>
+		     	</switch>
+		     </td>
+		      <td style="text-align:center" class='tc'><{$vo.serviceTitle}></td>
+		        <td style="text-align:center" class='tc'><{$vo.createTime}></td>
+		      <td style="text-align:center" class='tc'><{$vo.peopleNum}></td>
+		      <td style="text-align:center" class='tc'><a href="<{:U('Client/sharecount',['countType' => '3','shareServiceId' =>$vo['sid']])}>"><{$vo.orderNum}></a></td>
+		 </tr> 
+		  </volist>
+		  </empty>
+		</table>
+	   </case>
+	   <case value="3"><!--接单统计里的接单人数统计 -->
+	   	<table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+		   <tr>
+		   <th width="10%">用户昵称</th>
+		
+		     <th width="20%">手机号</th>
+		
+		     <th width="15%">接单时间</th>      
+		   </tr>
+		   <empty name="list">
+		   <tr><td style="text-align:center" colspan="6" class='tc'>当前请求无数据</td></tr>
+		    <else />
+		   <volist name="list" id="vo">
+		    <tr>
+		     <td style="text-align:center" class='tc'><{$vo.buyerName}></td>
+		      <td style="text-align:center" class='tc'><{$vo.usertelephone}></td>
+		        <td style="text-align:center" class='tc'><{$vo.dealDatetime}></td>
+		    </tr> 
+		  </volist>
+		  </empty>
+		</table>
+	   </case>
+	   
+	    <case value="4"><!--销售人员统计 -->
+	   	<table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+		   <tr>
+		   <th width="10%">昵称</th>
+		<th width="15%">等级</th>      
+		     <th width="20%">手机号</th>
+		
+		     <th width="15%">申请时间</th>      
+		   </tr>
+		   <empty name="list">
+		   <tr><td style="text-align:center" colspan="6" class='tc'>当前请求无数据</td></tr>
+		    <else />
+		   <volist name="list" id="vo">
+		    <tr>
+		     <td style="text-align:center" class='tc'><{$vo.user_nick_name}></td>
+		      <td style="text-align:center" class='tc'>
+		      <switch name="vo.seller_level">
+		      	<case value="1">初级</case>
+		      	<case value="2">中级</case>
+		      	<case value="3">高级</case>
+		      </switch>		      
+		      </td>
+		      <td style="text-align:center" class='tc'><{$vo.user_telephone}></td>
+		        <td style="text-align:center" class='tc'><{$vo.create_time}></td>
+		    </tr> 
+		  </volist>
+		  </empty>
+		</table>
+	   </case>	   
+   </switch>
+
+<div id="page">
+  <{$page}>   每页显示<select id="selectpagesize" style="width:50px;display:inline-block;">
+								<option ><{$pageSize}></option>
+							<option value="10">10</option>
+							<option value="5">5</option>
+							<option value="15">15</option>
+							<option value="20">20</option>
+							<option value="30">30</option>
+							<option value="40">40</option>
+							<option value="50">50</option>
+					</select>  条</div>
+</div>
+
+<script>
+ 
+$("#access").click(function(){
+	window.location.href="<{:U('Client/sharecount',['countType' => '1'])}>";
+})
+
+$("#share").click(function(){
+	window.location.href="<{:U('Client/sharecount',['countType' => '2'])}>";
+	
+})
+
+ $("#sale").click(function(){
+	window.location.href="<{:U('Client/sharecount',['countType' => '4'])}>";
+	
+})
+$("#selectpagesize").on('change',function(){
+    var pageSize=$(this).val();
+    window.location.href = "__APP__/Client/sharecount?pageSize="+pageSize;
+});
+</script>
+</body>
+</html>

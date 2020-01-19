@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>商品信息|<{$configcache['Title']}></title>
+	<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+	<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+	<link rel="stylesheet" type="text/css" href="__JS__/layer/skin/layer.css" />
+	
+	<link rel="stylesheet" href="__PUBLIC__/jcrop/css/jquery.Jcrop.css" />
+
+	
+	<script type="text/javascript" src="__JS__/jquery.js"></script>
+	
+	
+	<script type="text/javascript" src="__JS__/Public.js"></script>
+	<script type="text/javascript" src="__JS__/winpop.js"></script>
+	<script type="text/javascript" src="__JS__/check.js"></script>
+
+	
+	<script type="text/javascript" src="__PUBLIC__/jcrop/js/jquery.Jcrop.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/js/productkinds.js"></script>
+	
+	
+    <script type="text/javascript" src="__PUBLIC__/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript"  src="__PUBLIC__/ueditor/ueditor.all.min.js"></script>
+
+  <style type="text/css">
+  .shop-1{border:1px solid #ccc; width:60%;margin-left: auto;margin-right: auto;}
+  .shop-2{margin: 30px;}
+  .imgbox img{max-width:90%;}
+  .basetb td{ padding:6px; padding-top:28px; padding-bottom:8px; font-size:15px;text-align:left;}
+  .label{text-align: center;}
+  
+  #target {
+    background-color: #ccc;
+    width: 500px;
+    height: 330px;
+    font-size: 24px;
+    display: block;
+  }
+	.inputtd input{
+  	 width: 100%;
+    height: 100%;
+    text-align:center;
+  }
+  
+  
+  td{
+   text-align:center;
+  }
+		
+
+
+	
+  </style>
+</head>
+<body>
+  <dt>详情信息</dt>
+  <div id="content" style="font-size:18px; color:#333; text-align:center;">
+   <dl id="dl">
+    <h2>
+      <div class="h2_left">
+        <a href="<{:U('Shop/index')}>" class="whole">商品</a>
+        <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+        <a href="javascript:history.back();" class="Retreat">后退</a>
+        <a href="javascript:history.go(1);" class="Advance">前进</a>
+        <input type="hidden" id="httpreferer" value="<{$httpreferer}>">
+        <input type="hidden" id="consult_url" value="<{$url}>">
+        
+      </div>
+    </h2><br/>
+
+
+
+ 
+       
+    	<input type="hidden" id="sid" name='serviceId' value="<{$goodsData.serviceId}>">
+    	<input type="hidden" id="userId" name='userId' value="<{$goodsData.userId}>">
+ 
+        <table style="width:100%" id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0" class="basetb">
+           <tr ><td colspan="2" style="text-align:center"><strong>订单详情</strong></td></tr>
+           <tr>
+		    <td style="text-align:center" width="20%"><strong>订单信息：</strong></td>
+		     <td width="">
+        	<div>订单号：<{$info.orderNo}></div>
+        	<div>下单时间：<{$info.dealDatetime}></div>
+        	<div>昵称：<{$info.userNickName}></div>
+        	<div>真实姓名：<{$info.userRealName}></div>
+        	<div>公司名称：<{$info.userCompany}></div>
+        	<div>手机号：<{$info.userTelephone}></div>
+        	<div>金额：<{$info.totalPrice}>&nbsp;<font color="orange">(含运费<{$freight}>元)</font></div>
+        	<div>订单信息：
+        			<table  width="100%" border="1" cellpadding="0" cellspacing="0" bordercolor="#CCCCCC">
+	        			<tr><td>下单时间</td><td>名称</td><td>商品金额</td><td>规格</td><td>数量</td><td>状态</td></tr>
+	        			<foreach name="orderInfoRecords" item="orderInfoRecords">
+	        			<tr>
+		        			<td><{$orderInfoRecords.dealDatetime}></td>
+		        			<td><{$orderInfoRecords.title}></td>
+		        			<td><{$orderInfoRecords.payPrice}></td>
+		        			<td><{$orderInfoRecords.specification}></td>
+		        			<td><{$orderInfoRecords.serviceNum}></td>
+		        			<td><{$orderInfoRecords.orderStatusType}></td>
+	        			</tr>
+	        				
+	        				</foreach>
+	        			</table>
+	
+        	</div>
+        	
+        	<div>
+        		售后信息：
+        		<div>
+        		<empty name="orderInfoAfter">
+        		无售后信息
+        		<else />
+	        			<table border="1" cellpadding="0" cellspacing="0" bordercolor="#CCCCCC" width="100%">
+	        			<tr><td>申请时间</td><td>名称</td><td>退款金额</td><td>规格</td><td>数量</td><td>状态</td></tr>
+	        			<foreach name="orderInfoAfter" item="orderInfoAfter">
+	        			<tr>
+		        			<td><{$orderInfoAfter.dealTime}></td>
+		        			<td><{$orderInfoAfter.title}></td>
+		        			<td><{$orderInfoAfter.refundPrice}></td>
+		        			<td><{$orderInfoAfter.specification}></td>
+		        			<td><{$orderInfoAfter.serviceNum}></td>
+		        			<td><{$orderInfoAfter.afterOrderStatusType}></td>
+	        			</tr>
+	        				
+	        				</foreach>
+	        			</table>
+	        			</empty>
+        			</div>
+        			
+        	</div>
+		    </td>    
+   		 </tr>
+   		 <tr>
+   		 <td style="text-align:center"><div><strong>推荐关系：</strong></div><div><small>(*买家（下单人）的一级推荐人，和二级推荐人)</small></div></td>
+		     <td >
+		     <table >
+		     	<tr>
+		     		<td width="20%">推荐关系</td>
+		     		<td width="20%">用户昵称</td>
+		     		<td width="20%">手机号</td>
+		     		<td width="20%">转账二维码</td>
+		     	</tr>
+		     	
+		     	<tr >
+		     	 <empty name="topone" >
+		     	 <td style="text-align:center" colspan="4">无上级推荐人</td>
+		     	 <else />
+		     	 <td>一级推荐关系：</td>
+		     		<td><{$topone["UserNickName"]}></td>
+		     		
+		     		<td><{$topone["UserTelephone"]}></td>
+		     		<td><img src="<{$topone['recBonusesUrl']}>" /></td>
+		     	 
+		     	</tr>
+		     	
+		     		<tr>
+		     		 <empty name="toptwo" >
+		     		  <td style="text-align:center" colspan="4">无二级推荐人</td>
+		     		<else />
+		     		<td>二级推荐关系：</td>
+		     		<td><{$toptwo["UserNickName"]}></td>
+		     		<td><{$toptwo["UserTelephone"]}></td>
+		     		<td><img src="<{$toptwo['recBonusesUrl']}>" /></td>
+		     		</empty>
+		     	 </empty>
+		     	 
+		     	 </empty>
+		     	</tr>
+
+		     	
+		     </table>
+		     
+
+		    </td> 
+		 
+   		 </tr>
+   			<!--  <tr>
+   		 <td  colspan="2" style="padding-left:50px"><strong>此订单扣除平台奖励比例:10%    扣除金额：10</strong></td>
+		    
+   		 </tr> -->
+      </table>
+
+
+</div>
+
+<script type="text/javascript">
+
+</script>
+
+</body>
+</html>

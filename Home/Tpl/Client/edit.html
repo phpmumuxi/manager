@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户管理|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script type="text/javascript" src="__JS__/check.js"></script>
+<link rel="stylesheet" href="__JS__/Validform/images/style.css" type="text/css" media="all" /> 
+<script type="text/javascript" src="__JS__/Validform/images/jquery-1.9.1.min.js"></script> 
+<script type="text/javascript" src="__JS__/Validform/images/Validform_v5.3.2.js"></script> 
+<script type="text/javascript" src="__JS__/Validform/plugin/passwordStrength/passwordStrength-min.js"></script>
+<script src="__JS__/jquery-form.js" type="text/javascript"></script>
+<style type="text/css" >
+    .dd_left{margin-top: 5px;}
+    #preview, .img, img{width:200px;height:200px;}
+    #preview{border:1px solid #000;}
+</style> 
+<script type="text/javascript">
+$(function(){
+    $("#form").Validform({
+        tiptype:2,
+        /*表单验证*/
+        tiptype:function(msg,o,cssctl){
+            if(!o.obj.is("form")){
+                var objtip=o.obj.parent().find(".Validform_checktip");
+                cssctl(objtip,o.type);
+                objtip.text(msg);
+                
+                var infoObj=o.obj.parent().find(".info");
+                if(o.type==2){
+                    infoObj.fadeOut(200);
+                }else{
+                    if(infoObj.is(":visible")){return;}
+                    infoObj.css({
+                        left:0,
+                        top:-30
+                    }).show().animate({
+                        top:-27
+                    },200);
+                }
+                
+            }   
+        },  
+    });
+    
+   })
+</script>
+</head>
+<body>
+<div id="content" style="width:800px;height:565px;margin:50px auto;">
+<!--     <form action="<{$url}>/manager/user/editUserDetail" method="post" class="form form-horizontal" id="form"  enctype="multipart/form-data"> -->
+    <dl id="cdl">
+        <dd>
+            <span class="dd_left">用户名:</span>
+            <span class="dd_right" style="margin-top:5px;">
+                <input type="text" class="qtext" name="userNickName" value="" id="userNickName" readonly="true"/>
+                <input type="hidden" class="qtext" name="sid" value="" id="titleid" readonly="true"/>
+            </span>
+        </dd>
+
+        <dd>
+            <div id="reader_box"></div>
+            <span class="dd_left">头像:</span>
+            <span class="dd_right" id="str">
+              
+            </span>
+        </dd>
+
+        <dd>
+            <div id="reader_box"></div>
+            <span class="dd_left">上传头像:</span>
+            <span class="dd_right">
+                <input type="file" name="file" id="file"  onchange="preview(this)"  accept="image/*" class='myfile'></input>
+            </span>
+        </dd>
+
+        <dd>
+        	<span class="dd_left">经常出没地址:</span>
+            <span class="dd_right">
+            	<input type="text" class="qtext" id="userFrequentAddress" name="userFrequentAddress" datatype="*2-80"  maxlength=80 />
+                <font class="defi defi-01"><span class="Validform_checktip"></span></font>
+            </span>
+        </dd>
+     
+        <dd>
+            <span class="dd_left">服务人数:</span>
+            <span class="dd_right">
+                <input type="text" class="qtext" name="userServiceNum" datatype="n"  id="userServiceNum"/>
+                <font class="defi defi-01"><span class="Validform_checktip"></span></font>
+            </span>
+        </dd>
+
+        <dd>
+            <span class="dd_left">服务状态:</span>
+            <span class="dd_right" style="margin-top: 5px;">
+                <label><input property="userServiceStatus" name="userServiceStatus" type="radio" value="0" />关闭 </label> 
+                <label><input property="userServiceStatus" name="userServiceStatus" type="radio" value="1" />开启 </label> 
+            </span>
+        </dd>
+   
+
+        <dd>
+            <span class="dd_left">专长:</span>
+            <span class="dd_right">
+                <input type="text" class="qtext" name="userSpeciality" datatype="*2-80"  maxlength=80 id="userSpeciality"/>
+                <font class="defi defi-01"><span class="Validform_checktip"></span></font>
+            </span>
+        </dd>
+
+        <dd>
+        	<span class="dd_left">收藏量:</span>
+            <span class="dd_right">
+            	<input type="text" class="dtext" name="userCollectionNum" datatype="n"  id="userCollectionNum"/><font>* 请填写数字</font><font class="defi defi-01"><span class="Validform_checktip"></span></font>
+            </span>
+        </dd>
+
+        <dd>
+            <span class="dd_left">持股金额:</span>
+            <span class="dd_right">
+                <input type="text" class="dtext" name="userStockNum" datatype="n"  id="userStockNum"/>
+            </span>
+        </dd>
+
+        <dd>
+            <span class="dd_left">积分:</span>
+            <span class="dd_right">
+               <input type="text" class="dtext" name="memberPoint" datatype="n"  id="memberPoint" readonly="readonly"/>
+            </span>
+        </dd>
+
+        <dd>
+            <span class="dd_left">会员等级:</span>
+            <span class="dd_right">
+                <input type="text" class="dtext" name="memberLvel" datatype="n"  id="memberLvel" readonly="readonly"/>
+            </span>
+        </dd>
+        
+        <dd>
+            <span class="dd_left">微信号:</span>
+            <span class="dd_right">
+                <input type="text" class="dtext" name="userWx" datatype="n"  id="userWx"/>
+            </span>
+        </dd>
+
+        <dd>
+            <span class="dd_left">QQ号:</span>
+            <span class="dd_right">
+                <input type="text" class="dtext" name="userQq" datatype="n"  id="userQq"/>
+            </span>
+        </dd>
+
+        <dd>
+            <span class="dd_left">荣誉值:</span>
+            <span class="dd_right">
+                <input type="text" class="dtext" name="memberGlory" datatype="n"  id="memberGlory" readonly="readonly" />
+            </span>
+        </dd>
+        
+    	<dd style="margin-top: 30px;"><input type="button" class="so" onclick="subimtBtn();" value="修 改" /></dd>
+    </dl>
+<!--     </form> -->
+</div>
+
+<script type="text/javascript">
+var img = '';
+ function preview(file){
+    $("#str").remove('.imgstr');
+    var prevDiv = document.getElementById('str');
+    if (file.files && file.files[0]){
+        var reader = new FileReader();
+        reader.onload = function(evt){
+        img = evt.target.result;
+        prevDiv.innerHTML = '<img src="' + evt.target.result + '" />';
+        }  
+        reader.readAsDataURL(file.files[0]);
+    }
+    else  
+    {
+    prevDiv.innerHTML = '<div class="img" style="filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src=\'' + file.value + '\'"></div>';
+    }
+ }
+
+  function getQueryString(name) {
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+      var r = window.location.search.substr(1).match(reg);
+      if (r != null) return unescape(r[2]); return null;
+    }
+
+  var sid = getQueryString("sid");
+  //请求数据
+  $.ajax({
+    url:'<{$url}>/manager/user/getUserDetail',// 跳转到 action  
+    data:{sid:sid},  
+    type:'post',  
+    cache:false,  
+    dataType:'json',  
+    success:function(data) {
+        if(data.code =="2000"){
+            var data = data.data;
+            $("#userNickName").val(data.userNickName);
+            $("#titleid").val(data.sid);
+            $("#userFrequentAddress").val(data.userFrequentAddress);
+            $("#userServiceNum").val(data.userServiceNum);
+            $("#userSpeciality").val(data.userSpeciality);
+            $("#userCollectionNum").val(data.userCollectionNum);
+            $("#memberPoint").val(data.memberPoint);
+            $("#userStockNum").val(data.userStockNum);
+            $("#memberGlory").val(data.memberGlory);
+            $("#userWx").val(data.userWx);
+            $("#userQq").val(data.userQq);
+            if(data.memberLevel == 1){
+                $("#memberLvel").val('金牌VIP');
+            }else if(data.memberLevel == 2){
+                $("#memberLvel").val('钻石VIP');
+            }else if(data.memberLevel == 3){
+                $("#memberLvel").val('皇冠VIP');
+            }else if(data.memberLevel == 0){
+                $("#memberLvel").val('普通用户');
+                console.log('普通用户')
+            }
+            var imgstr='';
+            imgstr+= ' <div class="imgstr"><img src="'+data.headPicUrl+'" alt="" style="height:100px;width:100px;"></div>'
+            document.getElementById("str").innerHTML =imgstr 
+
+            var radio = data.userServiceStatus;
+            if(radio == null){
+                var radio = "0";
+            }
+            document.all("userServiceStatus")[radio].checked=true;
+       }
+      }, 
+      error : function() {      
+        alert("异常！");  
+    }  
+  });
+
+
+
+function subimtBtn(){
+    var userNickName = $('#userNickName').val();
+    var sid = $('#titleid').val();
+    var userFrequentAddress = $('#userFrequentAddress').val();
+    var userServiceNum = $('#userServiceNum').val();
+    var userSpeciality = $('#userSpeciality').val();
+    var userCollectionNum = $('#userCollectionNum').val();
+      
+    var fileObj = document.getElementById("file").files[0];
+    var FileController = '<{$url}>/manager/user/editUserDetail';                 
+    var form = new FormData();
+    form.append("file", fileObj);                          
+                          
+    form.append("userNickName", userNickName);                        
+    form.append("sid", sid);                        
+    form.append("userFrequentAddress", userFrequentAddress);
+    form.append("userServiceNum", userServiceNum);
+    form.append("userSpeciality", userSpeciality);
+    form.append("userCollectionNum", userCollectionNum);
+    form.append("userWx", $("#userWx").val());                        
+    form.append("userQq", $("#userQq").val());                        
+                                            
+    var xhr = new XMLHttpRequest();
+    xhr.open("post", FileController, true);
+      xhr.onload = function (json) {
+        var obj = jQuery.parseJSON(json.target.responseText)
+        if(obj.code == 2000){
+            alert(obj.message);
+            location.href=document.referrer;
+        }
+      };
+      xhr.send(form);
+        
+}
+
+</script>
+</body>
+</html>

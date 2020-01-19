@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>收费配置|<{$configcache['Title']}></title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <link rel="stylesheet" type="text/css" href="__JS__/layer/skin/layer.css" />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/layer/layer.js"></script>
+    <style type="text/css">
+    .tc{text-align:center; text-indent:0;font-family:"微软雅黑";font-size: 14px;color:#111;}
+    .came a{top:10px; width:100px; height:35px; line-height:30px; border:none; background:#a2a2a2; color:#fff; font-family:"微软雅黑";text-align:center;float:right;margin-right: 20px;margin-top: 20px;margin-bottom: 10px;cursor: pointer;}
+    </style>
+<script>
+    function myBrowser(){
+    var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+    var isOpera = userAgent.indexOf("Opera") > -1;
+    if (isOpera) {
+        return "Opera"
+    }; //判断是否Opera浏览器
+    if (userAgent.indexOf("Firefox") > -1) {
+        return "FF";
+        /*firefox----这段js重新封装了event对象，经验证可以在火狐下支持！----*/
+        function __firefox(){
+            HTMLElement.prototype.__defineGetter__("runtimeStyle", __element_style);
+            window.constructor.prototype.__defineGetter__("event", __window_event);
+            Event.prototype.__defineGetter__("srcElement", __event_srcElement);
+        }
+        function __element_style(){
+            return this.style;
+        }
+        function __window_event(){
+            return __window_event_constructor();
+        }
+        function __event_srcElement(){
+            return this.target;
+        }
+        function __window_event_constructor(){
+            if(document.all){
+                return window.event;
+            }
+            var _caller = __window_event_constructor.caller;
+            while(_caller!=null){
+                var _argument = _caller.arguments[0];
+                if(_argument){
+                    var _temp = _argument.constructor;
+                    if(_temp.toString().indexOf("Event")!=-1){
+                        return _argument;
+                    }
+                }
+                _caller = _caller.caller;
+            }
+            return null;
+        }
+        if(window.addEventListener){
+            __firefox();
+        }
+    } //判断是否Firefox浏览器
+    if (userAgent.indexOf("Chrome") > -1){
+      return "Chrome";
+  }
+  if (userAgent.indexOf("Safari") > -1) {
+    return "Safari";
+    } //判断是否Safari浏览器
+    if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+        return "IE";
+    }; //判断是否IE浏览器
+}
+myBrowser();
+</script>
+</head>
+<body>
+    <div id="content">
+       <h1>首页 > 逸管家 > 收费配置</h1>
+       <h2>
+           <div class="h2_left">
+               <a href="__ACTION__" class="whole">全部</a>
+               <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+               <a href="javascript:history.back();" class="Retreat">后退</a>
+               <a href="javascript:history.go(1);" class="Advance">前进</a>
+           </div>
+    </h2>
+<div class="came"><a href="<{:U('Client/chargeEdit')}>" title=""><font size='4'>+</font>添加</a></div>
+<table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+   <tr>
+     <th>序号</th>
+     <th>费用类型</th>
+     <th>扣费比例</th>
+     <th>添加时间</th>
+     <th>更新时间</th>
+     <th>备注</th>
+     <th>操作</th>   
+ </tr>
+ <volist name="list" id="vo" empty="$empty">
+ <tr>
+    <td style="text-align:center" class='tc'><{$vo.id}></td>
+    <td style="text-align:center" class='tc'>
+        <switch name="vo.costType">
+            <case value="1">扣费比例</case>        
+        <default />
+    </switch>
+    </td>
+    <td style="text-align:center" class='tc'><{$vo['plateformRatio'] * 100}>%</td>
+    <td style="text-align:center" class='tc'><{$vo.createTime}></td>
+    <td style="text-align:center" class='tc'><{$vo.updateTime}></td>
+    <td style="text-align:center" class='tc'><{$vo.comment}></td>
+    <td style="text-align:center" class='tc'><a href="__APP__/Client/chargeEdit?id=<{$vo.id}>" style="margin-right: 5px;color:black">编辑</a> <a href="javascript:;" onclick="delChargeSet('<{$vo.id}>');">删除</a></td>   
+</tr>
+</volist>   
+</table>
+<div id="page">
+  <{$page}>
+</div>
+</div>
+<script type="text/javascript">
+var _url='<{$Think.config.URL}>';
+
+//删除收费配置
+function delChargeSet(_id){
+    layer.confirm('确认删除？删除后不可恢复！',function(){                    
+        $.post(_url+'/manager/congfig/delParamConfig',{'ids':_id},function(result){
+                if(result.success){
+                    layer.msg('删除成功！',{icon: 1,time: 1500},function(){
+                        f5()
+                    });
+                }else{
+                  layer.msg('删除失败！',{icon: 2,time: 1500},function(){                
+                        f5();
+                  });
+                }
+        },'json')
+    });
+ }
+
+</script>
+</body>
+</html>

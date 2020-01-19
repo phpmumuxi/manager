@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商品管理|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<style type="text/css">
+    .select{padding:5px 10px;border:#ddd 1px solid;border-radius:4px;width:60%;margin:5% auto;font-size:12px}
+    .select li{list-style:none;padding:10px 0 5px 100px}
+    .select .select-list{border-bottom:#eee 1px dashed}
+    .select dl{zoom:1;position:relative;line-height:24px;}
+    .select dl:after{content:" ";display:block;clear:both;height:0;overflow:hidden}
+    .select dt{width:100px;margin-bottom:5px;position:absolute;top:0;left:-100px;text-align:right;color:#666;height:24px;line-height:24px}
+    .select dd{float:left;display:inline;margin:0 0 5px 5px;}
+    .select a{display:inline-block;white-space:nowrap;height:24px;padding:0 10px;text-decoration:none;color:#039;border-radius:2px;}
+    .select a:hover{color:#f60;background-color:#f3edc2}
+    .select .selected a{color:#fff;background-color:#f60}
+    .select-result dt{font-weight:bold}
+    .select-no{color:#999}
+    .select .select-result a{padding-right:20px;background:#f60 url("__PUBLIC__/image/close.gif") right 9px no-repeat}
+    .select .select-result a:hover{background-position:right -15px}
+    .tc{text-align:center; text-indent:0;font-family:"微软雅黑";font-size: 14px;color:#111;}
+    
+    .tel{left:0; top:10px; width:200px; height:24px; line-height:24px; color:#555; font-family:"微软雅黑"; repeat-x left top; border:solid 1px #ccc;}
+    .sure{left:220px; top:10px; width:60px; height:28px; line-height:28px; border:none; background:#090; color:#fff; font-family:"微软雅黑"; cursor:pointer;}
+    a:link {color: #169BD5}
+</style>
+</head>
+<body>
+<div id="content">
+    <h1>首页 > 商品管理 > 商铺管理</h1>
+    <h2>
+        <div class="h2_left">
+            <a href="__ACTION__" class="whole">全部</a>
+            <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+    </h2>
+    <div class="fen">
+        <ul class="select" style="height:75px;margin-top: 20px;margin-bottom: 20px;">
+         <li class="select-list List_more"> 
+              <dl>        
+                  <dt>店铺类型：</dt>
+                  <dd <if condition="$userShopType eq 0"> class="selected"</if>>
+                    <a href="<{:U('Shop/shops',['userShopType' => 0])}>">全部</a>
+                  </dd>
+                  <dd <if condition="$userShopType eq 1"> class="selected"</if>>
+                    <a href="<{:U('Shop/shops',['userShopType' => 1])}>">社区店铺</a>
+                  </dd>
+                  <dd <if condition="$userShopType eq 2"> class="selected"</if>>
+                    <a href="<{:U('Shop/shops',['userShopType' => 2])}>">工厂店铺</a>
+                  </dd>
+                  <dd <if condition="$userShopType eq 3"> class="selected"</if>>
+                    <a href="<{:U('Shop/shops',['userShopType' => 3])}>">贸易服务商店铺</a>
+                  </dd>
+              </dl>
+          </li>
+          <li class="select-list List_more">
+            <dl id="select" >
+                <dt>数据来源：</dt>
+                  <dd <if condition="$dataSource eq -1"> class="selected"</if>>
+                    <a href="<{:U('Shop/shops',['dataSource' => -1])}>">全部</a>
+                  </dd>
+                    <dd <if condition="$dataSource eq 0"> class="selected"</if>>
+                    <a href="<{:U('Shop/shops',['dataSource' => 0])}>">自营</a>
+                  </dd>
+                  <dd <if condition="$dataSource eq 1"> class="selected"</if>>
+                    <a href="<{:U('Shop/shops',['dataSource' => 1])}>">第三方</a>
+                  </dd>
+            </dl>
+          </li>         
+        </ul>
+    </div>
+
+  <form method="post" style="margin-top:40px;">
+    <div>
+        <div>
+            手机号：<input type="text" name="telephone" id="userTelephone" class="tel"  placeholder="请输入用户手机号" value="<{$data['telephone']}>"/>&nbsp;&nbsp;&nbsp;
+            昵称：<input type="text" name="userNickName" id="userNickName" class="tel"  placeholder="请输入用户昵称" value="<{$data['userNickName']}>"/>&nbsp;&nbsp;&nbsp;                      
+            <input type="submit" class="sure" value="搜索" />           
+        </div>
+    </div>
+  </form> 
+
+<table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+    <tr>
+        <th>店铺类型</th>
+        <th>公司名/商铺名称</th>
+        <th>用户昵称</th>
+        <th>城市</th>
+        <th>手机号码</th>
+        <th>服务费/年</th>
+        <th>推荐返利/笔</th>
+        <th>交易佣金/笔</th>
+        <th>交易手续费/笔</th>
+        <th>提现手续费</th>
+        <th>数据来源</th>       
+        <th>商品数量</th>
+    </tr>
+    <empty name="list">
+      <tr><td colspan="12" style="text-align:center">暂无数据</td></tr>
+    <else />
+    <volist name="list" id="vo">
+        <tr>
+            <td style="text-align:center">
+                <switch name="vo.userShopType">
+                    <case value="1">社区店铺</case>
+                    <case value="2">工厂店铺</case>
+                    <case value="3">贸易服务商店铺</case>
+                    <default />
+                </switch>
+            </td>
+            <td style="text-align:center"><{$vo.companyName}></td>
+            <td style="text-align:center"><{$vo.userNickName}></td>
+            <td style="text-align:center"><{$vo.userServiceCity}></td>
+            <td style="text-align:center"><{$vo.userTelephone}></td>
+            <td style="text-align:center"><{$vo.serviceFee}></td>
+            <td style="text-align:center"><{$vo.recommendRebate}></td>
+            <td style="text-align:center"><{$vo.tradeCommission}></td>
+            <td style="text-align:center"><{$vo.tradeFee}></td>
+            <td style="text-align:center"><{$vo.withdrawFee}></td>
+            <td style="text-align:center">
+                <switch name="vo.dataSource">
+                    <case value="0">自营</case>
+                    <case value="1">第三方</case>
+                    <default />
+                </switch>
+            </td>
+            <td style="text-align:center">
+                <if condition="$vo.goodsNum gt 0">                
+                    <a href="javascript:;" class="lookShopsBtn" sid="<{$vo.sid}>"><{$vo.goodsNum}></a>
+                <else />
+                    0
+                </if>                           
+            </td>      
+        </tr> 
+    </volist>
+    </empty>
+</table>
+    <div id="page">
+      <{$page}>
+    </div>
+</div>
+<script src="__PUBLIC__/js/layer/layer.js"></script>
+<script type="text/javascript">
+    // $('.sure').click(function(){    
+    //     var _userTelephone = $.trim($('#userTelephone').val());
+    //     var _userNickName = $.trim($('#userNickName').val());
+    //     var _companyName = $.trim($('#companyName').val());
+
+    //     if (_userTelephone && !(/^[1][3,4,5,6,7,8,9][0-9]{9}$/.test(_userTelephone))) {  
+    //         layer.msg('手机号不正确！', {icon: 2});
+    //         return false;
+    //     }    
+    //     if(_userTelephone == "" && _userNickName =="" && _companyName ==""){
+    //         layer.msg('请输入要搜索信息！', {icon: 2}); 
+    //         return false;
+    //     } 
+    // })
+
+    $('.lookShopsBtn').click(function(){
+        var _sid = $(this).attr('sid');
+        window.location.href =  "__APP__/Shop/goods?companyId="+_sid;     
+    });
+</script>
+</body>
+</html>

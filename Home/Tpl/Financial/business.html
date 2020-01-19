@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>财务管理|<{$configcache['Title']}></title>
+  <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+  <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+  <script type="text/javascript" src="__JS__/jquery.js"></script>
+  <script type="text/javascript" src="__JS__/Public.js"></script>
+  <script type="text/javascript" src="__JS__/winpop.js"></script>
+  <script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+  <style type="text/css">
+  .select{padding:5px 10px;border:#ddd 1px solid;border-radius:4px;width:60%;margin:5% auto;font-size:12px}
+  .select li{list-style:none;padding:10px 0 5px 100px}
+  .select .select-list{border-bottom:#eee 1px dashed}
+  .select dl{zoom:1;position:relative;line-height:24px;}
+  .select dl:after{content:" ";display:block;clear:both;height:0;overflow:hidden}
+  .select dt{width:100px;margin-bottom:5px;position:absolute;top:0;left:-100px;text-align:right;color:#666;height:24px;line-height:24px}
+  .select dd{float:left;display:inline;margin:0 0 5px 5px;}
+  .select a{display:inline-block;white-space:nowrap;height:24px;padding:0 10px;text-decoration:none;color:#039;border-radius:2px;}
+  .select a:hover{color:#f60;background-color:#f3edc2}
+  .select .selected a{color:#fff;background-color:#f60}
+  .select-result dt{font-weight:bold}
+  .select-no{color:#999}
+  .select .select-result a{padding-right:20px;background:#f60 url("__PUBLIC__/image/close.gif") right 9px no-repeat}
+  .select .select-result a:hover{background-position:right -15px}
+  .tc{text-align:center; text-indent:0;font-family:"微软雅黑";font-size: 14px;color:#111;}
+  .tel{left:0; top:10px; width:220px; height:26px; line-height:26px; color:#555; font-family:"微软雅黑"; repeat-x left top; border:solid 1px #ccc;}
+  .tel-1{left:220px; top:10px; width:60px; height:28px; line-height:28px; border:none; background:#090; color:#fff; font-family:"微软雅黑"; cursor:pointer;}
+  </style>
+</head>
+<body>
+  <div id="content">
+   <h1>首页 > 财务管理 > 商家申请提现列表</h1>
+   <h2>
+     <div class="h2_left">
+       <a href="__ACTION__" class="whole">全部</a>
+       <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+       <a href="javascript:history.back();" class="Retreat">后退</a>
+       <a href="javascript:history.go(1);" class="Advance">前进</a>
+     </div>
+     <!-- <div class="search">
+      <form method="get" id="search">
+       <input type="text" name="k" class="text" value="<{$key}>"/>
+       <input type="submit" class="so" value="搜 索" />
+     </form>
+     <font>小贴士:&nbsp;&nbsp;&nbsp;请输入商家名称</font>
+   </div> -->
+ </h2>
+ <div class="fen">
+  <ul class="select" style="height:88px;margin-top: 20px;margin-bottom: 20px;">
+   <!-- <li class="select-list List_more"> 
+    <dl id="select">
+      <dt>申请时间：</dt>
+      <volist name="times" id="val">
+        <dd <if condition="$Think.get.t eq $val['value']"> class="selected select-all"</if>><a href="<{$val.value|createsearchurl="/Financial/business",t,###,"add",null,null}>"><{$val.name}></a></dd>
+      </volist>
+    </dl>
+  </li> -->
+  <li class="select-list List_more"> 
+     <dl id="select">
+      <dt>交易状态：</dt>
+        <dd <?php if(get('t')<0){ echo ' class="selected select-all"';}$t = -1;?>><a href="<{$t|createsearchurl="/Financial/business",t,###,"add",null,null}>">全部</a></dd>
+        <volist name="tradeStatus" id="val">
+          <dd <if condition="$Think.get.t eq $val['value']"> class="selected select-all"</if>><a href="<{$val.value|createsearchurl="/Financial/business",t,###,"add",null,null}>"><{$val.name}></a></dd>
+        </volist>
+      </dl>
+  </li>
+</ul>
+</div>
+<table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+  <tr>
+    <th>开户名称/收款人名称</th>
+    <th>公司名称</th>
+    <th>银行帐号</th>
+    <th>金额</th>
+    <th>开户行</th>
+    <th>开户支行</th>
+    <th>开户城市</th>
+    <th>申请时间</th> 
+    <th>手机号</th>
+    <th>交易状态</th>
+    <th>操作</th>
+  </tr>
+  <volist name="pay" id="vo">
+    <tr>
+      <td style="text-align:center" class='tc'><{$vo.bankUserRealName}></td>
+      <td style="text-align:center" class='tc'><{$vo.companyName}></td>
+      <td style="text-align:center" class='tc'><{$vo.cardNo}></td>
+      <td style="text-align:center" class='tc'><{$vo.money}> 元</td>
+      <td style="text-align:center" class='tc'><{$vo.bankname}></td>
+      <td style="text-align:center" class='tc'><{$vo.bankBranchName}></td>
+      <td style="text-align:center" class='tc'><{$vo.city}></td>
+      <td style="text-align:center" class='tc'><{$vo.tradeTime}></td>
+      <td style="text-align:center" class='tc'><{$vo.userTelephone}></td>
+      <td style="text-align:center" class='tc'>
+       <!-- 使用switch标签判断输出 -->
+       <switch name="vo.tradeStatus">
+         <case value="0">失败</case>
+         <case value="1">待付款</case>
+         <case value="2">成功</case>
+         <case value="3">待收款</case>
+         <default />
+       </switch>
+     </td>
+      <td>
+        <switch name="vo.tradeStatus">
+          <case value="0">失败&nbsp;&nbsp;
+            <if condition="$vo.payType eq 4">
+             <a href="javascript:;" class="voucher" style="color:#0000FF" mainTradeNo="<{$vo.mainTradeNo}>">查看凭证</a>
+             <!--  <a href="<{:U('Financial/voucher',array('mainTradeNo'=>$vo['mainTradeNo'],'orderNo'=>$vo['orderNo']))}>"  style="color:#0000FF">查看凭证</a> -->
+             <else/>
+           </if>
+         </case>
+         <case value="1">
+          <if condition="$vo.payType eq 4">
+            <a href="javascript:;" class="paysure" style="color:#0000FF" id="<{$vo.sid}>" orderNo="<{$vo.orderNo}>">确认支付</a>&nbsp;&nbsp;<a href="javascript:;" class="voucher" style="color:#0000FF" mainTradeNo="<{$vo.mainTradeNo}>">查看凭证</a><!-- <a href="<{:U('Financial/voucher',array('mainTradeNo'=>$vo['mainTradeNo'],'orderNo'=>$vo['orderNo']))}>"  style="color:#0000FF">查看凭证</a>-->
+            <else/>
+            <a href="javascript:;" class="success" style="color:#0000FF" id="<{$vo.sid}>">&nbsp;&nbsp;成功</a>&nbsp;&nbsp;<a href="javascript:;" class="nopass" style="color:#0000FF" id="<{$vo.sid}>">失败</a>
+          </if>
+        </case>
+        <case value="2">已成功&nbsp;&nbsp;
+          <if condition="$vo.payType eq 4">
+           <a href="javascript:;" class="voucher" style="color:#0000FF" mainTradeNo="<{$vo.mainTradeNo}>">查看凭证</a>
+           <!--    <a href="<{:U('Financial/voucher',array('mainTradeNo'=>$vo['mainTradeNo'],'orderNo'=>$vo['orderNo']))}>"  style="color:#0000FF">查看凭证</a> -->
+           <else/>
+         </if>
+       </case>
+       <case value="3">
+        <if condition="$vo.payType eq 4">
+          <a href="javascript:;" class="success" style="color:#0000FF" id="<{$vo.sid}>">&nbsp;&nbsp;成功</a>&nbsp;&nbsp;<a href="javascript:;" class="nopass" style="color:#0000FF" id="<{$vo.sid}>">失败</a>&nbsp;&nbsp;<!-- <a href="javascript:;" class="paysure" style="color:#0000FF" id="<{$vo.sid}>" orderNo="<{$vo.orderNo}>">确认支付</a>&nbsp;&nbsp; --><a href="javascript:;" class="voucher" style="color:#0000FF" mainTradeNo="<{$vo.mainTradeNo}>">查看凭证</a> <!-- <a href="<{:U('Financial/voucher',array('mainTradeNo'=>$vo['mainTradeNo'],'orderNo'=>$vo['orderNo']))}>"  style="color:#0000FF">查看凭证</a>-->
+          <else/>
+          <a href="javascript:;" class="success" style="color:#0000FF" id="<{$vo.sid}>">&nbsp;&nbsp;成功</a>&nbsp;&nbsp;<a href="javascript:;" class="nopass" style="color:#0000FF" id="<{$vo.sid}>">失败</a>
+        </if>
+      </case>
+      <default />
+    </switch>
+  </td>
+</tr> 
+</volist>
+</table>
+
+<div id="page">
+  <{$page}>
+</div>
+</div>
+
+<script type="text/javascript">
+$(function()
+{
+  $ ("select").change (function ()
+  {
+    var tradeStatus = ($ (this).find ("option:selected").attr ("tradeStatus"));
+    if(tradeStatus == 40){
+      tradeStatus = 0;
+    }
+    var id =  ($ (this).find ("option:selected").attr ("id"));
+            //console.log(tradeStatus+id);
+            $.ajax({
+              type: "POST",
+              cache: true,
+              async: true,
+              ifModified:true,
+              timeout:12000,
+              url: "<{$url}>/manager/wtRecord/editWtRecord",
+              data: {tradeStatus:tradeStatus,id:id}, 
+              dataType: "json",
+              // accepts: "json",
+              success: function(json) {
+                f5();
+              },  
+              error: function(XMLHttpRequest, exception) {
+                f5();
+                // if (XMLHttpRequest.status == 0) {
+                //   alert('网络不给力，请稍后再试！');
+                // }else if (XMLHttpRequest.status == 404) {
+                //   alert('资源地址不存在');
+                // }else if (XMLHttpRequest.status == 408) {
+                //   alert('网络不给力，请稍后再试！');
+                // }else if (XMLHttpRequest.status == 500) {
+                //   alert('服务器出错啦')
+                // }else if (XMLHttpRequest.status == 502) {
+                //   alert('Web服务器用作网关或代理服务器时收到了无效响应');
+                // }else if (XMLHttpRequest.status == 503) {
+                //   alert('服务不可用');
+                // }else if (XMLHttpRequest.status == 504) {
+                //   alert('网关超时！');
+                // }else{
+                // }
+              }
+            })
+})
+})
+</script>
+
+<script type="text/javascript">
+$(function (){
+  $('.success').click(function(){
+    var tradeStatus = 2;
+    var id= $(this).attr('id');
+    //console.log(id+tradeStatus);
+    if(!confirm("确认修改状态吗？")){ 
+      window.event.returnValue = false; 
+      return;
+    } 
+    $.ajax({
+      type: "POST",
+      cache: true,
+      async: true,
+      ifModified:true,
+      timeout:12000,
+      url: "<{$url}>/manager/wtRecord/editWtRecord",
+      data: {tradeStatus:tradeStatus,id:id}, 
+      dataType: "json",
+      // accepts: "json",
+      success: function(json) {
+        f5();
+      },  
+      error: function(XMLHttpRequest, exception) {
+        f5();
+      }
+    })
+  });
+
+  $('.nopass').click(function(){
+    var tradeStatus = 0;
+    var id= $(this).attr('id');
+    // console.log(id+tradeStatus);
+    if(!confirm("确认修改状态吗？")){ 
+      window.event.returnValue = false; 
+      return;
+    } 
+    $.ajax({
+      type: "POST",
+      cache: true,
+      async: true,
+      ifModified:true,
+      timeout:12000,
+      url: "<{$url}>/manager/wtRecord/editWtRecord",
+      data: {tradeStatus:tradeStatus,id:id}, 
+      dataType: "json",
+      // accepts: "json",
+      success: function(json) {
+        f5();
+      },  
+      error: function(XMLHttpRequest, exception) {
+        f5();
+      }
+    })
+  });
+
+  $('.voucher').click(function(){
+    var mainTradeNo= $(this).attr('mainTradeNo');
+    //console.log(mainTradeNo);return;
+
+    $.ajax({
+      type: "POST",
+      cache: true,
+      async: true,
+      ifModified:true,
+      timeout:12000,
+      url: "<{$url}>/manager/wtRecord/checkUpCertificate",
+      data: {mainTradeNo:mainTradeNo}, 
+      dataType: "json",
+      success: function(data) {
+          console.log(data);
+          if(data.code == '2000'){
+            if(data.data){
+              // var tong = '<div id="tong" class="hide layui-layer-wrap" style="display:block;"><img src="'+data.data.certificateUrl+'" style="width:598px;"></div>';
+              //   layer.open({
+              //   type: 1,
+              //   title: false,
+              //   closeBtn: 1,
+              //   area: '600px',
+              //     skin: 'layui-layer-nobg', //没有背景色
+              //     shadeClose: true,
+              //     content: tong
+              //   });
+              
+               
+     
+              //调用示例
+              layer.ready(function(){ //为了layer.ext.js加载完毕再执行
+                layer.photos({
+                  photos: '#layer-photos-demo'
+                  ,shift: 5 //0-6的选择，指定弹出图片动画类型，默认随机
+                });
+              });
+            }else{
+              alert(data.message);
+            }
+          }
+        },  
+        error: function(XMLHttpRequest, exception) {
+          f5();
+        }
+      })
+  });
+});
+
+
+
+$('.cash').click(function(){
+  var bankname = $(this).attr('bankname');
+  var cardNo = $(this).attr('cardNo');
+  var bank =  '<br>开户银行:'+bankname+'<br><br>银行账号:'+cardNo+'';
+  console.log(bank);
+  layer.open({
+    type: 1,
+      skin: 'layui-layer-rim', //加上边框
+      area: ['420px', '240px'], //宽高
+      content: bank
+    });
+});
+
+
+$('.paysure').click(function(){
+    var tradeStatus = '2';
+    var id= $(this).attr('id');
+    var orderNo = $(this).attr('orderNo');
+    wintq('正在处理,请稍后...',4,20000,0,'');
+    // console.log(orderNo);return;
+    if(!confirm("确认修改状态吗？")){ 
+      window.event.returnValue = false; 
+      return;
+    } 
+    $.ajax({
+      type: "POST",
+      cache: true,
+      async: true,
+      ifModified:true,
+      timeout:12000,
+      url: "<{$url}>/manager/wtRecord/confimOfflineWtRecord",
+      data: {tradeStatus:tradeStatus,id:id,orderNo:orderNo}, 
+      dataType: "json",
+      // accepts: "json",
+      success: function(data) {
+        alert('修改成功');
+        f5();
+      },  
+      error: function(XMLHttpRequest, exception) {
+        f5();
+      }
+    })
+  });
+
+</script>
+
+</body>
+</html>

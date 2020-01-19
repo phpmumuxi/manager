@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>渠道管理|<{$configcache['Title']}></title>
+<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+<script type="text/javascript" src="__JS__/jquery.js"></script>
+<script type="text/javascript" src="__JS__/Public.js"></script>
+<script type="text/javascript" src="__JS__/winpop.js"></script>
+<script type="text/javascript" src="__JS__/check.js"></script>
+<script type="text/javascript" src="__JS__/jquery-form.js"></script>
+<link rel="stylesheet" href="__JS__/Validform/images/style.css" type="text/css" media="all" /> 
+<script type="text/javascript" src="__JS__/Validform/images/jquery-1.9.1.min.js"></script> 
+<script type="text/javascript" src="__JS__/Validform/images/Validform_v5.3.2.js"></script> 
+<script type="text/javascript" src="__JS__/Validform/plugin/passwordStrength/passwordStrength-min.js"></script> 
+<script src="__JS__/jquery-form.js" type="text/javascript"></script>
+<script type="text/javascript" src="__JS__/layer/layer.js"></script>
+<link rel="stylesheet" type="text/css" href="__JS__/layer/skin/layer.css" />
+<style type="text/css" >
+    #view{} .imgbox{float:left;position:relative;width:100px;height: 100px;margin-left: 10px;margin-top: 10px;
+      padding:5px;border:solid 1px #ccc;border-radius: 5px;;}
+    #view{} .imgbox .close{border: solid 1px #ccc;position: absolute;top: -15px;
+      width: 20px;height: 20px; display: inherit;cursor: pointer;text-align: center;background: red;color: #fff;right: -10px;z-index: 20;border-radius: 100%;}
+    #view{} .imgbox input{width:100%;height: 100%;z-index: 10;}
+    .tablecon{width: 800px; margin-left:80px;}
+    #content .tablecon #cdl dd .dd_left { display:block; width:110px; line-height:24px; float:left; text-align:left; font-weight:900; color:#444; margin-right:6px; }
+    .bang{cursor: pointer;background-color: #090;color: #fff;margin-right: 365px;float:right;text-align: center;width: 60px;height: 26px;margin-top: 5px;}
+    .acttitle{font-size: 28px;margin: 0 auto;width: 120px;font-weight: bold;}
+    #content #cdl dd font span { font-family:"Georgia"; font-weight:900; font-size:18px; color:#444; }
+    #content .atext { width:100px; height:24px; line-height:24px;border:solid 1px #ccc; font-family:"宋体"; }
+</style>
+<script type="text/javascript">
+$(function(){
+    $(".registerform").Validform({
+        tiptype:2,
+        /*表单验证*/
+        tiptype:function(msg,o,cssctl){
+            if(!o.obj.is("form")){
+                var objtip=o.obj.parent().find(".Validform_checktip");
+                cssctl(objtip,o.type);
+                objtip.text(msg);
+                
+                var infoObj=o.obj.parent().find(".info");
+                if(o.type==2){
+                    infoObj.fadeOut(200);
+                }else{
+                    if(infoObj.is(":visible")){return;}
+                    layer.closeAll('loading');
+                    infoObj.css({
+                        left:0,
+                        top:-30
+                    }).show().animate({
+                        top:-27
+                    },200);
+                } 
+            }   
+        },  
+    });
+})
+</script> 
+</head>
+<body>
+<div id="content">
+    <h1>首页 > 渠道管理 > 新增渠道</h1>
+    <h2>
+        <div class="h2_left">
+            <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+    </h2>
+    <div class="tablecon">
+    <div class="acttitle">新增渠道</div>
+    <form action="<{$url}>/manager/activeChannel/save" method="post" class="registerform" id="form"  enctype="multipart/form-data">
+    <dl id="cdl">
+        <dd>
+            <span class="dd_left">渠道名称:</span>
+            <span class="dd_right">
+                <input type="text" class="qtext" name="channelName" value="" id="channelName" datatype="*1-400" errormsg="渠道名称在1~400位之间！"  nullmsg="请填写渠道名称！" maxlength=400 />
+                <font class="defi defi-01"><span class="Validform_checktip"></span></font>
+            </span>
+        </dd>
+        <dd>
+            <span class="dd_left">渠道编码:</span>
+            <span class="dd_right">
+                <input type="text" class="qtext" name="channelCode" value="" id="channelCode" datatype="*1-400" errormsg="渠道编码在1~80位之间！"  nullmsg="请填写渠道编码！" maxlength=400 /><span style="color:red;">(提示:渠道编码唯一)</span>
+                <font class="defi defi-01"><span class="Validform_checktip"></span></font>
+            </span>
+        </dd>
+<!--         <dd>
+            <span class="dd_left">是否启用:</span>
+            <span class="dd_right">
+                <input type="radio" name="istUse" value="1" checked>启用&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="istUse" value="0">不启用
+            </span>
+        </dd> -->
+<!--         <dd>
+            <span class="dd_left">备注:</span>
+            <span class="dd_right">
+                 <textarea style="border: 1px solid rgb(204, 204, 204); box-shadow: none; margin: 0px; width: 509px; height: 106px;" name="remark" id="remark"  maxlength="3000"></textarea>
+            </span>
+        </dd> -->
+    	<dd style="margin-top: 10px;margin-bottom: 160px;"><input type="submit" class="so submit" value="提 交" /></dd>
+        <input type="hidden" name="" value="<{:U('Activity/sources')}>" id="jump">
+    </dl>
+    </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+$(function(){
+$(document).ready(function(){
+    $('.submit').click(function(){
+        var channelName = $('#channelName').val();
+        var channelCode = $('#channelCode').val();
+      
+        if(channelName == '' || channelCode==''){
+            return;
+        }
+        var index = layer.load(1, {shade: [0.1,'#fff']});   
+    });
+
+    $('#form').ajaxForm(function(data){
+        //弹出ajax请求后的回调结果，data回调数据  onclick="sub()"
+        if(data.code =="2000" ){ 
+            layer.closeAll('loading');
+            alert(data.message);
+            var url = $('#jump').val();
+            window.location.href = url; 
+            // location.href=document.referrer; 
+         }else{
+            layer.closeAll('loading');
+            alert(data.message);
+         }
+    });
+});
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>已报名人员统计|<{$configcache['Title']}></title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/winpop.js"></script>
+    <style>
+    .nav_div{
+        border-bottom:1px solid #333333;
+        height:50px;
+        margin-top: 30px;    
+    }
+    .nav_div ul{
+        list-style:none;
+        text-align:center;
+        cursor:pointer; 
+        margin-left: 0;
+    }
+    .nav_div ul li{
+        float:left;
+        height:49px;
+        width:128px;
+        line-height:50px;
+    }
+    .nav_active{
+        color: #169BD5;
+        border-top: 1px solid #333333;
+        border-left: 1px solid #333333;
+        border-right: 1px solid #333333;
+        border-bottom: 2px solid white;
+    }
+    .sign_button{
+        border:1px solid #ddd;
+        padding: 6px 14px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin:0 10px;
+        background: #009900;
+        color: white;
+    }
+  </style> 
+</head>
+<body>
+<div id="content">
+    <h1>首页 > 逸管家 > 公益服务</h1>
+    <h2>
+        <div class="h2_left">
+            <a href="__ACTION__" class="whole">全部</a>
+            <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+    </h2>
+    <div class="nav_div">
+        <ul>
+            <a href="<{:U('Client/publicservice')}>"><li>公益服务类型</li></a>
+            <a href="<{:U('Client/userlist')}>"><li>报名人员</li></a>
+            <a href="<{:U('Client/getactivity')}>"><li class="nav_active">招募活动</li></a>
+        </ul>
+        <p style="clear: both"></p>
+    </div>
+    <h3 style="font-weight: bold;font-size: 16px;margin-top: 35px">已报名人员统计</h3>
+    <hr style="width:60%">
+    <table id="table" style="width:60%" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+        <tr>
+            <th>真实姓名</th>
+            <th>手机号</th>
+            <th>报名时间</th>
+        </tr>
+        <empty name="list">
+    	<tr><td style='text-align:center' colspan='3'>暂时没有数据</td></tr>
+    	<else/>
+	        <volist name="list" id="vo">
+	            <tr>
+	                <td style="text-align:center" class='tc'><{$vo.userName}></td> 
+                    <td style="text-align:center" class='tc'><{$vo.userTel}></td>
+                    <td style="text-align:center" class='tc'><{$vo.enrollTime}></td>
+	            </tr>
+	        </volist>
+        </empty>
+    </table>
+    <div id="page">
+        <{$page}>
+    </div>
+</div>
+</body>
+</html>

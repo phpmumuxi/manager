@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+	   	<meta name="Keywords" content="ygj"/>
+		<meta name="Description" content="ygj"/>
+		<meta name="author" content="jc"/>
+	    <meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="format-detection" content="telephone=no"> 
+	    <meta name="apple-mobile-web-app-status-bar-style" content="blank-translucent">
+	    <title>合同详情</title>
+
+
+		<style type='text/css'>
+			body, html {margin: 0; padding: 0; background: white; color: rgba(255,255,255,0.8); font-family: "Droid Sans Mono", monospace; font-size: 12px; }
+			a { color: #fff; }
+			h1 { line-height: 40px; font-size: 30px; }
+			h2 { line-height: 30px; font-size: 20px; }
+			h1, h2 { color: #fff; border-bottom: 2px solid rgba(255,255,255,0.7); }
+			#container { margin: 50px; }
+			#content img { height: 80px; margin-right: 10px; margin-bottom: 10px; border: 2px solid #043a6b; padding: 2px; }
+			#content img:hover { border: 2px solid #fff; }
+			pre { background: rgba(255,255,255,0.6); padding: 10px; color: #012647; }
+		</style>
+	</head>
+	<body ms-controller="inits" class="ms-controller">
+		<header class="header-all">
+			<span class="iconfont icon-left" :css="{paddingTop:@headerPadding,lineHeight:@headerLine}" ms-on-tap="@back()"></span>
+		</header>
+		<div id="pullrefresh" class="mui-scroll-wrapper" :css="{top:@scrollTop,bottom:@scrollBottom}">
+			<div id='container'>
+				<div id='content'>
+					<volist name="picture" id="vo">
+					<img src="<{$vo['realPicUrl']}>" class="img1" style="height:350px;width:350px">
+						</volist>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/javascript" src="__JS__/jquery2.js"></script>
+<script type="text/javascript" src="__JS__/jquery.museum.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$.museum($('#content img'));
+	});
+</script>
+

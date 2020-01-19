@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>管家推荐统计|<{$configcache['Title']}></title>
+  <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+  <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+  <script type="text/javascript" src="__JS__/jquery.js"></script>
+   <script type="text/javascript" src="__JS__/Public.js"></script>
+  <style type="text/css">
+  .select{padding:5px 10px;border:#ddd 1px solid;border-radius:4px;width:60%;margin:5% auto;font-size:12px}
+  .select li{list-style:none;padding:10px 0 5px 80px}
+  .select .formli{list-style:none;padding:10px 0 5px 20px}
+  .select .select-list{border-bottom:#eee 1px dashed}
+  .select dl{zoom:1;position:relative;line-height:24px;}
+  .select dl:after{content:" ";display:block;clear:both;height:0;overflow:hidden}
+  .select dt{width:100px;margin-bottom:5px;position:absolute;top:0;left:-100px;text-align:right;color:#666;height:24px;line-height:24px}
+  .select dd{float:left;display:inline;margin:0 0 5px 5px;}
+  .select a{display:inline-block;white-space:nowrap;height:24px;padding:0 10px;text-decoration:none;color:#039;border-radius:2px;}
+  .select a:hover{color:#f60;background-color:#f3edc2}
+  .select .selected a{color:#fff;background-color:#f60}
+  .select-result dt{font-weight:bold}
+  .select-no{color:#999}
+  .select .select-result a{padding-right:20px;background:#f60 url("__PUBLIC__/image/close.gif") right 9px no-repeat}
+  .select .select-result a:hover{background-position:right -15px}
+  .tc{text-align:center; text-indent:0;font-family:"微软雅黑";font-size: 14px;color:#111;}
+  .butclass{
+  	background:#029be1;
+  	color:white;
+  	height:40px;
+  	width:120px;
+  	margin:40px;
+  	padding:10px;
+  	border-radius:5px;
+  }
+  .reasoncontent{
+  margin-left:20%;
+  margin-top:30px;
+  border:1px solid #797979;
+  width:60%;
+  height:100px
+  }
+  
+  td{
+  	text-align:center;
+  }
+  th{
+  	text-align:center;
+  }
+  .btnclick{
+  height:20px;
+  	 background: #080;
+    cursor: pointer;
+    color: #fff;
+  }
+   a:link {color: #0000FF}     /* 未访问的链接 */
+	a:visited {color: #d90a81}  /* 已访问的链接 */
+	a:hover {color: #d90a81}    /* 当有鼠标悬停在链接上 */
+	a:active {color: #d90a81}   /* 被选择的链接 */
+  .sure{left:220px; top:10px; width:60px; height:28px; line-height:28px; border:none; background:#090; color:#fff; font-family:"微软雅黑"; cursor:pointer;}
+   .tel{left:0; top:10px; width:220px; height:26px; line-height:26px; color:#555; font-family:"微软雅黑"; repeat-x left top; border:solid 1px #ccc;}
+  </style>
+  <script>
+  function myBrowser(){
+    var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+    var isOpera = userAgent.indexOf("Opera") > -1;
+    if (isOpera) {
+      return "Opera"
+    }; //判断是否Opera浏览器
+    if (userAgent.indexOf("Firefox") > -1) {
+      return "FF";
+      /*firefox----这段js重新封装了event对象，经验证可以在火狐下支持！----*/
+      function __firefox(){
+        HTMLElement.prototype.__defineGetter__("runtimeStyle", __element_style);
+        window.constructor.prototype.__defineGetter__("event", __window_event);
+        Event.prototype.__defineGetter__("srcElement", __event_srcElement);
+      }
+      function __element_style(){
+        return this.style;
+      }
+      function __window_event(){
+        return __window_event_constructor();
+      }
+      function __event_srcElement(){
+        return this.target;
+      }
+      function __window_event_constructor(){
+        if(document.all){
+          return window.event;
+        }
+        var _caller = __window_event_constructor.caller;
+        while(_caller!=null){
+          var _argument = _caller.arguments[0];
+          if(_argument){
+            var _temp = _argument.constructor;
+            if(_temp.toString().indexOf("Event")!=-1){
+              return _argument;
+            }
+          }
+          _caller = _caller.caller;
+        }
+        return null;
+      }
+      if(window.addEventListener){
+        __firefox();
+      }
+    } //判断是否Firefox浏览器
+    if (userAgent.indexOf("Chrome") > -1){
+      return "Chrome";
+    }
+    if (userAgent.indexOf("Safari") > -1) {
+      return "Safari";
+    } //判断是否Safari浏览器
+    if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+      return "IE";
+    }; //判断是否IE浏览器
+  }
+  </script>
+</head>
+<body>
+  <div id="content">
+   <h1>首页 > 管家推荐统计>管家已推荐用户</h1>
+   <h2>
+     <div class="h2_left">
+       <a href="__ACTION__" class="whole">全部</a>
+       <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+       <a href="javascript:history.back();" class="Retreat">后退</a>
+       <a href="javascript:history.go(1);" class="Advance">前进</a>
+     </div>
+    
+      <input type="hidden" id="url" value="<{$url}>">
+
+      
+  </h2>
+  
+  	<div class="fen" style="margin-top:20px;">
+ 
+
+	<ul class="select" style="height:80px;margin-top: 20px;margin-bottom: 10px;">
+        <li class="formli" style="margin-top: 20px;"">
+  
+	         <form method="post">
+		        <div>
+		            <input type="text" name="orderNumber" class="tel orderno"  placeholder="最低交易指数" value="<{$orderNumber}>"/>&nbsp;&nbsp;&nbsp;&nbsp;
+		           <input type="submit" class="sure" value="查询" /> 
+		           <button id="exportButton" type="button" style="margin:5px;background:#090; color:#fff;font-size: 13px;padding-top: 5px;padding-bottom: 6px;padding-left: 15px;padding-right: 15px;cursor: pointer;">导出</button>
+		        </div>
+	    	</form>
+	
+        </li>
+       
+	</ul>
+	
+	<div style="margin-top:60px">
+	<div><font size="2"  color="#008B8B">统计汇总</font></div>
+	<div><font size="2" color="#008B8B"><{$getparam.userTelephone}>(<{$getparam.userNickName}>),共推荐人<{$getparam.relCount}>个，有<{$peopleCount}>人共成交了<{$orderNumCount}>个订单，总金额为：<{$orderPriceSum}>元。</font></div>
+	</div>
+  	<div style="margin-top:40px"><font  size="5">管家已推荐用户：</font></div>
+  	</div>
+  	 
+  
+  	
+  <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+   <tr>
+
+     <th width="20%">用户昵称</th>
+     <th width="15%">用户手机号</th>  
+     <th width="10%">交易数</th>  
+     <th width="20%">累计交易金额(元)</th>  
+
+     <th width="15%">交易时间</th> 
+     <th width="15%">注册时间</th>       
+   </tr>
+   <empty name="list">
+   <tr><td style="text-align:center" colspan="6" class='tc'>没有推荐人</td></tr>
+    <else />
+   <volist name="list" id="vo">
+    <tr>
+      <td style="text-align:center" class='tc'><{$vo.userNickName}></td>
+      <td style="text-align:center" class='tc'><{$vo.userTelephone}></td>
+      <td style="text-align:center" class='tc'><{$vo.orderNum}></td>
+      <td style="text-align:center" class='tc'><{$vo.orderMoney}></td>
+      <td style="text-align:center" class='tc'><empty name='vo.orderFinishTime'><else /><{:date('Y-m-d H:i:s',strtotime($vo['orderFinishTime']))}></empty></td>
+      <td style="text-align:center" class='tc'><empty name='vo.createTime'><else /><{:date('Y-m-d H:i:s',strtotime($vo['createTime']))}></empty></td> 
+    </tr> 
+  </volist>
+  </empty>
+</table>
+<div style="display:none" class="watch"></div>
+
+<!-- 审核记录 -->
+<div style="display:none" class="recorddiv">
+<table id="tablerecord" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0" style="width:80%;margin-left:10%;">
+	<tr>
+		<th width="25%">审核时间</th>
+		<th width="20%">操作人</th>
+		<th width="15%">审核结果</th>
+		<th width="40%">备注</th>
+	</tr>	
+</table>
+
+</div>
+
+<!-- 不通过 -->
+<div style="display:none" class="notpassdiv">
+
+	<span style="float:left;width:100%;text-align: center;">审核不通过，请发送消息给用户</span>
+	<span><textarea class="reasoncontent" placeholder="请输入不通过原因"></textarea></span>
+	<span style="float:left;width:100%;text-align: center;">
+	<button type="button" class=" butclass notpasssave">确认发送</button>
+	</span>
+</div>
+
+<!-- 审核 -->
+<div style="display:none" class="checkdiv">
+	<span style="float:left;width:100%;text-align: center;">审核通过并设置为管家经理。</span>
+	<span style="float:left;width:100%;text-align: center;">
+	<button type="button" class=" butclass pass">确认设置</button>
+	<button type="button" class=" butclass notpass">取消暂不设置</button>
+	</span>
+</div>
+<div id="page">
+  <{$page}>   每页显示<select id="selectpagesize" style="width:50px;display:inline-block;">
+        
+ 										<option ><{$pageSize}></option>
+										<option value="10">10</option>
+										<option value="5">5</option>
+										<option value="15">15</option>
+										<option value="20">20</option>
+										<option value="30">30</option>
+										<option value="40">40</option>
+										<option value="50">50</option>
+								</select>  条</div>
+</div>
+</div>
+<script>
+$("#selectpagesize").on('change',function(){
+    var sid="<{$sid}>";
+    var pageSize=$(this).val();
+    window.location.href = "__APP__/Client/housemanagercountinfo?sid="+sid+"&pageSize="+pageSize;
+});
+
+$('#exportButton').click(function(){
+    if(!($(this).attr('disabled'))){        
+        $(this).attr('disabled',true);
+        $(this).css("background",'#ddd');
+        $.get("<{:U('Client/recommendExport')}>",'',function(res){                
+            $('#exportButton').css("background",'#090');
+            $('#exportButton').removeAttr("disabled");
+            if(res.code){
+                window.location.href = "<{:U('Financial/downExcel')}>?path="+res.data;  
+            }else{
+                alert(res.msg);
+            }
+            
+        },'json')
+    }
+})   
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>app管理|<{$configcache['Title']}></title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/winpop.js"></script>
+    <script type="text/javascript" src="__JS__/check.js"></script>
+    <script type="text/javascript" src="__JS__/jquery-form.js"></script>
+    <link rel="stylesheet" href="__JS__/Validform/images/style.css" type="text/css" media="all" /> 
+    <script type="text/javascript" src="__JS__/Validform/images/jquery-1.9.1.min.js"></script> 
+    <script type="text/javascript" src="__JS__/Validform/images/Validform_v5.3.2.js"></script> 
+    <script type="text/javascript" src="__JS__/Validform/plugin/passwordStrength/passwordStrength-min.js"></script> 
+    <script src="__JS__/jquery-form.js" type="text/javascript"></script>
+    <script type="text/javascript" src="__JS__/layer/layer.js"></script>
+    <link rel="stylesheet" type="text/css" href="__JS__/layer/skin/layer.css" />
+    <style type="text/css" >
+    .dd_left{margin-top: 5px;}
+    .dtext{text-align: center;}
+    #preview, .img, img{width:200px;height:200px;}
+    #preview{border:1px solid #000;}
+    #view{} .imgbox{float:left;position:relative;width:100px;height: 100px;margin-left: 10px;margin-top: 10px;
+      padding:5px;border:solid 1px #ccc;border-radius: 5px;;}
+      #view{} .imgbox .close{border: solid 1px #ccc;position: absolute;top: -15px;
+          width: 20px;height: 20px; display: inherit;cursor: pointer;text-align: center;background: red;color: #fff;right: -10px;z-index: 20;border-radius: 100%;}
+          #view{} .imgbox input{width:100%;height: 100%;z-index: 10;}
+          .editimg{height:100px;}
+          .delimg{height: 20px;width:20px;cursor: pointer;}
+          .registerform{width:700px;height:565px;margin:20px;border:1px solid #bcd4e5;}
+          </style> 
+      </head>
+      <body>
+        <div id="content">
+            <h1>首页 > app管理 > banner修改</h1>
+            <h2>
+                <div class="h2_left">
+                    <a href="__ACTION__" class="whole">全部</a>
+                    <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+                    <a href="javascript:history.back();" class="Retreat">后退</a>
+                    <a href="javascript:history.go(1);" class="Advance">前进</a>
+                </div>
+            </h2>
+            <form action="<{$url}>/manager/banner/update" method="post" class="registerform" id="form">
+                <dl id="cdl">
+                    <dd>
+                        <span class="dd_left">标题:</span>
+                        <span class="dd_right" style="margin-top:5px;">
+                            <input type="text" class="qtext" name="title" value="<{$banner.title}>" id="title" />
+                            <input type="hidden" class="qtext" name="sid" value="<{$banner.sid}>" id="titlesid" />
+                        </span>
+                    </dd>
+
+                    <!-- <dd>
+                        <span class="dd_left">类型:</span>
+                        <span class="dd_right" style="margin-top:5px;">
+                            <select name="type" style="width:80px;" class="dtext" id="type">
+						  <option value="1" <if condition="$banner.type eq 1">selected</if>>APP</option>
+						  <option value="2" <if condition="$banner.type eq 2">selected</if>>PC</option>
+						  <option value="3" <if condition="$banner.type eq 3">selected</if>>APP首页</option>
+						
+						</select>
+                        </span>
+                    </dd> -->
+
+                    <dd class="yuanimg">
+                        <span class="dd_left">图片:</span>
+                        <span class="dd_right">
+                            <span class="hidenimg<{$k}>">
+                                <img src="<{$banner.realPicUrl}>" alt="" class="editimg">
+                                <img src="__PUBLIC__/image/del.png" alt="" class="delimg" key="<{$banner.pic}>">
+                                <input type="hidden" name="pic" value="<{$banner.pic}>" class="imgkey">
+                            </span>
+                        </span>
+                    </dd> 
+
+                    <dd>
+                        <div id="reader_box"></div>
+                        <span class="dd_left">上传图片:</span>
+                        <span class="dd_right">
+                            <input type="file" name="file" id="file" onchange="load(this)" class='myfile'></input>
+                            <div id="view"></div>
+                            <div id="imgkey"></div>
+                        </span>
+                    </dd>
+
+                    <dd>
+                        <span class="dd_left">排序号：</span>
+                        <span class="dd_right">
+                            <input type="text" class="dtext" name="sort" id="sort" value="<{$banner.sort}>" /><font>* 排序号，请填写数字</font>
+                        </dd>
+
+                        <dd>
+                            <span class="dd_left" style="margin-left:25px;">图片链接地址:</span>
+                            <span class="dd_right">
+                                <input type="text" class="qtext" name="href"  id="href" value="<{$banner.href}>"/>
+                            </span>
+                        </dd>
+
+                        <dd>
+                            <span class="dd_right" style="margin-top: 5px;" id="clientStatus">
+                                <span class="dd_left">展示位置:</span>
+                                    <label><input property="site" class="radios" name="site" type="radio" value="1" <if condition="$banner.site eq 1">checked</if>>社区主banner </label>
+                                <label><input property="site" class="radios" name="site" type="radio" value="2" <if condition="$banner.site eq 2">checked</if>>社区子banner </label>
+                                <label><input property="site" class="radios" name="site" type="radio" value="71" <if condition="$banner.site eq 71">checked</if> />零售首页banner(1)</label>
+                                <label><input property="site" class="radios" name="site" type="radio" value="72" <if condition="$banner.site eq 72">checked</if> />零售首页banner(2)</label>
+                                <label><input property="site" class="radios" name="site" type="radio" value="43" <if condition="$banner.site eq 43">checked</if> />批发首页banner(3)</label>
+                                <label><input property="site" class="radios" name="site" type="radio" value="44" <if condition="$banner.site eq 44">checked</if> />批发首页banner(4)</label>
+                                 <label><input property="site" class="radios" name="site" type="radio" value="51" <if condition="$banner.site eq 51">checked</if> />H5banner(1)</label>
+                                  <label><input property="site" class="radios" name="site" type="radio" value="52" <if condition="$banner.site eq 52">checked</if> />H5banner(2)</label>
+                                   <label><input property="site" class="radios" name="site" type="radio" value="53" <if condition="$banner.site eq 53">checked</if> />H5banner(3)</label>
+                                    <label><input property="site" class="radios" name="site" type="radio" value="54" <if condition="$banner.site eq 54">checked</if> />H5banner(4)</label>
+                                    <label><input property="site" class="radios" name="site" type="radio" value="61" <if condition="$banner.site eq 61">checked</if> />APP首页滑动banner</label>
+                                    <label><input property="site" class="radios" name="site" type="radio" value="99" <if condition="$banner.site eq '99'">checked</if> />APP首页固定banner</label>
+                                    <label><input property="site" class="radios" name="site" type="radio" value="8" <if condition="$banner.site eq '8'">checked</if> />共享房产banner</label>
+                                    <label><input property="site" class="radios" name="site" type="radio" value="9" <if condition="$banner.site eq '9'">checked</if> />共享销售banner</label>
+                                    <label><input property="site" class="radios" name="site" type="radio" value="10" <if condition="$banner.site eq '10'">checked</if> />公益服务banner</label>
+                                 </span>
+                        </dd>
+                        <input type="hidden" class="checktype"  name="type" value="3"> 
+                        <dd style="margin-top: 10px;margin-bottom: 160px;"><input type="submit" class="so submit" value="提 交" /></dd>
+                        <input type="hidden" name="" value="<{:U('End/banner')}>" id="jump">
+                    </dl>
+                     </form>
+                </div>
+
+                <script type="text/javascript">
+                var imgkey = [];
+                function load(file) {
+                    var num=1;
+                    $('.imgbox').remove();
+                    if (file.files) {
+                        for (var i = 0; i < file.files.length; i++) {
+                            var reader = new FileReader();
+                            reader.readAsDataURL(file.files[i]);
+                            reader.onload = function(evt) {
+                                var imgbox=$('<div></div>');
+                                imgbox.addClass('imgbox');
+                                $('#view').append(imgbox);
+                                var imgs = $('<input type="image" />');
+                                imgs.attr('name','mum'+num);
+                                num++;
+                                imgs.appendTo(imgbox);
+                                imgs.attr('src', evt.target.result);
+                            }
+                        }
+                    }
+                }
+
+
+                $(".radios").click(function(){
+                        var radiovalue = $(this).val();
+                        if(radiovalue == "51" || radiovalue == "52" || radiovalue == "53" || radiovalue == "54"){
+                            $(".checktype").val("5");
+                        }else{
+                            $(".checktype").val("3");
+                        }
+                        
+                    })
+
+                $('#file').click(function(){
+                   if($(".yuanimg").length>0){
+                    alert('请先删除图片');
+                    return false;
+                }
+                if(ext!=".jpeg"&&ext!=".jpg"&&ext!=".bmp"&&ext!=".png" &&ext!=".JPEG"&&ext!=".JPG"&&ext!=".BMP"&&ext!=".PNG"){
+                    alert("文件选择错误,图片类型必须是jpeg,jpg,bmp,png中的一种"); 
+                    return false; 
+                }
+            });
+
+                $(document).on("change", "input[name=file]", logosub);
+                function logosub() {
+        //模拟form表单提交数据
+        var filepath=$("input[name='file']").val();
+        var extStart=filepath.lastIndexOf("."); 
+        var ext=filepath.substring(extStart,filepath.length).toUpperCase(); 
+        if(ext!=".jpeg"&&ext!=".jpg"&&ext!=".bmp"&&ext!=".png" &&ext!=".JPEG"&&ext!=".JPG"&&ext!=".BMP"&&ext!=".PNG"){ 
+            alert("文件选择错误,图片类型必须是jpeg,jpg,bmp,png中的一种"); 
+            return false; 
+        }
+        var index = layer.load(1, {shade: [0.1,'#fff']});
+        var fileObj = document.getElementById("file").files[0];
+        //console.log(fileObj);return;
+        
+        var FileController = '<{$url}>/manager/banner/uploadBannerImage';
+        var form = new FormData();
+        form.append("bannerFile", fileObj);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("post", FileController, true);
+        xhr.onload = function (json) {
+            var obj = jQuery.parseJSON(json.target.responseText);
+            console.log(obj);
+            layer.closeAll('loading');
+            if(obj.code == 2000){
+                // console.log(obj.data.key);return;
+                var html = '<input type="hidden" name="pic" value="'+obj.data.picKey+'">';
+                $('#imgkey').html(html);
+                //alert(obj.message);
+            }
+        };
+        xhr.send(form);
+    }
+
+
+    $('.delimg').click(function(){
+        var key = $(this).attr('key');
+        var index = layer.load(1, {shade: [0.1,'#fff']});
+   // console.log(key);return;
+   $.ajax({
+    url:'<{$url}>/manager/banner/deleteBannerImg',
+    data:{pickey:key},
+    type:'post',
+    cache:'false',
+    dataType:'json',
+    success:function(data){
+        console.log(data);
+        layer.closeAll('loading');
+        $('.yuanimg').remove();
+        $('.imgkey').remove();
+    },
+    error:function(){
+        layer.closeAll('loading');
+        alert('异常!');
+    }
+});  
+});
+
+    $(function(){
+        $(document).ready(function(){
+            $('.submit').click(function(){
+                var _oldPic = $('.yuanimg').find("input[name='pic']").val();
+                var _pic = $('#imgkey').find("input[name='pic']").val();
+                if(!_oldPic && !_pic){
+                    alert('请上传banner图');
+                    return false;
+                }
+                var index = layer.load(1, {
+          shade: [0.1,'#fff'] //0.1透明度的白色背景
+      });   
+            });
+
+            $('#form').ajaxForm(function(data){
+        //弹出ajax请求后的回调结果，data回调数据  onclick="sub()"
+        if(data.code =="2000" ){ 
+            layer.closeAll('loading');
+            alert(data.message);
+            var url = $('#jump').val();
+            window.location.href = url; 
+            // location.href=document.referrer; 
+        }else{
+            layer.closeAll('loading');
+            alert(data.message);
+        }
+    });
+        });
+    });
+
+    </script>
+</body>
+</html>

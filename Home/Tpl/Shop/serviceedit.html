@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>商品信息|<{$configcache['Title']}></title>
+	<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+	<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+	<link rel="stylesheet" type="text/css" href="__JS__/layer/skin/layer.css" />
+	
+	<link rel="stylesheet" href="__PUBLIC__/jcrop/css/jquery.Jcrop.css" />
+
+	
+	<script type="text/javascript" src="__JS__/jquery.js"></script>
+	
+	
+	<script type="text/javascript" src="__JS__/Public.js"></script>
+	<script type="text/javascript" src="__JS__/winpop.js"></script>
+	<script type="text/javascript" src="__JS__/check.js"></script>
+
+
+  <style type="text/css">
+  .shop-1{border:1px solid #ccc; width:60%;margin-left: auto;margin-right: auto;}
+  .shop-2{margin: 30px;}
+  .imgbox img{max-width:90%;}
+  .basetb td{ padding:6px; padding-top:8px; padding-bottom:8px; font-size:15px;}
+  .label{text-align: center;}
+  
+  #target {
+    background-color: #ccc;
+    width: 500px;
+    height: 330px;
+    font-size: 24px;
+    display: block;
+  }
+	.inputtd input{
+  	 width: 100%;
+    height: 100%;
+    text-align:center;
+  }
+  
+  .file {
+		    position: relative;
+		    display: inline-block;
+		    background: #D0EEFF;
+		    border: 1px solid #99D3F5;
+		    border-radius: 4px;
+		    padding: 4px 12px;
+		    overflow: hidden;
+		    color: #1E88C7;
+		    text-decoration: none;
+		    text-indent: 0;
+		    line-height: 20px;
+		}
+		.file input {
+		    position: absolute;
+		    font-size: 100px;
+		    right: 0;
+		    top: 0;
+		    opacity: 0;
+		}
+		.file:hover {
+		    background: #AADFFD;
+		    border-color: #78C3F3;
+		    color: #004974;
+		    text-decoration: none;
+		}
+		
+		
+.delete{
+
+    line-height:10px;
+    text-align:center;
+    font-weight:bold;
+    cursor:pointer;
+    font-size:10px;
+    color:red;
+
+}
+.type_content td div{
+    width: 30%;
+    height: 210px;
+    overflow: auto;
+    float: left;
+	}
+	
+	.buttonstyle{
+	background:#029be1;
+	color:white;
+	height:23px;
+	width:80px;
+	margin:10px;
+	border-radius:10px
+	}
+	
+	input[type="text"]{
+    display: inline-block;
+    padding: 4px;
+    font-size: 13px;
+    line-height: 18px;
+    color: #808080;
+    border: 1px solid #ccc;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+	
+  </style>
+</head>
+<body>
+  <dt>详情信息</dt>
+  <div id="content" style="font-size:18px; color:#333; text-align:center;width:1190px;">
+   <dl id="dl">
+    <h2>
+      <div class="h2_left">
+        <a href="<{:U('Shop/index')}>" class="whole">商品</a>
+        <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+        <a href="javascript:history.back();" class="Retreat">后退</a>
+        <a href="javascript:history.go(1);" class="Advance">前进</a>
+        <input type="hidden" id="httpreferer" value="<{$httpreferer}>">
+        <input type="hidden" id="consult_url" value="<{$url}>">
+        
+      </div>
+    </h2><br/>
+   
+    <div style="clear:both"></div>
+    <!-- action="<{:U('Shop/shopedit')}>"判断类别 -->
+
+
+      <form class='formdata'>
+       
+    	<input type="hidden" id="sid" name='serviceId' value="<{$goodsData.serviceId}>">
+    	<input type="hidden" id="userId" name='userId' value="<{$goodsData.userId}>">
+ 
+        <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0" class="basetb">
+           <tr>
+
+		    <td>产品图：</td>
+	      
+		      <td>
+
+		      <volist name="picture" id="pic">
+ 				<div class='imagelist' style="width:200px;height:200px;margin:10px;padding:10px; float:left">
+					<div >
+						<img class="img-sm image"  id="<{$pic.sid}>" data-key="<{$pic.picServiceUrl}>" data-main="<{$pic.mainPage}>" src="<{$pic.realPicUrl}>" width="190" height="180"  />
+						<span class="delete" style="float:right">X</span>
+					</div>
+			    </div>
+		      </volist>         
+		    </td>    
+   		 </tr>
+            <td class="label" >详情:</td>
+            <td style="width:1000px;height:600px">
+            	<div style="width:100%;height:100%" ><{$goodsData.serviceDetail}></div>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">上下架:</td>
+            <td>
+            <input type="radio" name='serviceStatus' value="1" <if condition="$goodsData['serviceStatus'] eq 1 " >checked</if> /><span>上架</span>
+            <input type="radio" name='serviceStatus' value="0" <if condition="$goodsData['serviceStatus'] eq 0 " >checked</if> /><span>下架</span>
+            </td>
+          </tr>
+          
+          
+          <tr>
+            <td class="label">是否删除:</td>
+            <td>
+            <input type="radio" name='isUser' value="1" <if condition="$goodsData['isUse'] eq 1 " >checked</if> /><span>是</span>
+            <input type="radio" name='isUser' value="0" <if condition="$goodsData['isUse'] eq 0 " >checked</if> /><span>否</span>
+            </td>
+          </tr>
+          
+        <tr>
+        	<td colspan="2" class="label"><input style="background:#029be1;color:white;height:43px;width:100px;margin:10px;border-radius:10px" type="button"  class="shopsave" value="保存" /><label class="message"></label></td>
+        	
+        </tr>
+
+      </table>
+      </form>
+   
+</div>
+<script type="text/javascript">
+
+$(function (){
+//遍历取信息	
+$('.shopsave').click(function(){
+	var url = "<{:U('Shop/serviceedit')}>";
+	var isUser = $('input[name="isUser"]:checked').val();
+	var serviceStatus = $('input[name="serviceStatus"]:checked').val();
+	var userId = $("#userId").val();
+	var sid = $("#sid").val();
+		$.post(url,{isUser:isUser,serviceStatus:serviceStatus,userId:userId,sid:sid},
+			function(data){
+			if(data.success){
+				
+				$(".message").html('<font color="green">修改成功</font>');
+				var rfererurl = $('#httpreferer').val();
+				var registurl = window.location.href=rfererurl;
+
+			}else{
+				$(".message").html('<font color="red">修改失败</font>');
+			}
+		});
+	
+	})
+	
+
+ }); 
+
+
+</script>
+
+</body>
+</html>

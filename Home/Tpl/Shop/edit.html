@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>商品信息|<{$configcache['Title']}></title>
+	<link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+	<link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+	<link rel="stylesheet" type="text/css" href="__JS__/layer/skin/layer.css" />
+	
+	<link rel="stylesheet" href="__PUBLIC__/jcrop/css/jquery.Jcrop.css" />
+
+	
+	<script type="text/javascript" src="__JS__/jquery.js"></script>
+	
+	
+	<script type="text/javascript" src="__JS__/Public.js"></script>
+	<script type="text/javascript" src="__JS__/winpop.js"></script>
+	<script type="text/javascript" src="__JS__/check.js"></script>
+
+	
+	<script type="text/javascript" src="__PUBLIC__/jcrop/js/jquery.Jcrop.js"></script>
+	
+	
+    <script type="text/javascript" src="__PUBLIC__/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript"  src="__PUBLIC__/ueditor/ueditor.all.min.js"></script>
+
+  <style type="text/css">
+  .shop-1{border:1px solid #ccc; width:60%;margin-left: auto;margin-right: auto;}
+  .shop-2{margin: 30px;}
+  .imgbox img{max-width:90%;}
+  .basetb td{ padding:6px; padding-top:8px; padding-bottom:8px; font-size:15px;}
+  .label{text-align: center;}
+  
+  #target {
+    background-color: #ccc;
+    width: 500px;
+    height: 330px;
+    font-size: 24px;
+    display: block;
+  }
+	.inputtd input{
+  	 width: 100%;
+    height: 100%;
+    text-align:center;
+  }
+  
+  .file {
+		    position: relative;
+		    display: inline-block;
+		    background: #D0EEFF;
+		    border: 1px solid #99D3F5;
+		    border-radius: 4px;
+		    padding: 4px 12px;
+		    overflow: hidden;
+		    color: #1E88C7;
+		    text-decoration: none;
+		    text-indent: 0;
+		    line-height: 20px;
+		}
+		.file input {
+		    position: absolute;
+		    font-size: 100px;
+		    right: 0;
+		    top: 0;
+		    opacity: 0;
+		}
+		.file:hover {
+		    background: #AADFFD;
+		    border-color: #78C3F3;
+		    color: #004974;
+		    text-decoration: none;
+		}
+  </style>
+</head>
+<body>
+  <dt>详情信息</dt>
+  <div id="content" style="font-size:18px; color:#333; text-align:center;width:1190px;">
+   <dl id="dl">
+    <h2>
+      <div class="h2_left">
+        <a href="<{:U('Shop/index')}>" class="whole">商品</a>
+        <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+        <a href="javascript:history.back();" class="Retreat">后退</a>
+        <a href="javascript:history.go(1);" class="Advance">前进</a>
+        <input type="hidden" id='httpreferer' value="<{$httpreferer}>">
+      </div>
+    </h2><br/>
+   
+    <div style="clear:both"></div>
+    <!-- action="<{:U('Shop/shopedit')}>"判断类别 -->
+
+
+      <form class='formdata'>
+       
+    	<input type="hidden" name='sid' value="<{$goodsData.serviceId}>">
+ 
+        <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0" class="basetb">
+           <tr>
+	      <td>产品图：</td>
+	      
+		      <td>
+
+		      <volist name="picture" id="pic">
+ 				<div class='imagelist' style="width:200px;height:200px;padding:10px; float:left">
+ 			
+				<img class="img-sm image"  id="<{$pic.sid}>" data-key="<{$pic.picServiceUrl}>" data-main="<{$pic.mainPage}>" src="<{$pic.realPicUrl}>" width="190" height="180"  />
+				<div class="file">
+					<span>更换</span>
+		    		<input type="file" name='hiddenfile' class="hiddenfile" />
+				</div>
+			</div>
+
+
+		      </volist>         
+		    </td>    
+   		 </tr>
+      </table>
+      </form>
+      
+      
+</div>
+
+<script type="text/javascript">
+
+var consult_url = 'http://yiguanjiaclub.org:8002/';
+
+/* document.getElementsByClassName("headerPic")[0].addEventListener("change", function(event){
+	var file = event.target.files[0];
+    var url = URL.createObjectURL(file);
+    var imageid = $(this).par
+    document.getElementById(imageid).src = url;
+    var form = new FormData();
+	var xhr = new XMLHttpRequest();
+	form.append("file", file);
+	xhr.open("post", consult_url + 'manager/trade/uploadImg', true);
+	xhr.onreadystatechange = function() {
+		if(xhr.readyState == 4 && xhr.status == 200) {
+			console.log(xhr.responseText)
+		}
+	};
+	xhr.send(form);
+}); 
+ */
+
+
+UE.getEditor('EditorId',{    //content为要编辑的textarea的id
+    initialFrameWidth: 1100,   //初始化宽度
+    initialFrameHeight: 500,   //初始化高度
+});
+
+$(function (){
+	$('.hiddenfile').change(function(){
+		var file = event.target.files[0];
+		var url = URL.createObjectURL(file);
+		var imgid = $(this).parent().prevAll('.img-sm').attr('id');
+		$('#'+imgid).attr('src',url);
+		
+		var form = new FormData();
+		var xhr = new XMLHttpRequest();
+		form.append("file", file);
+		xhr.open("post", consult_url + 'manager/trade/uploadImg', true);
+		xhr.onreadystatechange = function() {
+			if(xhr.readyState == 4 && xhr.status == 200) {
+				var result = jQuery.parseJSON(xhr.responseText);
+				$('#'+imgid).attr('data-key',result.key);
+			}
+		};
+		xhr.send(form);
+		
+	})
+
+	
+$('.shopsave').click(function(){
+	var formdata = $('.formdata').serializeArray();
+	
+	var imgList = new Array;
+	$('.imagelist').each(function(){
+		var data = {};
+		data.key = $(this).find('.image').data('key');
+		data.mainPage = $(this).find('.image').data('main');
+		imgList.push(data);
+	});
+	
+	var url = '/Shop/shopedit';
+	$.post(url,{formdata:formdata,imagelist:imgList},function(data){
+		if(data.success){
+			
+			$(".message").html('<font color="green">修改成功</font>');
+			var rfererurl = $('#httpreferer').val();
+			var registurl = window.location.href=rfererurl;
+			setTimeout(registurl);
+		}else{
+			$(".message").html('<font color="red">修改失败</font>');
+		}
+	})
+})
+	
+
+ }); 
+
+
+</script>
+
+</body>
+</html>

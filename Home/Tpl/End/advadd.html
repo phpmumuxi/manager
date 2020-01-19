@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>app管理|<{$configcache['Title']}></title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/winpop.js"></script>
+    <script type="text/javascript" src="__JS__/check.js"></script>
+    <script type="text/javascript" src="__JS__/jquery-form.js"></script>
+    <script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__JS__/layer/layer.js"></script>
+    <link rel="stylesheet" type="text/css" href="__JS__/layer/skin/layer.css" />
+    <style type="text/css" >
+        #view{} .imgbox{float:left;position:relative;width:100px;height: 100px;margin-left: 10px;margin-top: 10px;
+                    padding:5px;border:solid 1px #ccc;border-radius: 5px;;}
+        #view{} .imgbox .close{border: solid 1px #ccc;position: absolute;top: -15px;
+                    width: 20px;height: 20px; display: inherit;cursor: pointer;text-align: center;background: red;color: #fff;right: -10px;z-index: 20;border-radius: 100%;}
+        #view{} .imgbox input{width:100%;height: 100%;z-index: 10;}
+        #view{} .mimgbox{float:left;position:relative;width:100px;height: 100px;margin-left: 10px;margin-top: 10px;
+                    padding:5px;border:solid 1px #ccc;border-radius: 5px;;}
+        #view{} .mimgbox .close{border: solid 1px #ccc;position: absolute;top: -15px;
+                    width: 20px;height: 20px; display: inherit;cursor: pointer;text-align: center;background: red;color: #fff;right: -10px;z-index: 20;border-radius: 100%;}
+        #view{} .mimgbox input{width:100%;height: 100%;z-index: 10;}
+        .tablecon{width: 800px; margin-left:80px;}
+        #content .tablecon #cdl dd .dd_left { display:block; width:110px; line-height:24px; float:left; text-align:left; font-weight:900; color:#444; margin-right:6px; }
+        .bang{cursor: pointer;background-color: #090;color: #fff;margin-right: 365px;float:right;text-align: center;width: 60px;height: 26px;margin-top: 5px;}
+        .acttitle{font-size: 28px;margin: 0 auto;width: 240px;font-weight: bold;}
+        #content #cdl dd font span { font-family:"Georgia"; font-weight:900; font-size:18px; color:#444; }
+        #content .atext { width:100px; height:24px; line-height:24px;border:solid 1px #ccc; font-family:"宋体"; }
+    </style>
+</head>
+<body>
+<div id="content">
+    <h1>首页 > app管理 > 发布广告引导页</h1>
+    <h2>
+        <div class="h2_left">
+            <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+    </h2>
+    <div class="tablecon">
+        <div class="acttitle">发布广告引导页</div>
+        <form action="<{$url}>/manager/guide/saveGuideAdv" method="post" class="registerform" id="form"  enctype="multipart/form-data">
+            <dl id="cdl">
+                <dd>
+                    <span class="dd_left">广告名称:</span>
+            <span class="dd_right">
+                <input type="text" class="qtext" name="advName" value="" id="advName" />
+            </span>
+                </dd>
+                <dd>
+                    <div id="reader_box"></div>
+                    <span class="dd_left">广告图片:</span>
+            <span class="dd_right">
+                <input type="file" name="file" id="file" onchange="load(this)" class='myfile'></input>
+                <div id="view"></div>
+                <div id="imgkey"></div>
+            </span> 只能上传一张
+                    - 建议尺寸1242*2208
+                    - 建议大小不超过600k
+                </dd>
+                <dd>
+                    <span class="dd_left">链接:</span>
+            <span class="dd_right">
+                <input type="text" class="qtext" name="gotoUrl" value="" id="gotoUrl" />
+            </span>
+                </dd>
+                <dd>
+                    <span class="dd_left">开始&结束时间:</span>
+            <span class="dd_right" style="margin-top:5px;">
+                <input name="startTime" type="text" id="start_date" name="start_date" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'<{$time}>',maxDate:&quot;#F{$dp.$D('end_date')}&quot;})" class="Wdate"/>&nbsp;~
+            </span>
+            <span class="dd_right" style="margin-top:5px;">
+                <input name="endTime" type="text" id="end_date" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss', minDate:&quot;#F{$dp.$D(\'start_date\')}&quot;,maxDate:'2038-01-01'})"  class="Wdate"/>
+            </span>
+                </dd>
+                <dd>
+                    <span class="dd_left">广告状态:</span>
+            <span class="dd_right" style="margin-top:5px;">
+            <input type="radio" name="isUse" value="1" checked>启用&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="radio" name="isUse" value="2">停用
+            </span>
+                </dd>
+                <dd style="margin-top: 10px;margin-bottom: 160px;"><input type="submit" class="so submit" value="提 交" /></dd>
+                <input type="hidden" name="" value="<{:U('End/adv')}>" id="jump">
+            </dl>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var imgkey = [];
+    function load(file) {
+        var num=1;
+        $('.imgbox').remove();
+        if (file.files) {
+            for (var i = 0; i < file.files.length; i++) {
+                var reader = new FileReader();
+                reader.readAsDataURL(file.files[i]);
+                reader.onload = function(evt) {
+                    var imgbox=$('<div></div>');
+                    imgbox.addClass('imgbox');
+                    $('#view').append(imgbox);
+                    var imgs = $('<input type="image" />');
+                    imgs.attr('name','mum'+num);
+                    num++;
+                    imgs.appendTo(imgbox);
+                    imgs.attr('src', evt.target.result);
+                }
+            }
+        }
+    }
+
+    $(document).on("change", "input[name=file]", logosub);
+    function logosub() {
+        //模拟form表单提交数据
+        var filepath=$("input[name='file']").val();
+        var extStart=filepath.lastIndexOf(".");
+        var ext=filepath.substring(extStart,filepath.length).toUpperCase();
+        if(ext!=".jpeg"&&ext!=".jpg"&&ext!=".bmp"&&ext!=".png" &&ext!=".JPEG"&&ext!=".JPG"&&ext!=".BMP"&&ext!=".PNG"){
+            alert("文件选择错误,图片类型必须是jpeg,jpg,bmp,png中的一种");
+            return false;
+        }
+
+        var index = layer.load(1, {shade: [0.1,'#fff']});
+        var fileObj = document.getElementById("file").files[0];
+        var FileController = '<{$url}>/manager/guide/uploadAdvImage';
+        var form = new FormData();
+        form.append("advFile", fileObj);
+        var xhr = new XMLHttpRequest();
+        xhr.open("post", FileController, true);
+        xhr.onload = function (json) {
+            var obj = jQuery.parseJSON(json.target.responseText);
+            console.log(obj);
+            layer.closeAll('loading');
+            if(obj.code == 2000){
+                // console.log(obj.data.key);return;
+                var html = '<input type="hidden" name="advPicUrl" value="'+obj.data.picKey+'">';
+                $('#imgkey').html(html);
+                alert(obj.message);
+            }
+        };
+        xhr.send(form);
+    }
+
+
+    $("#end_date").blur(function(){
+        var bTime = $('#start_date').val();
+        var eTime = $('#end_date').val();
+        //alert(bTime);
+    });
+
+    $('.submit').click(function(){
+        var index = layer.load(1, {shade: [0.1,'#fff']});
+
+        $('#form').ajaxForm(function(data){
+            //弹出ajax请求后的回调结果，data回调数据  onclick="sub()"
+            //console.log(data);
+            if(data.code =="2000" ){
+                layer.closeAll('loading');
+                //console.log(data);
+                alert(data.message);
+                var url = $('#jump').val();
+                window.location.href = url;
+                location.href=document.referrer;
+            }else{
+                layer.closeAll('loading');
+                alert(data.message);
+            }
+        });
+    });
+</script>
+</body>
+</html>

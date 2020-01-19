@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>商品管理|<{$configcache['Title']}></title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+    <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/Public.js"></script>
+    <script type="text/javascript" src="__JS__/winpop.js"></script>
+    <script type="text/javascript" src="__JS__/My97DatePicker/WdatePicker.js"></script>
+    <style type="text/css">
+        .select{padding:5px 10px;border:#ddd 1px solid;border-radius:4px;width:60%;margin:5% auto;font-size:12px}
+        .select li{list-style:none;padding:10px 0 5px 100px}
+        .select .select-list{border-bottom:#eee 1px dashed}
+        .select dl{zoom:1;position:relative;line-height:24px;}
+        .select dl:after{content:" ";display:block;clear:both;height:0;overflow:hidden}
+        .select dt{width:100px;margin-bottom:5px;position:absolute;top:0;left:-100px;text-align:right;color:#666;height:24px;line-height:24px}
+        .select dd{float:left;display:inline;margin:0 0 5px 5px;}
+        .select a{display:inline-block;white-space:nowrap;height:24px;padding:0 10px;text-decoration:none;color:#039;border-radius:2px;}
+        .select a:hover{color:#f60;background-color:#f3edc2}
+        .select .selected a{color:#fff;background-color:#f60}
+        .select-result dt{font-weight:bold}
+        .select-no{color:#999}
+        .select .select-result a{padding-right:20px;background:#f60 url("__PUBLIC__/image/close.gif") right 9px no-repeat}
+        .select .select-result a:hover{background-position:right -15px}
+        .tc{text-align:center; text-indent:0;font-family:"微软雅黑";font-size: 14px;color:#111;}
+    </style>
+</head>
+<body>
+<div id="content">
+    <h1>首页 > 商品管理 > 商品库</h1>
+    <h2>
+        <div class="h2_left">
+            <a href="__ACTION__" class="whole">全部</a>
+            <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+            <a href="javascript:history.back();" class="Retreat">后退</a>
+            <a href="javascript:history.go(1);" class="Advance">前进</a>
+        </div>
+
+        <div class="search">
+            <form method="get" id="search">
+                <input name="tel" type="text" placeholder="输入手机号码" />&nbsp;
+                <input type="submit" class="so" value="搜 索" />
+            </form>
+        </div>
+    </h2>
+
+    <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0">
+        <tr>
+            <th>用户昵称</th>
+            <th>手机号码</th>
+            <th>发放时间</th>
+            <th>股票数(冻结)</th>
+        </tr>
+        <input type="hidden" name="url" value="<{$url}>">
+        <volist name="list" id="vo">
+            <tr>
+                <td style="text-align:center" class='tc'><{$vo.userNickName}></td>
+                <td style="text-align:center" class='tc'><{$vo.userTelephone}></td>
+                <td style="text-align:center" class='tc'><{$vo.createTime}></td>
+                <td style="text-align:center" class='tc'><{$vo.userStockNum}></td>
+            </tr>
+        </volist>
+        <p>
+        </p>
+    </table>
+    <div id="page">
+        <{$page}>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>详情信息|<{$configcache['Title']}></title>
+  <link rel="stylesheet" type="text/css" href="__CSS__/content.css"  />
+  <link rel="stylesheet" type="text/css" href="__CSS__/public.css"  />
+  <script type="text/javascript" src="__JS__/jquery.js"></script>
+  <script type="text/javascript" src="__JS__/Public.js"></script>
+  <script type="text/javascript" src="__JS__/winpop.js"></script>
+  <script type="text/javascript" src="__JS__/check.js"></script>
+  <script type="text/javascript" src="__JS__/layer/layer.js"></script>
+  <link rel="stylesheet" type="text/css" href="__JS__/layer/skin/layer.css"  />
+  <style type="text/css">
+  .shop-1{border:1px solid #ccc; width:60%;margin-left: auto;margin-right: auto;}
+  .shop-2{margin: 30px;}
+  .imgbox img{max-width:90%;}
+  .basetb td{ padding:6px; padding-top:8px; padding-bottom:8px; font-size:15px;}
+  .label{text-align: center;}
+  </style>
+</head>
+<body>
+  <div id="content" style="font-size:18px; color:#333; text-align:center">
+   <dl id="dl">
+    <h2>
+      <div class="h2_left">
+        <a href="<{:U('Client/agent')}>" class="whole">全部</a>
+        <a href="javascript:;" class="f5" onclick="f5();">刷新</a>
+        <a href="javascript:history.back();" class="Retreat">后退</a>
+        <a href="javascript:history.go(1);" class="Advance">前进</a>
+      </div>
+    </h2><br/>
+    <table id="table" border="1" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0" class="basetb">
+      <tr>
+        <td class="label">公司名称:</td>
+        <td><{$cc.companyName}></td>
+      </tr>
+      <tr>
+        <td class="label">用户名:</td>
+        <td><{$cc.userNickName}></td>
+      </tr>
+      <tr>
+        <td class="label">手机号:</td>
+        <td><{$cc.userTelephone}></td>
+      </tr>
+
+      <tr>
+        <td class="label">下属代理:</td>
+        <td><{$agent}></td>
+      </tr>
+      <tr>
+        <td class="label">下属公司:</td>
+        <td><{$company}></td>
+      </tr>
+      <tr>
+        <td class="label">服务数量:</td>
+        <td><{$cc.serviceCount}></td>
+      </tr>
+
+      <tr>
+        <td class="label">业务范围:</td>
+        <td><{$cc.businessScope}></td>
+      </tr> 
+      <tr>
+        <td class="label">添加时间:</td>
+        <td><{$cc.userCreateDate}></td>
+      </tr> 
+      <tr>
+        <td class="label">店铺状态:</td>
+        <td>
+          <input type='radio'  name= 'isuse' id='isuse' value='1' <if condition="$cc.isUse eq '1'">checked</if>>&nbsp;启用&nbsp;
+          <input type='radio'  name= 'isuse' id='isuse' value='0' <if condition="$cc.isUse eq '0'">checked</if>/>&nbsp;停用&nbsp;
+        
+        </td>
+      </tr>
+  </table> 
+
+  <if condition="$type eq 2">
+    <else/>
+        <div class="tong" style="width:20%;margin-top:50px;margin-bottom:180px;">
+       <button class="pass" style="background-color:#f60;color:#fff;cursor:pointer;width:80px;height:40px;">提交
+     </div>
+  </if>
+
+</div>
+
+<script type="text/javascript">
+$(function (){
+
+ $('.pass').click(function(){
+  var index = layer.load(0, {shade: false});
+  var isuse = $('input[name="isuse"]:checked').val();
+  var userId = "<{$userid}>";
+    $.ajax({
+      type: "POST",
+      cache: true,
+      async: true,
+      ifModified:true,
+      timeout:20000,
+      url: "<{$url}>/manager/community/updateCommUserIsUse",
+      data: {userId:userId,isUse:isuse}, 
+      dataType: "json",
+      // accepts: "json",
+      success: function(json) {
+        alert(json.message);
+        layer.closeAll('loading');
+        f5();
+      },  
+      error: function(XMLHttpRequest, exception) {
+        layer.closeAll('loading');
+        if (XMLHttpRequest.status == 0) {
+          alert('网络不给力，请稍后再试！');
+        }else if (XMLHttpRequest.status == 404) {
+          alert('资源地址不存在');
+        }else if (XMLHttpRequest.status == 408) {
+          alert('网络不给力，请稍后再试！');
+        }else if (XMLHttpRequest.status == 500) {
+          alert('服务器出错啦')
+        }else if (XMLHttpRequest.status == 502) {
+          alert('Web服务器用作网关或代理服务器时收到了无效响应');
+        }else if (XMLHttpRequest.status == 503) {
+          alert('服务不可用');
+        }else if (XMLHttpRequest.status == 504) {
+          alert('网关超时！');
+        }else{
+
+        }
+      }
+    })
+
+});
+
+});
+
+</script>
+</body>
+</html>
